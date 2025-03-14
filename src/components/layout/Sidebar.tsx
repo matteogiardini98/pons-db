@@ -48,10 +48,10 @@ const Sidebar = () => {
     setEmail('');
   };
 
-  // Updated logo paths - using the correct paths for dark and light modes
+  // Updated logo paths to use the newly uploaded images
   const logoUrl = theme === 'dark' 
-    ? '/lovable-uploads/0b3a778e-cad6-428d-b345-9c0dc1f2c1b3.png' 
-    : '/lovable-uploads/6441194c-6a93-4e33-b3bd-51bef2eaae84.png';
+    ? '/lovable-uploads/4dfad91b-1e3b-48f7-aef4-adb4017a550f.png' 
+    : '/lovable-uploads/9ffbda64-9d7c-4e7c-9334-eb8df74a815c.png';
 
   return (
     <aside

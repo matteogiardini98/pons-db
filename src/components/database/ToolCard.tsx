@@ -1,7 +1,7 @@
 
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { ExternalLink, Star, ImageOff } from 'lucide-react';
+import { ExternalLink, Star } from 'lucide-react';
 import { AiTool } from '@/utils/types';
 import { cn } from '@/lib/utils';
 import AnimatedCard from '@/components/ui/AnimatedCard';
@@ -13,7 +13,6 @@ interface ToolCardProps {
 
 const ToolCard = ({ tool }: ToolCardProps) => {
   const [isHovered, setIsHovered] = useState(false);
-  const [logoError, setLogoError] = useState(false);
   
   const getAverageRating = (tool: AiTool) => {
     if (tool.reviews.length === 0) return null;
@@ -23,11 +22,6 @@ const ToolCard = ({ tool }: ToolCardProps) => {
   };
   
   const averageRating = getAverageRating(tool);
-  
-  const handleLogoError = () => {
-    console.error("Tool logo failed to load:", tool.logo);
-    setLogoError(true);
-  };
   
   return (
     <AnimatedCard
@@ -42,32 +36,17 @@ const ToolCard = ({ tool }: ToolCardProps) => {
       >
         <div className="p-6 flex flex-col h-full">
           <div className="flex justify-between items-start mb-4">
-            <div className="flex items-center gap-4">
-              <div className="w-12 h-12 rounded-lg overflow-hidden bg-secondary flex items-center justify-center">
-                {logoError ? (
-                  <ImageOff size={18} className="text-muted-foreground" />
-                ) : (
-                  <img 
-                    src={tool.logo} 
-                    alt={`${tool.name} logo`} 
-                    className="w-full h-full object-cover"
-                    onError={handleLogoError}
-                  />
-                )}
-              </div>
+            <div>
+              <h3 className="font-medium text-lg leading-tight">{tool.name}</h3>
               
-              <div>
-                <h3 className="font-medium text-lg leading-tight">{tool.name}</h3>
-                
-                <div className="flex items-center mt-1 text-sm text-muted-foreground">
-                  {averageRating && (
-                    <div className="flex items-center mr-3">
-                      <Star className="w-3.5 h-3.5 fill-yellow-400 text-yellow-400 mr-1" />
-                      <span>{averageRating}</span>
-                    </div>
-                  )}
-                  <span>{tool.reviews.length} reviews</span>
-                </div>
+              <div className="flex items-center mt-1 text-sm text-muted-foreground">
+                {averageRating && (
+                  <div className="flex items-center mr-3">
+                    <Star className="w-3.5 h-3.5 fill-yellow-400 text-yellow-400 mr-1" />
+                    <span>{averageRating}</span>
+                  </div>
+                )}
+                <span>{tool.reviews.length} reviews</span>
               </div>
             </div>
             

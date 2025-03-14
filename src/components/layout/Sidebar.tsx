@@ -1,6 +1,7 @@
+
 import { useState } from 'react';
 import { NavLink, useLocation } from 'react-router-dom';
-import { Database, LayoutDashboard, PlusCircle, Sun, Moon, ArrowRight, ImageOff, BookOpen } from 'lucide-react';
+import { Database, LayoutDashboard, PlusCircle, Sun, Moon, ArrowRight, BookOpen } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useTheme } from '@/hooks/use-theme';
 import { Input } from '@/components/ui/input';
@@ -10,7 +11,6 @@ import { useToast } from '@/hooks/use-toast';
 const Sidebar = () => {
   const [collapsed, setCollapsed] = useState(false);
   const [email, setEmail] = useState('');
-  const [logoError, setLogoError] = useState(false);
   const { theme, setTheme } = useTheme();
   const location = useLocation();
   const { toast } = useToast();
@@ -49,13 +49,6 @@ const Sidebar = () => {
     setEmail('');
   };
 
-  const logoUrl = '/lovable-uploads/6a9bd96e-870c-4305-8591-ea4b83807048.png';
-
-  const handleImageError = () => {
-    console.error("Logo image failed to load:", logoUrl);
-    setLogoError(true);
-  };
-
   return (
     <aside
       className={cn(
@@ -67,44 +60,15 @@ const Sidebar = () => {
     >
       <div className="flex flex-col h-full">
         <div className={cn(
-          "p-4 flex items-center",
+          "p-4 flex items-center justify-center",
           theme === 'dark' ? 'border-neutral-700' : 'border-neutral-200'
         )} 
         style={{ borderBottom: '1px solid' }}>
-          {!collapsed && (
-            <div className="flex items-center gap-3">
-              {logoError ? (
-                <div className="h-8 w-8 flex items-center justify-center bg-neutral-100 dark:bg-neutral-800 rounded">
-                  <ImageOff size={16} className={theme === 'dark' ? 'text-neutral-400' : 'text-neutral-500'} />
-                </div>
-              ) : (
-                <img
-                  src={logoUrl}
-                  alt="pons logo"
-                  className="h-8 w-auto"
-                  onError={handleImageError}
-                />
-              )}
-              <span className={cn(
-                "text-xl font-medium",
-                theme === 'dark' ? 'text-white' : 'text-black'
-              )}>pons</span>
-            </div>
-          )}
-          {collapsed && (
-            logoError ? (
-              <div className="h-8 w-8 flex items-center justify-center bg-neutral-100 dark:bg-neutral-800 rounded mx-auto">
-                <ImageOff size={16} className={theme === 'dark' ? 'text-neutral-400' : 'text-neutral-500'} />
-              </div>
-            ) : (
-              <img
-                src={logoUrl}
-                alt="pons logo"
-                className="h-8 w-auto mx-auto"
-                onError={handleImageError}
-              />
-            )
-          )}
+          <span className={cn(
+            "text-xl font-medium",
+            theme === 'dark' ? 'text-white' : 'text-black',
+            collapsed ? "hidden" : "block"
+          )}>pons</span>
         </div>
         
         <nav className="flex-1 pt-4">

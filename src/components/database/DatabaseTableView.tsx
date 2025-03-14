@@ -1,55 +1,18 @@
 
 import { useState, useEffect } from 'react';
-import { Search, Tag, Users, MapPin, ArrowUpDown, ChevronDown } from 'lucide-react';
-import { AiTool, FilterState, Industry, BusinessFunction } from '@/utils/types';
+import { Tag, Users, ArrowUpDown } from 'lucide-react';
+import { AiTool, FilterState } from '@/utils/types';
 import { mockTools } from '@/utils/data';
 import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Table, TableHeader, TableRow, TableHead, TableBody, TableCell } from '@/components/ui/table';
-import { Badge } from '@/components/ui/badge';
 import { pageTransition } from '@/utils/animations';
 import { motion } from 'framer-motion';
-import { useNavigate } from 'react-router-dom';
-import { 
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-  SelectGroup,
-  SelectLabel
-} from "@/components/ui/select";
-import { Checkbox } from "@/components/ui/checkbox";
 import { cn } from '@/lib/utils';
 import { useTheme } from '@/hooks/use-theme';
-
-const INDUSTRIES = [
-  'Retail',
-  'Automotive',
-  'Tech SaaS',
-  'Agriculture',
-  'Pharma',
-  'Food & Beverage',
-  'Construction & Real Estate',
-  'Financial Services',
-  'Education',
-  'Hospitality',
-  'Transportation & Logistics',
-  'Professional Services',
-  'Entertainment',
-];
-
-const FUNCTIONS = [
-  'Marketing',
-  'Business Development',
-  'Field Sales',
-  'Sales Engineering',
-  'Product Development',
-  'Research & Development',
-  'Customer Support',
-  'Production / Manufacturing',
-  'Finance & Accounting',
-];
+import SearchBar from './SearchBar';
+import FilterDropdown from './FilterDropdown';
+import EUComplianceFilter from './EUComplianceFilter';
+import ToolsTable from './ToolsTable';
+import { INDUSTRIES, FUNCTIONS } from './filterConstants';
 
 const DatabaseTableView = () => {
   const { theme } = useTheme();
@@ -66,7 +29,6 @@ const DatabaseTableView = () => {
       dataResidency: false,
     },
   });
-  const navigate = useNavigate();
   const [showIndustryDropdown, setShowIndustryDropdown] = useState(false);
   const [showFunctionDropdown, setShowFunctionDropdown] = useState(false);
   const [showEUDropdown, setShowEUDropdown] = useState(false);
@@ -85,7 +47,7 @@ const DatabaseTableView = () => {
     setSearchTerm(e.target.value);
   };
 
-  const toggleIndustryFilter = (industry: Industry) => {
+  const toggleIndustryFilter = (industry) => {
     setFilters(prev => {
       const industries = prev.industries.includes(industry)
         ? prev.industries.filter(i => i !== industry)
@@ -95,7 +57,7 @@ const DatabaseTableView = () => {
     });
   };
 
-  const toggleFunctionFilter = (func: BusinessFunction) => {
+  const toggleFunctionFilter = (func) => {
     setFilters(prev => {
       const functions = prev.functions.includes(func)
         ? prev.functions.filter(f => f !== func)
@@ -126,6 +88,24 @@ const DatabaseTableView = () => {
         dataResidency: false,
       },
     });
+  };
+
+  const toggleIndustryDropdown = () => {
+    setShowIndustryDropdown(!showIndustryDropdown);
+    setShowFunctionDropdown(false);
+    setShowEUDropdown(false);
+  };
+
+  const toggleFunctionDropdown = () => {
+    setShowFunctionDropdown(!showFunctionDropdown);
+    setShowIndustryDropdown(false);
+    setShowEUDropdown(false);
+  };
+
+  const toggleEUDropdown = () => {
+    setShowEUDropdown(!showEUDropdown);
+    setShowIndustryDropdown(false);
+    setShowFunctionDropdown(false);
   };
 
   const filteredTools = tools.filter((tool) => {
@@ -165,11 +145,8 @@ const DatabaseTableView = () => {
   });
 
   const isDarkMode = theme === 'dark';
-  const bgColor = isDarkMode ? 'bg-[#222222]' : 'bg-white';
   const textColor = isDarkMode ? 'text-white' : 'text-black';
   const mutedTextColor = isDarkMode ? 'text-neutral-400' : 'text-neutral-500';
-  const borderColor = isDarkMode ? 'border-neutral-700' : 'border-neutral-200';
-  const headerBgColor = isDarkMode ? 'bg-[#1a1a1a]' : 'bg-neutral-50';
   const hoverBgColor = isDarkMode ? 'hover:bg-neutral-800' : 'hover:bg-neutral-100';
   const buttonBgColor = isDarkMode ? 'bg-[#222222]' : 'bg-white';
 
@@ -199,233 +176,41 @@ const DatabaseTableView = () => {
           </div>
           
           <div className="flex flex-col md:flex-row gap-3 md:items-center mb-6">
-            <div className="relative flex-grow max-w-lg">
-              <Search className={cn("absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4", mutedTextColor)} />
-              <Input
-                type="search"
-                placeholder="Search for AI tools..."
-                className={cn("pl-10", 
-                  isDarkMode 
-                    ? "bg-[#333333] border-neutral-700 text-white" 
-                    : "bg-white border-neutral-200 text-black"
-                )}
-                value={searchTerm}
-                onChange={handleSearchChange}
-              />
-            </div>
+            <SearchBar searchTerm={searchTerm} onSearchChange={handleSearchChange} />
             
             <div className="flex flex-wrap gap-2">
-              <div className="relative">
-                <Button 
-                  variant="outline" 
-                  size="sm" 
-                  className={cn("border-neutral-700 gap-2", 
-                    isDarkMode ? "bg-[#222222] hover:bg-neutral-800" : "bg-white hover:bg-neutral-100",
-                    showIndustryDropdown && (isDarkMode ? "bg-neutral-800" : "bg-neutral-100")
-                  )}
-                  onClick={() => {
-                    setShowIndustryDropdown(!showIndustryDropdown);
-                    setShowFunctionDropdown(false);
-                    setShowEUDropdown(false);
-                  }}
-                >
-                  <Tag size={16} />
-                  Industry
-                  {filters.industries.length > 0 && (
-                    <Badge variant={isDarkMode ? "secondary" : "outline"} className="ml-1">
-                      {filters.industries.length}
-                    </Badge>
-                  )}
-                  <ChevronDown size={14} className={cn(
-                    "transition-transform",
-                    showIndustryDropdown && "transform rotate-180"
-                  )} />
-                </Button>
-                
-                {showIndustryDropdown && (
-                  <div className={cn(
-                    "absolute mt-1 p-2 rounded-md shadow-lg w-64 z-50",
-                    isDarkMode ? "bg-[#333333] border border-neutral-700" : "bg-white border border-neutral-200"
-                  )}>
-                    <div className="flex justify-between items-center mb-2">
-                      <h4 className={cn("text-sm font-medium", textColor)}>Industries</h4>
-                      {filters.industries.length > 0 && (
-                        <Button 
-                          variant="ghost" 
-                          size="sm" 
-                          className="h-6 text-xs px-2"
-                          onClick={() => setFilters(prev => ({ ...prev, industries: [] }))}
-                        >
-                          Clear
-                        </Button>
-                      )}
-                    </div>
-                    <div className="max-h-60 overflow-y-auto space-y-1 pr-1">
-                      {INDUSTRIES.map((industry) => (
-                        <div key={industry} className="flex items-center space-x-2">
-                          <Checkbox 
-                            id={`industry-${industry}`} 
-                            checked={filters.industries.includes(industry as Industry)}
-                            onCheckedChange={() => toggleIndustryFilter(industry as Industry)}
-                          />
-                          <label 
-                            htmlFor={`industry-${industry}`}
-                            className={cn("text-sm cursor-pointer", textColor)}
-                          >
-                            {industry}
-                          </label>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                )}
-              </div>
+              <FilterDropdown
+                title="Industry"
+                icon={<Tag size={16} />}
+                isOpen={showIndustryDropdown}
+                onToggle={toggleIndustryDropdown}
+                options={INDUSTRIES}
+                selectedOptions={filters.industries}
+                onOptionToggle={toggleIndustryFilter}
+                onClear={() => setFilters(prev => ({ ...prev, industries: [] }))}
+              />
               
-              <div className="relative">
-                <Button 
-                  variant="outline" 
-                  size="sm" 
-                  className={cn("border-neutral-700 gap-2", 
-                    isDarkMode ? "bg-[#222222] hover:bg-neutral-800" : "bg-white hover:bg-neutral-100",
-                    showFunctionDropdown && (isDarkMode ? "bg-neutral-800" : "bg-neutral-100")
-                  )}
-                  onClick={() => {
-                    setShowFunctionDropdown(!showFunctionDropdown);
-                    setShowIndustryDropdown(false);
-                    setShowEUDropdown(false);
-                  }}
-                >
-                  <Users size={16} />
-                  Function
-                  {filters.functions.length > 0 && (
-                    <Badge variant={isDarkMode ? "secondary" : "outline"} className="ml-1">
-                      {filters.functions.length}
-                    </Badge>
-                  )}
-                  <ChevronDown size={14} className={cn(
-                    "transition-transform",
-                    showFunctionDropdown && "transform rotate-180"
-                  )} />
-                </Button>
-                
-                {showFunctionDropdown && (
-                  <div className={cn(
-                    "absolute mt-1 p-2 rounded-md shadow-lg w-64 z-50",
-                    isDarkMode ? "bg-[#333333] border border-neutral-700" : "bg-white border border-neutral-200"
-                  )}>
-                    <div className="flex justify-between items-center mb-2">
-                      <h4 className={cn("text-sm font-medium", textColor)}>Functions</h4>
-                      {filters.functions.length > 0 && (
-                        <Button 
-                          variant="ghost" 
-                          size="sm"
-                          className="h-6 text-xs px-2"
-                          onClick={() => setFilters(prev => ({ ...prev, functions: [] }))}
-                        >
-                          Clear
-                        </Button>
-                      )}
-                    </div>
-                    <div className="max-h-60 overflow-y-auto space-y-1 pr-1">
-                      {FUNCTIONS.map((func) => (
-                        <div key={func} className="flex items-center space-x-2">
-                          <Checkbox 
-                            id={`function-${func}`} 
-                            checked={filters.functions.includes(func as BusinessFunction)}
-                            onCheckedChange={() => toggleFunctionFilter(func as BusinessFunction)}
-                          />
-                          <label 
-                            htmlFor={`function-${func}`}
-                            className={cn("text-sm cursor-pointer", textColor)}
-                          >
-                            {func}
-                          </label>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                )}
-              </div>
+              <FilterDropdown
+                title="Function"
+                icon={<Users size={16} />}
+                isOpen={showFunctionDropdown}
+                onToggle={toggleFunctionDropdown}
+                options={FUNCTIONS}
+                selectedOptions={filters.functions}
+                onOptionToggle={toggleFunctionFilter}
+                onClear={() => setFilters(prev => ({ ...prev, functions: [] }))}
+              />
               
-              <div className="relative">
-                <Button 
-                  variant="outline" 
-                  size="sm" 
-                  className={cn("border-neutral-700 gap-2", 
-                    isDarkMode ? "bg-[#222222] hover:bg-neutral-800" : "bg-white hover:bg-neutral-100",
-                    showEUDropdown && (isDarkMode ? "bg-neutral-800" : "bg-neutral-100")
-                  )}
-                  onClick={() => {
-                    setShowEUDropdown(!showEUDropdown);
-                    setShowIndustryDropdown(false);
-                    setShowFunctionDropdown(false);
-                  }}
-                >
-                  <MapPin size={16} />
-                  EU-ready
-                  {(filters.euCompliant.gdpr || filters.euCompliant.dataResidency) && (
-                    <Badge variant={isDarkMode ? "secondary" : "outline"} className="ml-1">
-                      {Number(filters.euCompliant.gdpr) + Number(filters.euCompliant.dataResidency)}
-                    </Badge>
-                  )}
-                  <ChevronDown size={14} className={cn(
-                    "transition-transform",
-                    showEUDropdown && "transform rotate-180"
-                  )} />
-                </Button>
-                
-                {showEUDropdown && (
-                  <div className={cn(
-                    "absolute mt-1 p-2 rounded-md shadow-lg w-64 z-50",
-                    isDarkMode ? "bg-[#333333] border border-neutral-700" : "bg-white border border-neutral-200"
-                  )}>
-                    <div className="flex justify-between items-center mb-2">
-                      <h4 className={cn("text-sm font-medium", textColor)}>EU Compliance</h4>
-                      {(filters.euCompliant.gdpr || filters.euCompliant.dataResidency) && (
-                        <Button 
-                          variant="ghost" 
-                          size="sm"
-                          className="h-6 text-xs px-2"
-                          onClick={() => setFilters(prev => ({ 
-                            ...prev, 
-                            euCompliant: { gdpr: false, dataResidency: false } 
-                          }))}
-                        >
-                          Clear
-                        </Button>
-                      )}
-                    </div>
-                    <div className="space-y-1">
-                      <div className="flex items-center space-x-2">
-                        <Checkbox 
-                          id="gdpr" 
-                          checked={filters.euCompliant.gdpr}
-                          onCheckedChange={() => toggleEUFilter('gdpr')}
-                        />
-                        <label 
-                          htmlFor="gdpr"
-                          className={cn("text-sm cursor-pointer", textColor)}
-                        >
-                          GDPR Compliant
-                        </label>
-                      </div>
-                      <div className="flex items-center space-x-2">
-                        <Checkbox 
-                          id="dataResidency" 
-                          checked={filters.euCompliant.dataResidency}
-                          onCheckedChange={() => toggleEUFilter('dataResidency')}
-                        />
-                        <label 
-                          htmlFor="dataResidency"
-                          className={cn("text-sm cursor-pointer", textColor)}
-                        >
-                          EU Data Residency
-                        </label>
-                      </div>
-                    </div>
-                  </div>
-                )}
-              </div>
+              <EUComplianceFilter
+                isOpen={showEUDropdown}
+                onToggle={toggleEUDropdown}
+                filters={filters.euCompliant}
+                onFilterToggle={toggleEUFilter}
+                onClear={() => setFilters(prev => ({ 
+                  ...prev, 
+                  euCompliant: { gdpr: false, dataResidency: false } 
+                }))}
+              />
               
               <Button variant="outline" size="sm" className={cn("border-neutral-700 gap-2", 
                 isDarkMode ? "bg-[#222222] hover:bg-neutral-800" : "bg-white hover:bg-neutral-100"
@@ -447,117 +232,7 @@ const DatabaseTableView = () => {
             </div>
           </div>
           
-          {isLoading ? (
-            <div className="w-full h-96 flex items-center justify-center">
-              <div className={cn("animate-spin rounded-full h-12 w-12 border-t-2 border-b-2", isDarkMode ? "border-white" : "border-black")}></div>
-            </div>
-          ) : (
-            <div className={cn("rounded-lg overflow-hidden border", bgColor, borderColor)}>
-              <Table className={textColor}>
-                <TableHeader className={headerBgColor}>
-                  <TableRow className={borderColor}>
-                    <TableHead className={textColor}>Name</TableHead>
-                    <TableHead className={cn("max-w-xs hidden md:table-cell", textColor)}>Description</TableHead>
-                    <TableHead className={cn("hidden md:table-cell", textColor)}>Industry Tags</TableHead>
-                    <TableHead className={cn("hidden md:table-cell", textColor)}>Function Tags</TableHead>
-                    <TableHead className={cn("hidden xl:table-cell", textColor)}>Stage</TableHead>
-                  </TableRow>
-                </TableHeader>
-                <TableBody>
-                  {filteredTools.map((tool) => (
-                    <TableRow 
-                      key={tool.id} 
-                      className={cn(borderColor, hoverBgColor, "cursor-pointer")}
-                      onClick={() => navigate(`/tool/${tool.id}`)}
-                    >
-                      <TableCell className="py-4">
-                        <div className="font-medium">{tool.name}</div>
-                      </TableCell>
-                      <TableCell className="max-w-xs hidden md:table-cell">
-                        <div className={cn("line-clamp-2", isDarkMode ? "text-neutral-300" : "text-neutral-600")}>{tool.description}</div>
-                      </TableCell>
-                      <TableCell className="hidden md:table-cell">
-                        <div className="flex flex-wrap gap-1.5">
-                          {tool.industries.slice(0, 2).map((industry) => (
-                            <Badge key={industry} variant="outline" className={cn(
-                              "bg-transparent border-neutral-600",
-                              isDarkMode ? "text-neutral-300" : "text-neutral-600"
-                            )}>
-                              {industry}
-                            </Badge>
-                          ))}
-                          {tool.industries.length > 2 && (
-                            <Badge variant="outline" className={cn(
-                              "bg-transparent border-neutral-600",
-                              isDarkMode ? "text-neutral-300" : "text-neutral-600"
-                            )}>
-                              +{tool.industries.length - 2}
-                            </Badge>
-                          )}
-                        </div>
-                      </TableCell>
-                      <TableCell className="hidden md:table-cell">
-                        <div className="flex flex-wrap gap-1.5">
-                          {tool.functions.slice(0, 2).map((func) => (
-                            <Badge key={func} variant="outline" className={cn(
-                              "bg-transparent border-neutral-600",
-                              isDarkMode ? "text-neutral-300" : "text-neutral-600"
-                            )}>
-                              {func}
-                            </Badge>
-                          ))}
-                          {tool.functions.length > 2 && (
-                            <Badge variant="outline" className={cn(
-                              "bg-transparent border-neutral-600",
-                              isDarkMode ? "text-neutral-300" : "text-neutral-600"
-                            )}>
-                              +{tool.functions.length - 2}
-                            </Badge>
-                          )}
-                        </div>
-                      </TableCell>
-                      <TableCell className="hidden xl:table-cell">
-                        <Badge 
-                          className={`${
-                            tool.reviews.length > 5 ? 'bg-green-900 text-green-100' : 
-                            tool.reviews.length > 0 ? 'bg-amber-900 text-amber-100' : 
-                            isDarkMode ? 'bg-neutral-800 text-neutral-300' : 'bg-neutral-200 text-neutral-600'
-                          }`}
-                        >
-                          {tool.reviews.length > 5 ? 'Seed' : 
-                           tool.reviews.length > 0 ? '1-10' : 'Unknown'}
-                        </Badge>
-                      </TableCell>
-                    </TableRow>
-                  ))}
-                </TableBody>
-              </Table>
-              
-              <div className={cn("flex items-center justify-between p-4 border-t text-sm", borderColor, headerBgColor)}>
-                <div className={mutedTextColor}>
-                  {filteredTools.length} results • Page 1/1
-                </div>
-                <div className="flex items-center gap-2">
-                  <Button 
-                    variant="outline" 
-                    size="sm" 
-                    className={cn("border-neutral-700", buttonBgColor, hoverBgColor)} 
-                    disabled
-                  >
-                    Previous
-                  </Button>
-                  <Button 
-                    variant="outline" 
-                    size="sm" 
-                    className={cn("border-neutral-700", buttonBgColor, hoverBgColor)} 
-                    disabled
-                  >
-                    Next
-                  </Button>
-                </div>
-              </div>
-            </div>
-          )}
+          <ToolsTable tools={filteredTools} isLoading={isLoading} />
         </div>
       </div>
     </motion.div>

@@ -1,11 +1,10 @@
 
 import { useEffect } from 'react';
-import Hero from '@/components/hero/Hero';
-import DatabaseView from '@/components/database/DatabaseView';
 import Navbar from '@/components/layout/Navbar';
 import Footer from '@/components/layout/Footer';
+import DashboardView from '@/components/dashboard/DashboardView';
 
-const Index = () => {
+const Dashboard = () => {
   // Apply scroll restoration on page load
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -15,12 +14,11 @@ const Index = () => {
     <div className="min-h-screen flex flex-col">
       <Navbar />
       <main className="flex-grow">
-        <Hero />
-        <DatabaseView />
+        <DashboardView />
       </main>
       <Footer />
     </div>
   );
 };
 
-export default Index;
+export default Dashboard;

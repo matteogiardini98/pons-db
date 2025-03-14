@@ -1,7 +1,7 @@
 
 import { useState } from 'react';
 import { NavLink, useLocation } from 'react-router-dom';
-import { Database, LayoutDashboard, PlusCircle, Sun, Moon, ArrowRight } from 'lucide-react';
+import { Database, LayoutDashboard, PlusCircle, Sun, Moon, ArrowRight, ImageOff } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useTheme } from '@/hooks/use-theme';
 import { Input } from '@/components/ui/input';
@@ -11,6 +11,7 @@ import { useToast } from '@/hooks/use-toast';
 const Sidebar = () => {
   const [collapsed, setCollapsed] = useState(false);
   const [email, setEmail] = useState('');
+  const [logoError, setLogoError] = useState(false);
   const { theme, setTheme } = useTheme();
   const location = useLocation();
   const { toast } = useToast();
@@ -48,10 +49,15 @@ const Sidebar = () => {
     setEmail('');
   };
 
-  // Updated logo paths to use the newly uploaded images
+  // Updated logo paths with error handling
   const logoUrl = theme === 'dark' 
     ? '/lovable-uploads/4dfad91b-1e3b-48f7-aef4-adb4017a550f.png' 
     : '/lovable-uploads/9ffbda64-9d7c-4e7c-9334-eb8df74a815c.png';
+
+  const handleImageError = () => {
+    setLogoError(true);
+    console.error("Logo image failed to load:", logoUrl);
+  };
 
   return (
     <aside
@@ -70,11 +76,18 @@ const Sidebar = () => {
         style={{ borderBottom: '1px solid' }}>
           {!collapsed && (
             <div className="flex items-center gap-3">
-              <img
-                src={logoUrl}
-                alt="pons41 logo"
-                className="h-8 w-auto"
-              />
+              {logoError ? (
+                <div className="h-8 w-8 flex items-center justify-center bg-neutral-100 dark:bg-neutral-800 rounded">
+                  <ImageOff size={16} className={theme === 'dark' ? 'text-neutral-400' : 'text-neutral-500'} />
+                </div>
+              ) : (
+                <img
+                  src={logoUrl}
+                  alt="pons41 logo"
+                  className="h-8 w-auto"
+                  onError={handleImageError}
+                />
+              )}
               <span className={cn(
                 "text-xl font-medium",
                 theme === 'dark' ? 'text-white' : 'text-black'
@@ -82,11 +95,18 @@ const Sidebar = () => {
             </div>
           )}
           {collapsed && (
-            <img
-              src={logoUrl}
-              alt="pons41 logo"
-              className="h-8 w-auto mx-auto"
-            />
+            logoError ? (
+              <div className="h-8 w-8 flex items-center justify-center bg-neutral-100 dark:bg-neutral-800 rounded mx-auto">
+                <ImageOff size={16} className={theme === 'dark' ? 'text-neutral-400' : 'text-neutral-500'} />
+              </div>
+            ) : (
+              <img
+                src={logoUrl}
+                alt="pons41 logo"
+                className="h-8 w-auto mx-auto"
+                onError={handleImageError}
+              />
+            )
           )}
         </div>
         

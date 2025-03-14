@@ -1,6 +1,6 @@
 
 import { useState, useEffect } from 'react';
-import { Tag, Users, ArrowUpDown } from 'lucide-react';
+import { Tag, Users, ArrowUpDown, ImageOff } from 'lucide-react';
 import { AiTool, FilterState } from '@/utils/types';
 import { mockTools } from '@/utils/data';
 import { Button } from '@/components/ui/button';
@@ -19,6 +19,7 @@ const DatabaseTableView = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [isLoading, setIsLoading] = useState(true);
   const [tools, setTools] = useState<AiTool[]>([]);
+  const [logoError, setLogoError] = useState(false);
   const [filters, setFilters] = useState<FilterState>({
     industries: [],
     functions: [],
@@ -150,6 +151,15 @@ const DatabaseTableView = () => {
   const hoverBgColor = isDarkMode ? 'hover:bg-neutral-800' : 'hover:bg-neutral-100';
   const buttonBgColor = isDarkMode ? 'bg-[#222222]' : 'bg-white';
 
+  const logoUrl = isDarkMode 
+    ? '/lovable-uploads/4dfad91b-1e3b-48f7-aef4-adb4017a550f.png'
+    : '/lovable-uploads/9ffbda64-9d7c-4e7c-9334-eb8df74a815c.png';
+
+  const handleImageError = () => {
+    setLogoError(true);
+    console.error("Logo image failed to load:", logoUrl);
+  };
+
   const activeFilterCount = 
     filters.industries.length + 
     filters.functions.length + 
@@ -164,14 +174,18 @@ const DatabaseTableView = () => {
       <div className="container-tight p-4 md:p-6">
         <div className="mb-8">
           <div className="flex items-center gap-3 mb-6">
-            <img 
-              src={isDarkMode 
-                ? '/lovable-uploads/4dfad91b-1e3b-48f7-aef4-adb4017a550f.png'
-                : '/lovable-uploads/9ffbda64-9d7c-4e7c-9334-eb8df74a815c.png'
-              } 
-              alt="pons41 logo" 
-              className="h-10 w-auto"
-            />
+            {logoError ? (
+              <div className="h-10 w-10 flex items-center justify-center bg-neutral-100 dark:bg-neutral-800 rounded">
+                <ImageOff className={isDarkMode ? 'text-neutral-400' : 'text-neutral-500'} />
+              </div>
+            ) : (
+              <img 
+                src={logoUrl} 
+                alt="pons41 logo" 
+                className="h-10 w-auto"
+                onError={handleImageError}
+              />
+            )}
             <h1 className="text-3xl md:text-4xl font-medium">pons41</h1>
           </div>
           

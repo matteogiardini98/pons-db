@@ -1,14 +1,19 @@
 
 import { useState } from 'react';
 import { NavLink, useLocation } from 'react-router-dom';
-import { Database, LayoutDashboard, PlusCircle, Sun, Moon } from 'lucide-react';
+import { Database, LayoutDashboard, PlusCircle, Sun, Moon, ArrowRight } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useTheme } from '@/hooks/use-theme';
+import { Input } from '@/components/ui/input';
+import { Button } from '@/components/ui/button';
+import { useToast } from '@/hooks/use-toast';
 
 const Sidebar = () => {
   const [collapsed, setCollapsed] = useState(false);
+  const [email, setEmail] = useState('');
   const { theme, setTheme } = useTheme();
   const location = useLocation();
+  const { toast } = useToast();
 
   const navLinks = [
     { name: 'Database', path: '/', icon: Database },
@@ -24,28 +29,60 @@ const Sidebar = () => {
     setTheme(theme === 'dark' ? 'light' : 'dark');
   };
 
+  const handleSubscribe = (e: React.FormEvent) => {
+    e.preventDefault();
+    
+    if (!email.trim() || !/\S+@\S+\.\S+/.test(email)) {
+      toast({
+        title: "Invalid email",
+        description: "Please enter a valid email address",
+        variant: "destructive"
+      });
+      return;
+    }
+
+    toast({
+      title: "Success!",
+      description: "You've been subscribed to our newsletter",
+    });
+    setEmail('');
+  };
+
+  const logoUrl = theme === 'dark' 
+    ? '/lovable-uploads/46fb78ce-090f-4f3e-a4cc-ef63c7432ed9.png' 
+    : '/lovable-uploads/6441194c-6a93-4e33-b3bd-51bef2eaae84.png';
+
   return (
     <aside
       className={cn(
-        'fixed left-0 top-0 bottom-0 z-40 transition-all duration-300 bg-[#222222] border-r border-neutral-700',
+        'fixed left-0 top-0 bottom-0 z-40 transition-all duration-300',
+        theme === 'dark' ? 'bg-[#222222] border-neutral-700' : 'bg-white border-neutral-200',
         collapsed ? 'w-16' : 'w-64'
       )}
+      style={{ borderRight: '1px solid' }}
     >
       <div className="flex flex-col h-full">
-        <div className="p-4 border-b border-neutral-700 flex items-center">
+        <div className={cn(
+          "p-4 flex items-center",
+          theme === 'dark' ? 'border-neutral-700' : 'border-neutral-200'
+        )} 
+        style={{ borderBottom: '1px solid' }}>
           {!collapsed && (
             <div className="flex items-center gap-3">
               <img
-                src="/lovable-uploads/0b3a778e-cad6-428d-b345-9c0dc1f2c1b3.png"
+                src={logoUrl}
                 alt="pons41 logo"
                 className="h-8 w-auto"
               />
-              <span className="text-xl font-medium text-white">pons41</span>
+              <span className={cn(
+                "text-xl font-medium",
+                theme === 'dark' ? 'text-white' : 'text-black'
+              )}>pons41</span>
             </div>
           )}
           {collapsed && (
             <img
-              src="/lovable-uploads/0b3a778e-cad6-428d-b345-9c0dc1f2c1b3.png"
+              src={logoUrl}
               alt="pons41 logo"
               className="h-8 w-auto mx-auto"
             />
@@ -62,8 +99,12 @@ const Sidebar = () => {
                     cn(
                       'flex items-center px-3 py-2 rounded-md text-sm font-medium transition-colors',
                       isActive
-                        ? 'bg-neutral-700 text-white'
-                        : 'text-neutral-300 hover:bg-neutral-800 hover:text-white',
+                        ? theme === 'dark' 
+                          ? 'bg-neutral-700 text-white' 
+                          : 'bg-neutral-200 text-black'
+                        : theme === 'dark'
+                          ? 'text-neutral-300 hover:bg-neutral-800 hover:text-white'
+                          : 'text-neutral-600 hover:bg-neutral-100 hover:text-black',
                       collapsed ? 'justify-center' : 'justify-start'
                     )
                   }
@@ -76,12 +117,57 @@ const Sidebar = () => {
           </ul>
         </nav>
         
-        <div className="p-4 border-t border-neutral-700">
+        {!collapsed && (
+          <div className={cn(
+            "p-4",
+            theme === 'dark' ? 'border-neutral-700' : 'border-neutral-200'
+          )}
+          style={{ borderTop: '1px solid' }}>
+            <div className="mb-3">
+              <p className={cn(
+                "text-xs mb-2",
+                theme === 'dark' ? 'text-neutral-400' : 'text-neutral-500'
+              )}>
+                We will send you an email with a new tool per week
+              </p>
+              <form onSubmit={handleSubscribe} className="flex gap-2">
+                <Input
+                  type="email"
+                  placeholder="Your email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  className={cn(
+                    "text-xs h-8",
+                    theme === 'dark' 
+                      ? 'bg-[#333333] border-neutral-700 text-white' 
+                      : 'bg-white border-neutral-200 text-black'
+                  )}
+                />
+                <Button 
+                  type="submit" 
+                  size="sm" 
+                  className="h-8 px-2"
+                  variant={theme === 'dark' ? 'default' : 'outline'}
+                >
+                  <ArrowRight className="h-3 w-3" />
+                </Button>
+              </form>
+            </div>
+          </div>
+        )}
+        
+        <div className={cn(
+          "p-4",
+          theme === 'dark' ? 'border-neutral-700' : 'border-neutral-200'
+        )}
+        style={{ borderTop: collapsed ? '1px solid' : 'none' }}>
           <button
             onClick={toggleTheme}
             className={cn(
               'flex items-center w-full px-3 py-2 rounded-md text-sm font-medium transition-colors',
-              'text-neutral-300 hover:bg-neutral-800 hover:text-white',
+              theme === 'dark'
+                ? 'text-neutral-300 hover:bg-neutral-800 hover:text-white'
+                : 'text-neutral-600 hover:bg-neutral-100 hover:text-black',
               collapsed ? 'justify-center' : 'justify-start'
             )}
           >
@@ -95,7 +181,12 @@ const Sidebar = () => {
           
           <button
             onClick={toggleSidebar}
-            className="mt-2 flex items-center w-full px-3 py-2 rounded-md text-sm font-medium text-neutral-300 hover:bg-neutral-800 hover:text-white transition-colors"
+            className={cn(
+              "mt-2 flex items-center w-full px-3 py-2 rounded-md text-sm font-medium transition-colors",
+              theme === 'dark'
+                ? 'text-neutral-300 hover:bg-neutral-800 hover:text-white'
+                : 'text-neutral-600 hover:bg-neutral-100 hover:text-black'
+            )}
           >
             {collapsed ? (
               <span className="mx-auto">→</span>

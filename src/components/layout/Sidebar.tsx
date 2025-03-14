@@ -48,8 +48,9 @@ const Sidebar = () => {
     setEmail('');
   };
 
+  // Updated logo paths - using the correct paths for dark and light modes
   const logoUrl = theme === 'dark' 
-    ? '/lovable-uploads/46fb78ce-090f-4f3e-a4cc-ef63c7432ed9.png' 
+    ? '/lovable-uploads/0b3a778e-cad6-428d-b345-9c0dc1f2c1b3.png' 
     : '/lovable-uploads/6441194c-6a93-4e33-b3bd-51bef2eaae84.png';
 
   return (

@@ -56,19 +56,6 @@ const DatabaseTableView = () => {
     return true;
   });
 
-  const renderCompanyLogo = (tool: AiTool) => (
-    <div className="w-8 h-8 rounded overflow-hidden bg-neutral-800 flex items-center justify-center">
-      <img 
-        src={tool.logo} 
-        alt={`${tool.name} logo`} 
-        className="w-full h-full object-cover"
-        onError={(e) => {
-          (e.target as HTMLImageElement).src = `https://via.placeholder.com/40/333333/FFFFFF?text=${tool.name.charAt(0)}`;
-        }}
-      />
-    </div>
-  );
-
   return (
     <motion.div 
       className="min-h-screen pt-16"
@@ -76,7 +63,14 @@ const DatabaseTableView = () => {
     >
       <div className="container-tight p-4 md:p-6 text-white">
         <div className="mb-8">
-          <h1 className="text-3xl md:text-4xl font-medium mb-6">AI Solutions</h1>
+          <div className="flex items-center gap-3 mb-6">
+            <img 
+              src="/lovable-uploads/0b3a778e-cad6-428d-b345-9c0dc1f2c1b3.png" 
+              alt="pons41 logo" 
+              className="h-10 w-auto"
+            />
+            <h1 className="text-3xl md:text-4xl font-medium">pons41</h1>
+          </div>
           
           <div className="flex flex-col md:flex-row gap-3 md:items-center mb-6">
             <div className="relative flex-grow max-w-lg">
@@ -93,15 +87,15 @@ const DatabaseTableView = () => {
             <div className="flex flex-wrap gap-2">
               <Button variant="outline" size="sm" className="border-neutral-700 bg-[#222222] hover:bg-neutral-800 gap-2">
                 <Tag size={16} />
-                Categories
+                Industry
               </Button>
               <Button variant="outline" size="sm" className="border-neutral-700 bg-[#222222] hover:bg-neutral-800 gap-2">
                 <Users size={16} />
-                Team size
+                Function
               </Button>
               <Button variant="outline" size="sm" className="border-neutral-700 bg-[#222222] hover:bg-neutral-800 gap-2">
                 <MapPin size={16} />
-                Location
+                EU-ready
               </Button>
               <Button variant="outline" size="sm" className="border-neutral-700 bg-[#222222] hover:bg-neutral-800 gap-2">
                 <ArrowUpDown size={16} />
@@ -134,13 +128,7 @@ const DatabaseTableView = () => {
                       onClick={() => navigate(`/tool/${tool.id}`)}
                     >
                       <TableCell className="py-4">
-                        <div className="flex items-center gap-3">
-                          {renderCompanyLogo(tool)}
-                          <div>
-                            <div className="font-medium">{tool.name}</div>
-                            <div className="text-sm text-neutral-400 md:hidden line-clamp-1">{tool.description}</div>
-                          </div>
-                        </div>
+                        <div className="font-medium">{tool.name}</div>
                       </TableCell>
                       <TableCell className="max-w-xs hidden md:table-cell">
                         <div className="line-clamp-2 text-neutral-300">{tool.description}</div>
@@ -201,13 +189,6 @@ const DatabaseTableView = () => {
               </div>
             </div>
           )}
-          
-          <div className="flex justify-center mt-8">
-            <Button className="gap-2" onClick={() => navigate('/add-tool')}>
-              <PlusCircle size={16} />
-              Add AI Solution
-            </Button>
-          </div>
         </div>
       </div>
     </motion.div>

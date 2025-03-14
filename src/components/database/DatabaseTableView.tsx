@@ -28,6 +28,7 @@ const DatabaseTableView = () => {
     euCompliant: {
       gdpr: false,
       dataResidency: false,
+      aiAct: false,
     },
   });
   const [showIndustryDropdown, setShowIndustryDropdown] = useState(false);
@@ -68,7 +69,7 @@ const DatabaseTableView = () => {
     });
   };
 
-  const toggleEUFilter = (type: 'gdpr' | 'dataResidency') => {
+  const toggleEUFilter = (type: 'gdpr' | 'dataResidency' | 'aiAct') => {
     setFilters(prev => ({
       ...prev,
       euCompliant: {
@@ -87,6 +88,7 @@ const DatabaseTableView = () => {
       euCompliant: {
         gdpr: false,
         dataResidency: false,
+        aiAct: false,
       },
     });
   };
@@ -152,8 +154,8 @@ const DatabaseTableView = () => {
   const buttonBgColor = isDarkMode ? 'bg-[#222222]' : 'bg-white';
 
   const logoUrl = isDarkMode 
-    ? '/lovable-uploads/4dfad91b-1e3b-48f7-aef4-adb4017a550f.png'
-    : '/lovable-uploads/9ffbda64-9d7c-4e7c-9334-eb8df74a815c.png';
+    ? '/lovable-uploads/0b439e01-d1aa-4e14-b75d-00cc947f78ef.png'
+    : '/lovable-uploads/649e008f-f511-4467-97e6-d658be7b73e6.png';
 
   const handleImageError = () => {
     setLogoError(true);
@@ -164,7 +166,8 @@ const DatabaseTableView = () => {
     filters.industries.length + 
     filters.functions.length + 
     (filters.euCompliant.gdpr ? 1 : 0) + 
-    (filters.euCompliant.dataResidency ? 1 : 0);
+    (filters.euCompliant.dataResidency ? 1 : 0) +
+    (filters.euCompliant.aiAct ? 1 : 0);
 
   return (
     <motion.div 
@@ -181,12 +184,12 @@ const DatabaseTableView = () => {
             ) : (
               <img 
                 src={logoUrl} 
-                alt="pons41 logo" 
+                alt="pons logo" 
                 className="h-10 w-auto"
                 onError={handleImageError}
               />
             )}
-            <h1 className="text-3xl md:text-4xl font-medium">pons41</h1>
+            <h1 className="text-3xl md:text-4xl font-medium">pons</h1>
           </div>
           
           <div className="flex flex-col md:flex-row gap-3 md:items-center mb-6">
@@ -194,7 +197,7 @@ const DatabaseTableView = () => {
             
             <div className="flex flex-wrap gap-2">
               <FilterDropdown
-                title="Industry"
+                title="industry"
                 icon={<Tag size={16} />}
                 isOpen={showIndustryDropdown}
                 onToggle={toggleIndustryDropdown}
@@ -205,7 +208,7 @@ const DatabaseTableView = () => {
               />
               
               <FilterDropdown
-                title="Function"
+                title="function"
                 icon={<Users size={16} />}
                 isOpen={showFunctionDropdown}
                 onToggle={toggleFunctionDropdown}
@@ -222,7 +225,7 @@ const DatabaseTableView = () => {
                 onFilterToggle={toggleEUFilter}
                 onClear={() => setFilters(prev => ({ 
                   ...prev, 
-                  euCompliant: { gdpr: false, dataResidency: false } 
+                  euCompliant: { gdpr: false, dataResidency: false, aiAct: false } 
                 }))}
               />
               
@@ -230,7 +233,7 @@ const DatabaseTableView = () => {
                 isDarkMode ? "bg-[#222222] hover:bg-neutral-800" : "bg-white hover:bg-neutral-100"
               )}>
                 <ArrowUpDown size={16} />
-                Sort
+                sort
               </Button>
               
               {activeFilterCount > 0 && (
@@ -240,7 +243,7 @@ const DatabaseTableView = () => {
                   onClick={clearFilters}
                   className={cn(mutedTextColor)}
                 >
-                  Clear all
+                  clear all
                 </Button>
               )}
             </div>

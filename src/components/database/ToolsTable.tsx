@@ -39,11 +39,10 @@ const ToolsTable = ({ tools, isLoading }: ToolsTableProps) => {
       <Table className={textColor}>
         <TableHeader className={headerBgColor}>
           <TableRow className={borderColor}>
-            <TableHead className={textColor}>Name</TableHead>
-            <TableHead className={cn("max-w-xs hidden md:table-cell", textColor)}>Description</TableHead>
-            <TableHead className={cn("hidden md:table-cell", textColor)}>Industry Tags</TableHead>
-            <TableHead className={cn("hidden md:table-cell", textColor)}>Function Tags</TableHead>
-            <TableHead className={cn("hidden xl:table-cell", textColor)}>Stage</TableHead>
+            <TableHead className={textColor}>name</TableHead>
+            <TableHead className={cn("max-w-xs hidden md:table-cell", textColor)}>description</TableHead>
+            <TableHead className={cn("hidden md:table-cell", textColor)}>industry tags</TableHead>
+            <TableHead className={cn("hidden md:table-cell", textColor)}>function tags</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
@@ -99,18 +98,6 @@ const ToolsTable = ({ tools, isLoading }: ToolsTableProps) => {
                   )}
                 </div>
               </TableCell>
-              <TableCell className="hidden xl:table-cell">
-                <Badge 
-                  className={`${
-                    tool.reviews.length > 5 ? 'bg-green-900 text-green-100' : 
-                    tool.reviews.length > 0 ? 'bg-amber-900 text-amber-100' : 
-                    isDarkMode ? 'bg-neutral-800 text-neutral-300' : 'bg-neutral-200 text-neutral-600'
-                  }`}
-                >
-                  {tool.reviews.length > 5 ? 'Seed' : 
-                   tool.reviews.length > 0 ? '1-10' : 'Unknown'}
-                </Badge>
-              </TableCell>
             </TableRow>
           ))}
         </TableBody>
@@ -118,7 +105,7 @@ const ToolsTable = ({ tools, isLoading }: ToolsTableProps) => {
       
       <div className={cn("flex items-center justify-between p-4 border-t text-sm", borderColor, headerBgColor)}>
         <div className={mutedTextColor}>
-          {tools.length} results • Page 1/1
+          {tools.length} results • page 1/1
         </div>
         <div className="flex items-center gap-2">
           <Button 
@@ -127,7 +114,7 @@ const ToolsTable = ({ tools, isLoading }: ToolsTableProps) => {
             className={cn("border-neutral-700", buttonBgColor, hoverBgColor)} 
             disabled
           >
-            Previous
+            previous
           </Button>
           <Button 
             variant="outline" 
@@ -135,7 +122,7 @@ const ToolsTable = ({ tools, isLoading }: ToolsTableProps) => {
             className={cn("border-neutral-700", buttonBgColor, hoverBgColor)} 
             disabled
           >
-            Next
+            next
           </Button>
         </div>
       </div>

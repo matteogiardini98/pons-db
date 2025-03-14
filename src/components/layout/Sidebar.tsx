@@ -1,7 +1,6 @@
-
 import { useState } from 'react';
 import { NavLink, useLocation } from 'react-router-dom';
-import { Database, LayoutDashboard, PlusCircle, Sun, Moon, ArrowRight, ImageOff } from 'lucide-react';
+import { Database, LayoutDashboard, PlusCircle, Sun, Moon, ArrowRight, ImageOff, BookOpen } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useTheme } from '@/hooks/use-theme';
 import { Input } from '@/components/ui/input';
@@ -17,9 +16,10 @@ const Sidebar = () => {
   const { toast } = useToast();
 
   const navLinks = [
-    { name: 'Database', path: '/', icon: Database },
-    { name: 'Dashboard', path: '/dashboard', icon: LayoutDashboard },
-    { name: 'Add Tool', path: '/add-tool', icon: PlusCircle },
+    { name: 'database', path: '/', icon: Database },
+    { name: 'dashboard', path: '/dashboard', icon: LayoutDashboard },
+    { name: 'add tool', path: '/add-tool', icon: PlusCircle },
+    { name: 'manifesto', path: '/manifesto', icon: BookOpen },
   ];
 
   const toggleSidebar = () => {
@@ -35,24 +35,24 @@ const Sidebar = () => {
     
     if (!email.trim() || !/\S+@\S+\.\S+/.test(email)) {
       toast({
-        title: "Invalid email",
-        description: "Please enter a valid email address",
+        title: "invalid email",
+        description: "please enter a valid email address",
         variant: "destructive"
       });
       return;
     }
 
     toast({
-      title: "Success!",
-      description: "You've been subscribed to our newsletter",
+      title: "success!",
+      description: "you've been subscribed to our newsletter",
     });
     setEmail('');
   };
 
   // Updated logo paths with error handling
   const logoUrl = theme === 'dark' 
-    ? '/lovable-uploads/4dfad91b-1e3b-48f7-aef4-adb4017a550f.png' 
-    : '/lovable-uploads/9ffbda64-9d7c-4e7c-9334-eb8df74a815c.png';
+    ? '/lovable-uploads/0b439e01-d1aa-4e14-b75d-00cc947f78ef.png' 
+    : '/lovable-uploads/649e008f-f511-4467-97e6-d658be7b73e6.png';
 
   const handleImageError = () => {
     setLogoError(true);
@@ -83,7 +83,7 @@ const Sidebar = () => {
               ) : (
                 <img
                   src={logoUrl}
-                  alt="pons41 logo"
+                  alt="pons logo"
                   className="h-8 w-auto"
                   onError={handleImageError}
                 />
@@ -91,7 +91,7 @@ const Sidebar = () => {
               <span className={cn(
                 "text-xl font-medium",
                 theme === 'dark' ? 'text-white' : 'text-black'
-              )}>pons41</span>
+              )}>pons</span>
             </div>
           )}
           {collapsed && (
@@ -102,7 +102,7 @@ const Sidebar = () => {
             ) : (
               <img
                 src={logoUrl}
-                alt="pons41 logo"
+                alt="pons logo"
                 className="h-8 w-auto mx-auto"
                 onError={handleImageError}
               />
@@ -149,12 +149,12 @@ const Sidebar = () => {
                 "text-xs mb-2",
                 theme === 'dark' ? 'text-neutral-400' : 'text-neutral-500'
               )}>
-                We will send you an email with a new tool per week
+                we will send you an email with a new tool per week
               </p>
               <form onSubmit={handleSubscribe} className="flex gap-2">
                 <Input
                   type="email"
-                  placeholder="Your email"
+                  placeholder="your email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   className={cn(
@@ -197,7 +197,7 @@ const Sidebar = () => {
             ) : (
               <Moon className={cn('h-5 w-5', !collapsed && 'mr-3')} />
             )}
-            {!collapsed && <span>{theme === 'dark' ? 'Light Mode' : 'Dark Mode'}</span>}
+            {!collapsed && <span>{theme === 'dark' ? 'light mode' : 'dark mode'}</span>}
           </button>
           
           <button
@@ -212,7 +212,7 @@ const Sidebar = () => {
             {collapsed ? (
               <span className="mx-auto">→</span>
             ) : (
-              <span>← Collapse</span>
+              <span>← collapse</span>
             )}
           </button>
         </div>

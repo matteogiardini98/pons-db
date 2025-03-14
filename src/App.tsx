@@ -11,6 +11,7 @@ import Dashboard from "./pages/Dashboard";
 import DatabasePage from "./pages/DatabasePage";
 import ToolDetailPage from "./pages/ToolDetailPage";
 import AddToolPage from "./pages/AddToolPage";
+import ManifestoPage from "./pages/ManifestoPage";
 
 const queryClient = new QueryClient();
 
@@ -27,6 +28,7 @@ const App = () => (
             <Route path="/dashboard" element={<Dashboard />} />
             <Route path="/add-tool" element={<AddToolPage />} />
             <Route path="/tool/:id" element={<ToolDetailPage />} />
+            <Route path="/manifesto" element={<ManifestoPage />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
           </Routes>

@@ -2,17 +2,19 @@
 import { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { ArrowLeft, ExternalLink, Globe, Linkedin, Check, X } from 'lucide-react';
+import { ArrowLeft, ExternalLink, Globe, Linkedin, Check, X, Send } from 'lucide-react';
 import { pageTransition } from '@/utils/animations';
 import { useTheme } from '@/hooks/use-theme';
 import { cn } from '@/lib/utils';
-import { AiTool } from '@/utils/types';
+import { AiTool, Review } from '@/utils/types';
 import { mockTools } from '@/utils/data';
 import Sidebar from '@/components/layout/Sidebar';
 import Footer from '@/components/layout/Footer';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
+import { Textarea } from '@/components/ui/textarea';
+import { useToast } from '@/hooks/use-toast';
 
 const ToolDetailPage = () => {
   const { id } = useParams<{ id: string }>();
@@ -20,6 +22,9 @@ const ToolDetailPage = () => {
   const { theme } = useTheme();
   const [tool, setTool] = useState<AiTool | null>(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [reviewText, setReviewText] = useState('');
+  const [reviews, setReviews] = useState<Review[]>([]);
+  const { toast } = useToast();
 
   useEffect(() => {
     // Apply scroll restoration on page load
@@ -29,11 +34,39 @@ const ToolDetailPage = () => {
     const timer = setTimeout(() => {
       const foundTool = mockTools.find(t => t.id === id);
       setTool(foundTool || null);
+      setReviews(foundTool?.reviews || []);
       setIsLoading(false);
     }, 500);
 
     return () => clearTimeout(timer);
   }, [id]);
+
+  const handleReviewSubmit = () => {
+    if (reviewText.trim() === '') {
+      toast({
+        title: "error",
+        description: "please enter a review before submitting",
+        variant: "destructive"
+      });
+      return;
+    }
+
+    const newReview: Review = {
+      id: `review-${Date.now()}`,
+      text: reviewText,
+      authorName: "anonymous user",
+      date: new Date().toISOString(),
+      rating: 5
+    };
+
+    setReviews(prev => [newReview, ...prev]);
+    setReviewText('');
+    
+    toast({
+      title: "success!",
+      description: "your review has been submitted",
+    });
+  };
 
   if (isLoading) {
     return (
@@ -58,16 +91,16 @@ const ToolDetailPage = () => {
         <Sidebar />
         <main className="flex-grow pl-16 md:pl-64 pt-16 container-tight p-6">
           <div className="text-center py-12">
-            <h2 className="text-2xl font-medium mb-4">Tool Not Found</h2>
+            <h2 className="text-2xl font-medium mb-4">tool not found</h2>
             <p className={cn(
               "mb-6",
               theme === 'dark' ? 'text-neutral-300' : 'text-neutral-700'
             )}>
-              The tool you're looking for doesn't exist or has been removed.
+              the tool you're looking for doesn't exist or has been removed.
             </p>
             <Button onClick={() => navigate('/')}>
               <ArrowLeft className="mr-2 h-4 w-4" />
-              Back to Database
+              back to database
             </Button>
           </div>
         </main>
@@ -90,7 +123,7 @@ const ToolDetailPage = () => {
             onClick={() => navigate('/')}
           >
             <ArrowLeft className="mr-2 h-4 w-4" />
-            Back to Database
+            back to database
           </Button>
           
           <div className={cn(
@@ -122,7 +155,7 @@ const ToolDetailPage = () => {
                     )}
                   >
                     <Globe className="h-4 w-4" />
-                    Website
+                    website
                     <ExternalLink className="h-3 w-3" />
                   </a>
                   
@@ -139,7 +172,7 @@ const ToolDetailPage = () => {
                       )}
                     >
                       <Linkedin className="h-4 w-4" />
-                      LinkedIn
+                      linkedin
                       <ExternalLink className="h-3 w-3" />
                     </a>
                   )}
@@ -151,10 +184,13 @@ const ToolDetailPage = () => {
             
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mt-8">
               <div>
-                <h3 className="text-xl font-medium mb-4">Industries</h3>
+                <h3 className="text-xl font-medium mb-4">industries</h3>
                 <div className="flex flex-wrap gap-2">
                   {tool.industries.map((industry) => (
-                    <Badge key={industry} variant="outline" className="bg-transparent border-neutral-600">
+                    <Badge key={industry} variant="outline" className={cn(
+                      "bg-transparent border-neutral-600 text-white",
+                      theme === 'dark' ? "text-white" : "text-black"
+                    )}>
                       {industry}
                     </Badge>
                   ))}
@@ -162,10 +198,13 @@ const ToolDetailPage = () => {
               </div>
               
               <div>
-                <h3 className="text-xl font-medium mb-4">Functions</h3>
+                <h3 className="text-xl font-medium mb-4">functions</h3>
                 <div className="flex flex-wrap gap-2">
                   {tool.functions.map((func) => (
-                    <Badge key={func} variant="outline" className="bg-transparent border-neutral-600">
+                    <Badge key={func} variant="outline" className={cn(
+                      "bg-transparent border-neutral-600",
+                      theme === 'dark' ? "text-white" : "text-black"
+                    )}>
                       {func}
                     </Badge>
                   ))}
@@ -173,10 +212,13 @@ const ToolDetailPage = () => {
               </div>
               
               <div>
-                <h3 className="text-xl font-medium mb-4">Business Types</h3>
+                <h3 className="text-xl font-medium mb-4">business types</h3>
                 <div className="flex flex-wrap gap-2">
                   {tool.businessTypes.map((type) => (
-                    <Badge key={type} variant="outline" className="bg-transparent border-neutral-600">
+                    <Badge key={type} variant="outline" className={cn(
+                      "bg-transparent border-neutral-600",
+                      theme === 'dark' ? "text-white" : "text-black"
+                    )}>
                       {type}
                     </Badge>
                   ))}
@@ -185,14 +227,17 @@ const ToolDetailPage = () => {
             </div>
             
             <div className="mt-8">
-              <h3 className="text-xl font-medium mb-4">Technical Level</h3>
-              <Badge variant="outline" className="bg-transparent border-neutral-600">
+              <h3 className="text-xl font-medium mb-4">technical level</h3>
+              <Badge variant="outline" className={cn(
+                "bg-transparent border-neutral-600",
+                theme === 'dark' ? "text-white" : "text-black"
+              )}>
                 {tool.technicalLevel}
               </Badge>
             </div>
             
             <div className="mt-8">
-              <h3 className="text-xl font-medium mb-4">Main Features</h3>
+              <h3 className="text-xl font-medium mb-4">main features</h3>
               <ul className={cn(
                 "list-disc pl-5 space-y-1",
                 theme === 'dark' ? 'text-neutral-300' : 'text-neutral-700'
@@ -204,7 +249,7 @@ const ToolDetailPage = () => {
             </div>
             
             <div className="mt-8">
-              <h3 className="text-xl font-medium mb-4">EU Compliance</h3>
+              <h3 className="text-xl font-medium mb-4">eu compliance</h3>
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                 <div className={cn(
                   "p-4 rounded-lg",
@@ -216,15 +261,15 @@ const ToolDetailPage = () => {
                     ) : (
                       <X className="h-5 w-5 text-red-500 mr-2" />
                     )}
-                    <h4 className="font-medium">GDPR Compliant</h4>
+                    <h4 className="font-medium">gdpr compliant</h4>
                   </div>
                   <p className={cn(
                     "text-sm",
                     theme === 'dark' ? 'text-neutral-400' : 'text-neutral-600'
                   )}>
                     {tool.euCompliant.gdpr 
-                      ? 'This tool is GDPR compliant and handles user data according to EU regulations.' 
-                      : 'This tool is not GDPR compliant or hasn\'t been verified.'}
+                      ? 'this tool is gdpr compliant and handles user data according to eu regulations.' 
+                      : 'this tool is not gdpr compliant or hasn\'t been verified.'}
                   </p>
                 </div>
                 
@@ -238,15 +283,15 @@ const ToolDetailPage = () => {
                     ) : (
                       <X className="h-5 w-5 text-red-500 mr-2" />
                     )}
-                    <h4 className="font-medium">EU Data Residency</h4>
+                    <h4 className="font-medium">eu data residency</h4>
                   </div>
                   <p className={cn(
                     "text-sm",
                     theme === 'dark' ? 'text-neutral-400' : 'text-neutral-600'
                   )}>
                     {tool.euCompliant.dataResidency 
-                      ? 'This tool stores data within the EU in compliance with data residency regulations.' 
-                      : 'This tool may store data outside the EU.'}
+                      ? 'this tool stores data within the eu in compliance with data residency regulations.' 
+                      : 'this tool may store data outside the eu.'}
                   </p>
                 </div>
                 
@@ -257,13 +302,13 @@ const ToolDetailPage = () => {
                   <div className="flex items-center mb-2">
                     {/* Assuming AI Act compliance is not yet tracked, adding as a placeholder */}
                     <X className="h-5 w-5 text-neutral-500 mr-2" />
-                    <h4 className="font-medium">EU AI Act Compliant</h4>
+                    <h4 className="font-medium">ai act compliant</h4>
                   </div>
                   <p className={cn(
                     "text-sm",
                     theme === 'dark' ? 'text-neutral-400' : 'text-neutral-600'
                   )}>
-                    Compliance status for the EU AI Act is not yet determined for this tool.
+                    compliance status for the eu ai act is not yet determined for this tool.
                   </p>
                 </div>
               </div>
@@ -271,7 +316,7 @@ const ToolDetailPage = () => {
             
             {tool.company && (
               <div className="mt-8">
-                <h3 className="text-xl font-medium mb-4">Company Information</h3>
+                <h3 className="text-xl font-medium mb-4">company information</h3>
                 <div className={cn(
                   "p-4 rounded-lg",
                   theme === 'dark' ? 'bg-neutral-800' : 'bg-neutral-100'
@@ -282,7 +327,7 @@ const ToolDetailPage = () => {
                         "text-sm font-medium mb-1",
                         theme === 'dark' ? 'text-neutral-400' : 'text-neutral-600'
                       )}>
-                        Company Name
+                        company name
                       </h4>
                       <p>{tool.company.name}</p>
                     </div>
@@ -292,7 +337,7 @@ const ToolDetailPage = () => {
                         "text-sm font-medium mb-1",
                         theme === 'dark' ? 'text-neutral-400' : 'text-neutral-600'
                       )}>
-                        Founded
+                        founded
                       </h4>
                       <p>{tool.company.founded}</p>
                     </div>
@@ -302,7 +347,7 @@ const ToolDetailPage = () => {
                         "text-sm font-medium mb-1",
                         theme === 'dark' ? 'text-neutral-400' : 'text-neutral-600'
                       )}>
-                        Location
+                        location
                       </h4>
                       <p>{tool.company.location}</p>
                     </div>
@@ -313,7 +358,7 @@ const ToolDetailPage = () => {
                           "text-sm font-medium mb-1",
                           theme === 'dark' ? 'text-neutral-400' : 'text-neutral-600'
                         )}>
-                          Employees
+                          employees
                         </h4>
                         <p>{tool.company.employees}</p>
                       </div>
@@ -323,49 +368,69 @@ const ToolDetailPage = () => {
               </div>
             )}
             
-            {tool.pricing && (
-              <div className="mt-8">
-                <h3 className="text-xl font-medium mb-4">Pricing</h3>
+            <div className="mt-8">
+              <h3 className="text-xl font-medium mb-4">share your experience</h3>
+              <div className={cn(
+                "p-4 rounded-lg",
+                theme === 'dark' ? 'bg-neutral-800' : 'bg-neutral-100'
+              )}>
+                <Textarea
+                  placeholder="write your review here..."
+                  className={cn(
+                    "mb-3 min-h-24",
+                    theme === 'dark' ? 'bg-neutral-700 border-neutral-600 text-white' : 'bg-white border-neutral-300'
+                  )}
+                  value={reviewText}
+                  onChange={(e) => setReviewText(e.target.value)}
+                />
+                <Button 
+                  onClick={handleReviewSubmit}
+                  className="flex items-center gap-2"
+                >
+                  <Send size={16} />
+                  submit review
+                </Button>
+              </div>
+            </div>
+            
+            <div className="mt-8">
+              <h3 className="text-xl font-medium mb-4">what users have to say about this tool</h3>
+              {reviews.length === 0 ? (
                 <div className={cn(
-                  "p-4 rounded-lg",
+                  "p-6 rounded-lg text-center",
                   theme === 'dark' ? 'bg-neutral-800' : 'bg-neutral-100'
                 )}>
-                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                    <div>
-                      <h4 className={cn(
-                        "text-sm font-medium mb-1",
-                        theme === 'dark' ? 'text-neutral-400' : 'text-neutral-600'
-                      )}>
-                        Pricing Model
-                      </h4>
-                      <p>{tool.pricing.model}</p>
-                    </div>
-                    
-                    <div>
-                      <h4 className={cn(
-                        "text-sm font-medium mb-1",
-                        theme === 'dark' ? 'text-neutral-400' : 'text-neutral-600'
-                      )}>
-                        Free Plan
-                      </h4>
-                      <p>{tool.pricing.hasFree ? 'Available' : 'Not available'}</p>
-                    </div>
-                    
-                    {tool.pricing.startingPrice && (
-                      <div>
-                        <h4 className={cn(
-                          "text-sm font-medium mb-1",
+                  <p className={theme === 'dark' ? 'text-neutral-400' : 'text-neutral-600'}>
+                    no reviews yet. be the first to share your experience!
+                  </p>
+                </div>
+              ) : (
+                <div className="space-y-4">
+                  {reviews.map((review) => (
+                    <div 
+                      key={review.id}
+                      className={cn(
+                        "p-4 rounded-lg",
+                        theme === 'dark' ? 'bg-neutral-800' : 'bg-neutral-100'
+                      )}
+                    >
+                      <div className="flex justify-between mb-2">
+                        <span className="font-medium">{review.authorName}</span>
+                        <span className={cn(
+                          "text-sm",
                           theme === 'dark' ? 'text-neutral-400' : 'text-neutral-600'
                         )}>
-                          Starting Price
-                        </h4>
-                        <p>${tool.pricing.startingPrice}/month</p>
+                          {new Date(review.date).toLocaleDateString()}
+                        </span>
                       </div>
-                    )}
-                  </div>
+                      <p className={theme === 'dark' ? 'text-neutral-300' : 'text-neutral-700'}>
+                        {review.text}
+                      </p>
+                    </div>
+                  ))}
                 </div>
-              </div>
-            )}
+              )}
+            </div>
           </div>
         </motion.div>
         <Footer />

@@ -12,8 +12,9 @@ interface EUComplianceFilterProps {
   filters: {
     gdpr: boolean;
     dataResidency: boolean;
+    aiAct?: boolean;
   };
-  onFilterToggle: (type: 'gdpr' | 'dataResidency') => void;
+  onFilterToggle: (type: 'gdpr' | 'dataResidency' | 'aiAct') => void;
   onClear: () => void;
 }
 
@@ -28,7 +29,10 @@ const EUComplianceFilter = ({
   const isDarkMode = theme === 'dark';
   const textColor = isDarkMode ? 'text-white' : 'text-black';
   
-  const activeFilterCount = Number(filters.gdpr) + Number(filters.dataResidency);
+  const activeFilterCount = 
+    Number(filters.gdpr) + 
+    Number(filters.dataResidency) + 
+    Number(filters.aiAct || false);
 
   return (
     <div className="relative">
@@ -42,7 +46,7 @@ const EUComplianceFilter = ({
         onClick={onToggle}
       >
         <MapPin size={16} />
-        EU-ready
+        eu-ready
         {activeFilterCount > 0 && (
           <Badge variant={isDarkMode ? "secondary" : "outline"} className="ml-1">
             {activeFilterCount}
@@ -60,7 +64,7 @@ const EUComplianceFilter = ({
           isDarkMode ? "bg-[#333333] border border-neutral-700" : "bg-white border border-neutral-200"
         )}>
           <div className="flex justify-between items-center mb-2">
-            <h4 className={cn("text-sm font-medium", textColor)}>EU Compliance</h4>
+            <h4 className={cn("text-sm font-medium", textColor)}>eu compliance</h4>
             {activeFilterCount > 0 && (
               <Button 
                 variant="ghost" 
@@ -68,7 +72,7 @@ const EUComplianceFilter = ({
                 className="h-6 text-xs px-2"
                 onClick={onClear}
               >
-                Clear
+                clear
               </Button>
             )}
           </div>
@@ -83,7 +87,7 @@ const EUComplianceFilter = ({
                 htmlFor="gdpr"
                 className={cn("text-sm cursor-pointer", textColor)}
               >
-                GDPR Compliant
+                gdpr compliant
               </label>
             </div>
             <div className="flex items-center space-x-2">
@@ -96,7 +100,20 @@ const EUComplianceFilter = ({
                 htmlFor="dataResidency"
                 className={cn("text-sm cursor-pointer", textColor)}
               >
-                EU Data Residency
+                eu data residency
+              </label>
+            </div>
+            <div className="flex items-center space-x-2">
+              <Checkbox 
+                id="aiAct" 
+                checked={filters.aiAct || false}
+                onCheckedChange={() => onFilterToggle('aiAct')}
+              />
+              <label 
+                htmlFor="aiAct"
+                className={cn("text-sm cursor-pointer", textColor)}
+              >
+                ai act compliant
               </label>
             </div>
           </div>

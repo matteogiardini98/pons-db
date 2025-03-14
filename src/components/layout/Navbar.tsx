@@ -27,9 +27,10 @@ const Navbar = () => {
   const isActive = (path: string) => location.pathname === path;
 
   const navLinks = [
-    { name: 'Database', path: '/' },
-    { name: 'Dashboard', path: '/dashboard' },
-    { name: 'Add Tool', path: '/add-tool' },
+    { name: 'database', path: '/' },
+    { name: 'dashboard', path: '/dashboard' },
+    { name: 'add tool', path: '/add-tool' },
+    { name: 'manifesto', path: '/manifesto' },
   ];
 
   return (
@@ -41,7 +42,7 @@ const Navbar = () => {
     >
       <div className="container-tight flex items-center justify-between">
         <Link to="/" className="flex items-center gap-2">
-          <span className="text-xl font-display font-semibold tracking-tight">AI Solutions Database</span>
+          <span className="text-xl font-display font-semibold tracking-tight">pons dashboard</span>
         </Link>
 
         {/* Desktop Navigation */}
@@ -66,7 +67,7 @@ const Navbar = () => {
         <button 
           onClick={toggleMenu} 
           className="md:hidden flex items-center justify-center w-10 h-10 rounded-full focus:outline-none hover:bg-secondary transition-colors"
-          aria-label={isMenuOpen ? "Close menu" : "Open menu"}
+          aria-label={isMenuOpen ? "close menu" : "open menu"}
         >
           {isMenuOpen ? <X size={20} /> : <Menu size={20} />}
         </button>

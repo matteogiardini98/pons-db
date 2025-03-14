@@ -4,7 +4,7 @@ export interface AiTool {
   name: string;
   description: string;
   url: string;
-  logo?: string;
+  logo: string;
   industries: string[];
   functions: string[];
   businessTypes: string[];

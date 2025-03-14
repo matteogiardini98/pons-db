@@ -49,14 +49,11 @@ const Sidebar = () => {
     setEmail('');
   };
 
-  // Updated logo paths with error handling
-  const logoUrl = theme === 'dark' 
-    ? '/lovable-uploads/0b439e01-d1aa-4e14-b75d-00cc947f78ef.png' 
-    : '/lovable-uploads/649e008f-f511-4467-97e6-d658be7b73e6.png';
+  const logoUrl = '/lovable-uploads/6a9bd96e-870c-4305-8591-ea4b83807048.png';
 
   const handleImageError = () => {
-    setLogoError(true);
     console.error("Logo image failed to load:", logoUrl);
+    setLogoError(true);
   };
 
   return (

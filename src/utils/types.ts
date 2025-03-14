@@ -4,6 +4,7 @@ export interface AiTool {
   name: string;
   description: string;
   url: string;
+  logo?: string;
   industries: string[];
   functions: string[];
   businessTypes: string[];
@@ -25,6 +26,8 @@ export interface AiTool {
     hasFree: boolean;
     startingPrice?: number;
   };
+  releaseDate?: string;
+  similarTools?: string[];
   reviews: Review[];
 }
 
@@ -34,6 +37,9 @@ export interface Review {
   authorName: string;
   date: string;
   rating: number;
+  role?: string;
+  industry?: string;
+  comment?: string;
 }
 
 export interface FilterState {
@@ -47,3 +53,8 @@ export interface FilterState {
     aiAct?: boolean;
   };
 }
+
+export type Industry = string;
+export type BusinessFunction = string;
+export type BusinessType = string;
+export type TechnicalLevel = string;

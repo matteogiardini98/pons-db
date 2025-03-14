@@ -1,4 +1,3 @@
-
 import { AiTool, Industry, BusinessFunction, BusinessType, TechnicalLevel } from './types';
 
 export const INDUSTRIES: Industry[] = [
@@ -56,6 +55,7 @@ export const mockTools: AiTool[] = [
     euCompliant: {
       gdpr: true,
       dataResidency: true,
+      aiAct: false
     },
     features: [
       "Automated data analysis",
@@ -79,18 +79,18 @@ export const mockTools: AiTool[] = [
     reviews: [
       {
         id: "r1",
-        author: "Marie Dubois",
+        authorName: "Marie Dubois",
         rating: 4.5,
-        comment: "Transformed how we understand our customer data. Easy to use but powerful.",
+        text: "Transformed how we understand our customer data. Easy to use but powerful.",
         role: "Marketing Director",
         industry: "Retail",
         date: "2023-05-12",
       },
       {
         id: "r2",
-        author: "Stefan Müller",
+        authorName: "Stefan Müller",
         rating: 5,
-        comment: "Exceptional tool that helped us identify cost-saving opportunities we never knew existed.",
+        text: "Exceptional tool that helped us identify cost-saving opportunities we never knew existed.",
         role: "CFO",
         industry: "Manufacturing",
         date: "2023-06-30",
@@ -111,6 +111,7 @@ export const mockTools: AiTool[] = [
     euCompliant: {
       gdpr: true,
       dataResidency: false,
+      aiAct: false
     },
     features: [
       "Brand voice customization",
@@ -134,9 +135,9 @@ export const mockTools: AiTool[] = [
     reviews: [
       {
         id: "r3",
-        author: "Luisa García",
+        authorName: "Luisa García",
         rating: 4,
-        comment: "Saves me hours each week on copywriting tasks. The quality is impressive most of the time.",
+        text: "Saves me hours each week on copywriting tasks. The quality is impressive most of the time.",
         role: "Content Manager",
         industry: "Technology",
         date: "2023-04-18",
@@ -180,9 +181,9 @@ export const mockTools: AiTool[] = [
     reviews: [
       {
         id: "r4",
-        author: "Henrik Johansson",
+        authorName: "Henrik Johansson",
         rating: 5,
-        comment: "Revolutionized our legal department's efficiency. Highly accurate and GDPR compliant.",
+        text: "Revolutionized our legal department's efficiency. Highly accurate and GDPR compliant.",
         role: "Legal Counsel",
         industry: "Finance",
         date: "2023-02-15",
@@ -226,9 +227,9 @@ export const mockTools: AiTool[] = [
     reviews: [
       {
         id: "r5",
-        author: "Lotte van der Berg",
+        authorName: "Lotte van der Berg",
         rating: 4.5,
-        comment: "Cut our hiring process time by 40%. The bias reduction features are particularly valuable.",
+        text: "Cut our hiring process time by 40%. The bias reduction features are particularly valuable.",
         role: "HR Director",
         industry: "Technology",
         date: "2023-07-21",
@@ -272,9 +273,9 @@ export const mockTools: AiTool[] = [
     reviews: [
       {
         id: "r6",
-        author: "Klaus Weber",
+        authorName: "Klaus Weber",
         rating: 5,
-        comment: "The forecasting accuracy has tremendously improved our inventory management and reduced waste.",
+        text: "The forecasting accuracy has tremendously improved our inventory management and reduced waste.",
         role: "Supply Chain Manager",
         industry: "Manufacturing",
         date: "2023-03-09",
@@ -317,9 +318,9 @@ export const mockTools: AiTool[] = [
     reviews: [
       {
         id: "r7",
-        author: "Philippe Martin",
+        authorName: "Philippe Martin",
         rating: 4.5,
-        comment: "Best-in-class security tool with excellent EU compliance features. Implementation requires technical expertise.",
+        text: "Best-in-class security tool with excellent EU compliance features. Implementation requires technical expertise.",
         role: "CISO",
         industry: "Finance",
         date: "2023-01-25",
@@ -363,9 +364,9 @@ export const mockTools: AiTool[] = [
     reviews: [
       {
         id: "r8",
-        author: "Fiona O'Connor",
+        authorName: "Fiona O'Connor",
         rating: 4,
-        comment: "The insights we've gained have transformed our approach to customer service. Integration was simple.",
+        text: "The insights we've gained have transformed our approach to customer service. Integration was simple.",
         role: "Customer Experience Director",
         industry: "Retail",
         date: "2023-05-02",
@@ -409,9 +410,9 @@ export const mockTools: AiTool[] = [
     reviews: [
       {
         id: "r9",
-        author: "Anna Korhonen",
+        authorName: "Anna Korhonen",
         rating: 5,
-        comment: "Transformed our teaching approach completely. Students are more engaged and learning outcomes have improved.",
+        text: "Transformed our teaching approach completely. Students are more engaged and learning outcomes have improved.",
         role: "Educational Director",
         industry: "Education",
         date: "2023-06-14",
@@ -455,9 +456,9 @@ export const mockTools: AiTool[] = [
     reviews: [
       {
         id: "r10",
-        author: "Lars Nielsen",
+        authorName: "Lars Nielsen",
         rating: 4.5,
-        comment: "Excellent diagnostic support with strong privacy protections. Integration with our systems required some work.",
+        text: "Excellent diagnostic support with strong privacy protections. Integration with our systems required some work.",
         role: "Medical Director",
         industry: "Healthcare",
         date: "2023-02-28",
@@ -500,9 +501,9 @@ export const mockTools: AiTool[] = [
     reviews: [
       {
         id: "r11",
-        author: "Marco Bianchi",
+        authorName: "Marco Bianchi",
         rating: 5,
-        comment: "Reduced our maintenance costs by 30% and downtime by 45%. The ROI has been exceptional.",
+        text: "Reduced our maintenance costs by 30% and downtime by 45%. The ROI has been exceptional.",
         role: "Operations Director",
         industry: "Manufacturing",
         date: "2023-07-11",

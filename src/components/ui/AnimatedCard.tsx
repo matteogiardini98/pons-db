@@ -8,6 +8,8 @@ interface AnimatedCardProps {
   hoverEffect?: 'tilt' | 'lift' | 'glow' | 'none';
   glowColor?: string;
   isInteractive?: boolean;
+  onMouseEnter?: () => void;
+  onMouseLeave?: () => void;
 }
 
 const AnimatedCard = ({
@@ -15,7 +17,9 @@ const AnimatedCard = ({
   className,
   hoverEffect = 'tilt',
   glowColor = 'rgba(255, 255, 255, 0.1)',
-  isInteractive = true
+  isInteractive = true,
+  onMouseEnter,
+  onMouseLeave
 }: AnimatedCardProps) => {
   const cardRef = useRef<HTMLDivElement>(null);
   const [isMounted, setIsMounted] = useState(false);
@@ -66,6 +70,9 @@ const AnimatedCard = ({
       // Fade out glow
       setOpacity(0);
     }
+    
+    // Call the user-provided onMouseLeave handler if it exists
+    onMouseLeave?.();
   };
 
   const getHoverClass = () => {
@@ -89,6 +96,7 @@ const AnimatedCard = ({
       )}
       onMouseMove={handleMouseMove}
       onMouseLeave={handleMouseLeave}
+      onMouseEnter={onMouseEnter}
       style={{
         transition: 'transform 0.2s ease-out',
         willChange: 'transform',

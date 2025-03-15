@@ -81,6 +81,41 @@ export type Database = {
         }
         Relationships: []
       }
+      reviews: {
+        Row: {
+          author_name: string | null
+          created_at: string | null
+          id: string
+          rating: number | null
+          text: string
+          tool_id: string
+        }
+        Insert: {
+          author_name?: string | null
+          created_at?: string | null
+          id?: string
+          rating?: number | null
+          text: string
+          tool_id: string
+        }
+        Update: {
+          author_name?: string | null
+          created_at?: string | null
+          id?: string
+          rating?: number | null
+          text?: string
+          tool_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "reviews_tool_id_fkey"
+            columns: ["tool_id"]
+            isOneToOne: false
+            referencedRelation: "ai_tools"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
     }
     Views: {
       [_ in never]: never

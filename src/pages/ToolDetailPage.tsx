@@ -1,4 +1,3 @@
-
 import { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
@@ -67,8 +66,7 @@ const ToolDetailPage = () => {
           const { data: reviewsData, error: reviewsError } = await supabase
             .from('reviews')
             .select('*')
-            .eq('tool_id', id)
-            .order('created_at', { ascending: false });
+            .eq('tool_id', id);
             
           if (!reviewsError && reviewsData) {
             const mappedReviews: Review[] = reviewsData.map(review => ({
@@ -129,10 +127,10 @@ const ToolDetailPage = () => {
       
       const newReview: Review = {
         id: data.id,
-        text: reviewText,
-        authorName: "anonymous user",
+        text: data.text,
+        authorName: data.author_name,
         date: data.created_at,
-        rating: 5
+        rating: data.rating
       };
 
       setReviews(prev => [newReview, ...prev]);

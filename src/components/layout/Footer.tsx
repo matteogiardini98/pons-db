@@ -1,22 +1,16 @@
-
 import { Link } from 'react-router-dom';
-
 const Footer = () => {
   const currentYear = new Date().getFullYear();
-
-  return (
-    <footer className="border-t border-border py-12 mt-12">
+  return <footer className="border-t border-border py-12 mt-12">
       <div className="container-tight">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-10">
           <div className="space-y-4">
-            <h4 className="text-base font-semibold">AI Solutions Database</h4>
-            <p className="text-sm text-muted-foreground">
-              An open-source database of AI solutions to help companies find the right tools for their business problems.
-            </p>
+            <h4 className="text-base font-semibold">pons database</h4>
+            <p className="text-sm text-muted-foreground">pons is an open-source database of AI solutions to help companies find the right tools for their business problems.</p>
           </div>
           
           <div className="space-y-4">
-            <h4 className="text-base font-semibold">Navigation</h4>
+            <h4 className="text-base font-semibold">navigation</h4>
             <ul className="space-y-3">
               <li>
                 <Link to="/" className="text-sm text-muted-foreground hover:text-primary transition-colors link-underline">
@@ -37,7 +31,7 @@ const Footer = () => {
           </div>
           
           <div className="space-y-4">
-            <h4 className="text-base font-semibold">About</h4>
+            <h4 className="text-base font-semibold">about</h4>
             <ul className="space-y-3">
               <li>
                 <Link to="#" className="text-sm text-muted-foreground hover:text-primary transition-colors link-underline">
@@ -58,7 +52,7 @@ const Footer = () => {
           </div>
           
           <div className="space-y-4">
-            <h4 className="text-base font-semibold">Contact</h4>
+            <h4 className="text-base font-semibold">contact</h4>
             <ul className="space-y-3">
               <li>
                 <a href="https://github.com" target="_blank" rel="noreferrer" className="text-sm text-muted-foreground hover:text-primary transition-colors link-underline">
@@ -88,8 +82,6 @@ const Footer = () => {
           </div>
         </div>
       </div>
-    </footer>
-  );
+    </footer>;
 };
-
 export default Footer;

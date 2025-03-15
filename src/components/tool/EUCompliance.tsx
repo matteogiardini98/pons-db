@@ -8,7 +8,7 @@ interface EUComplianceProps {
   euCompliant: {
     gdpr: boolean;
     dataResidency: boolean;
-    aiAct: boolean;
+    aiAct?: boolean; // Made optional with the ? symbol
   };
 }
 

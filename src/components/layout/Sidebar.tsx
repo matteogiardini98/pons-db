@@ -1,9 +1,12 @@
 
 import { Link, useLocation } from 'react-router-dom';
+import { useState } from 'react';
 import { cn } from '@/lib/utils';
 import { useTheme } from '@/hooks/use-theme';
-import { Database, PlusCircle, FileText } from 'lucide-react';
+import { Database, PlusCircle, FileText, PanelLeftClose, Sun, Moon } from 'lucide-react';
 import EmailSubscription from './EmailSubscription';
+import BetaBanner from '@/components/ui/beta-banner';
+import { Button } from '@/components/ui/button';
 
 interface SidebarProps {
   collapsed?: boolean;
@@ -11,22 +14,34 @@ interface SidebarProps {
 
 const Sidebar = ({ collapsed = false }: SidebarProps) => {
   const location = useLocation();
-  const { theme } = useTheme();
+  const { theme, setTheme } = useTheme();
+  const [isCollapsed, setIsCollapsed] = useState(collapsed);
   
   const isActive = (path: string) => {
     return location.pathname === path;
   };
 
+  const toggleSidebar = () => {
+    setIsCollapsed(!isCollapsed);
+  };
+
+  const toggleTheme = () => {
+    setTheme(theme === 'dark' ? 'light' : 'dark');
+  };
+
   return (
     <div className={cn(
       "fixed inset-y-0 left-0 z-50 h-screen transition-all duration-300 ease-in-out",
-      collapsed ? "w-16" : "w-16 md:w-64",
+      isCollapsed ? "w-16" : "w-16 md:w-64",
       theme === 'dark' ? 'bg-[#111111] border-r border-[#222222]' : 'bg-white border-r border-neutral-200'
     )}>
       <div className="flex h-full flex-col">
         <div className="flex items-center justify-center h-16 md:justify-start md:pl-6">
           <Link to="/" className="flex items-center">
-            <span className={cn("font-medium text-lg", collapsed ? "hidden" : "hidden md:block")}>pons ai</span>
+            <span className={cn("font-medium text-lg", isCollapsed ? "hidden" : "hidden md:block")}>pons</span>
+            <div className={cn("ml-2", isCollapsed ? "hidden" : "hidden md:inline-block")}>
+              <BetaBanner />
+            </div>
           </Link>
         </div>
         
@@ -42,7 +57,7 @@ const Sidebar = ({ collapsed = false }: SidebarProps) => {
                 )}
               >
                 <Database className="h-5 w-5 mr-2 flex-shrink-0" />
-                <span className={cn(collapsed ? "hidden" : "hidden md:block")}>database</span>
+                <span className={cn(isCollapsed ? "hidden" : "hidden md:block")}>database</span>
               </Link>
             </li>
             <li>
@@ -55,7 +70,7 @@ const Sidebar = ({ collapsed = false }: SidebarProps) => {
                 )}
               >
                 <PlusCircle className="h-5 w-5 mr-2 flex-shrink-0" />
-                <span className={cn(collapsed ? "hidden" : "hidden md:block")}>add tool</span>
+                <span className={cn(isCollapsed ? "hidden" : "hidden md:block")}>add tool</span>
               </Link>
             </li>
             <li>
@@ -68,14 +83,37 @@ const Sidebar = ({ collapsed = false }: SidebarProps) => {
                 )}
               >
                 <FileText className="h-5 w-5 mr-2 flex-shrink-0" />
-                <span className={cn(collapsed ? "hidden" : "hidden md:block")}>manifesto</span>
+                <span className={cn(isCollapsed ? "hidden" : "hidden md:block")}>manifesto</span>
               </Link>
             </li>
           </ul>
         </nav>
         
-        <div className={cn(collapsed ? "hidden" : "hidden md:block", "border-t mt-auto")} style={{ borderColor: theme === 'dark' ? '#222222' : '#e5e5e5' }}>
+        <div className={cn(isCollapsed ? "hidden" : "hidden md:block", "border-t mt-auto")} 
+          style={{ borderColor: theme === 'dark' ? '#222222' : '#e5e5e5' }}>
           <EmailSubscription />
+          
+          <div className="p-4 flex flex-col gap-2">
+            <Button 
+              variant="outline" 
+              size="sm" 
+              onClick={toggleTheme}
+              className="w-full justify-start"
+            >
+              {theme === 'dark' ? <Sun className="h-4 w-4 mr-2" /> : <Moon className="h-4 w-4 mr-2" />}
+              {theme === 'dark' ? 'light mode' : 'dark mode'}
+            </Button>
+            
+            <Button 
+              variant="outline" 
+              size="sm" 
+              onClick={toggleSidebar}
+              className="w-full justify-start"
+            >
+              <PanelLeftClose className="h-4 w-4 mr-2" />
+              collapse sidebar
+            </Button>
+          </div>
         </div>
       </div>
     </div>

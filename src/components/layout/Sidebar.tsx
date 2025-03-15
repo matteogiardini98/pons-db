@@ -6,7 +6,6 @@ import { useTheme } from '@/hooks/use-theme';
 import { Database, PlusCircle, FileText, PanelLeftClose, Sun, Moon } from 'lucide-react';
 import EmailSubscription from './EmailSubscription';
 import BetaBanner from '@/components/ui/beta-banner';
-import { Button } from '@/components/ui/button';
 
 interface SidebarProps {
   collapsed?: boolean;
@@ -37,10 +36,10 @@ const Sidebar = ({ collapsed = false }: SidebarProps) => {
     )}>
       <div className="flex h-full flex-col">
         <div className="flex items-center justify-center h-16 md:justify-start md:pl-6">
-          <Link to="/" className="flex items-center">
+          <Link to="/" className="flex items-center gap-2">
             <span className={cn("font-medium text-lg", isCollapsed ? "hidden" : "hidden md:block")}>pons</span>
-            <div className={cn("ml-2", isCollapsed ? "hidden" : "hidden md:inline-block")}>
-              <BetaBanner />
+            <div className={cn(isCollapsed ? "hidden" : "hidden md:inline-block")}>
+              <BetaBanner inSidebar={true} />
             </div>
           </Link>
         </div>
@@ -89,30 +88,40 @@ const Sidebar = ({ collapsed = false }: SidebarProps) => {
           </ul>
         </nav>
         
-        <div className={cn(isCollapsed ? "hidden" : "hidden md:block", "border-t mt-auto")} 
+        <div className={cn("border-t mt-auto")} 
           style={{ borderColor: theme === 'dark' ? '#222222' : '#e5e5e5' }}>
           <EmailSubscription />
           
           <div className="p-4 flex flex-col gap-2">
-            <Button 
-              variant="outline" 
-              size="sm" 
+            {/* Simplified theme toggle button */}
+            <button 
               onClick={toggleTheme}
-              className="w-full justify-start"
+              className={cn(
+                "flex items-center gap-2 rounded-md px-3 py-2 text-sm",
+                theme === 'dark' ? 'hover:bg-[#222222] text-gray-300' : 'hover:bg-neutral-100 text-gray-700'
+              )}
             >
-              {theme === 'dark' ? <Sun className="h-4 w-4 mr-2" /> : <Moon className="h-4 w-4 mr-2" />}
-              {theme === 'dark' ? 'light mode' : 'dark mode'}
-            </Button>
+              {theme === 'dark' 
+                ? <Sun className="h-4 w-4" /> 
+                : <Moon className="h-4 w-4" />
+              }
+              <span className={cn(isCollapsed ? "hidden" : "hidden md:block")}>
+                {theme === 'dark' ? 'light mode' : 'dark mode'}
+              </span>
+            </button>
             
-            <Button 
-              variant="outline" 
-              size="sm" 
+            {/* Simplified collapse sidebar button */}
+            <button 
               onClick={toggleSidebar}
-              className="w-full justify-start"
+              className={cn(
+                "flex items-center gap-2 rounded-md px-3 py-2 text-sm",
+                theme === 'dark' ? 'hover:bg-[#222222] text-gray-300' : 'hover:bg-neutral-100 text-gray-700',
+                isCollapsed ? "hidden" : "hidden md:flex"
+              )}
             >
-              <PanelLeftClose className="h-4 w-4 mr-2" />
-              collapse sidebar
-            </Button>
+              <PanelLeftClose className="h-4 w-4" />
+              <span>collapse sidebar</span>
+            </button>
           </div>
         </div>
       </div>

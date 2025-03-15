@@ -15,6 +15,8 @@ import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
 import { Textarea } from '@/components/ui/textarea';
 import { useToast } from '@/hooks/use-toast';
+import { supabase } from '@/integrations/supabase/client';
+import BetaBanner from '@/components/ui/beta-banner';
 
 const ToolDetailPage = () => {
   const { id } = useParams<{ id: string }>();
@@ -30,15 +32,56 @@ const ToolDetailPage = () => {
     // Apply scroll restoration on page load
     window.scrollTo(0, 0);
     
-    // Simulate API loading
-    const timer = setTimeout(() => {
-      const foundTool = mockTools.find(t => t.id === id);
-      setTool(foundTool || null);
-      setReviews(foundTool?.reviews || []);
-      setIsLoading(false);
-    }, 500);
-
-    return () => clearTimeout(timer);
+    const fetchTool = async () => {
+      try {
+        // First try to fetch from Supabase
+        const { data, error } = await supabase
+          .from('ai_tools')
+          .select('*')
+          .eq('id', id)
+          .single();
+          
+        if (data) {
+          // Map Supabase data to AiTool type
+          const toolFromDb: AiTool = {
+            id: data.id,
+            name: data.name,
+            description: data.description,
+            url: data.website,
+            logo: '',
+            industries: data.industries,
+            functions: data.functions,
+            businessTypes: data.business_types,
+            technicalLevel: data.technical_level,
+            features: data.features || [],
+            euCompliant: {
+              gdpr: data.gdpr_compliant,
+              dataResidency: data.data_residency,
+              aiAct: data.ai_act_compliant
+            },
+            reviews: []
+          };
+          setTool(toolFromDb);
+          setReviews(toolFromDb.reviews);
+          setIsLoading(false);
+        } else {
+          // Fallback to mock data
+          const foundTool = mockTools.find(t => t.id === id);
+          setTool(foundTool || null);
+          setReviews(foundTool?.reviews || []);
+          setIsLoading(false);
+        }
+      } catch (error) {
+        console.error('Error fetching tool:', error);
+        // Fallback to mock data
+        const foundTool = mockTools.find(t => t.id === id);
+        setTool(foundTool || null);
+        setReviews(foundTool?.reviews || []);
+        setIsLoading(false);
+      }
+    };
+    
+    fetchTool();
   }, [id]);
 
   const handleReviewSubmit = () => {
@@ -114,6 +157,7 @@ const ToolDetailPage = () => {
       theme === 'dark' ? 'bg-[#111111] text-white' : 'bg-white text-black'
     )}>
       <Sidebar />
+      <BetaBanner />
       <main className="flex-grow pl-16 md:pl-64 pt-0">
         <motion.div className="container-tight p-4 md:p-6 pt-16" {...pageTransition}>
           <Button 

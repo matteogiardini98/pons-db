@@ -5,6 +5,7 @@ import Footer from '@/components/layout/Footer';
 import DashboardView from '@/components/dashboard/DashboardView';
 import { cn } from '@/lib/utils';
 import { useTheme } from '@/hooks/use-theme';
+import BetaBanner from '@/components/ui/beta-banner';
 
 const Dashboard = () => {
   const { theme } = useTheme();
@@ -20,7 +21,11 @@ const Dashboard = () => {
       theme === 'dark' ? 'bg-[#111111] text-white' : 'bg-white text-black'
     )}>
       <Sidebar />
+      <BetaBanner />
       <main className="flex-grow pl-16 md:pl-64 pt-0">
+        <div className="p-4 md:p-6 pt-16">
+          <h1 className="text-2xl md:text-3xl font-medium mb-6">pons dashboard</h1>
+        </div>
         <DashboardView />
         <Footer />
       </main>

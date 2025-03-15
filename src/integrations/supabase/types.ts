@@ -9,7 +9,78 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
-      [_ in never]: never
+      ai_tools: {
+        Row: {
+          ai_act_compliant: boolean | null
+          business_types: string[]
+          created_at: string | null
+          data_residency: boolean | null
+          description: string
+          features: string[] | null
+          functions: string[]
+          gdpr_compliant: boolean | null
+          id: string
+          industries: string[]
+          linkedin: string | null
+          name: string
+          technical_level: string | null
+          updated_at: string | null
+          website: string
+        }
+        Insert: {
+          ai_act_compliant?: boolean | null
+          business_types: string[]
+          created_at?: string | null
+          data_residency?: boolean | null
+          description: string
+          features?: string[] | null
+          functions: string[]
+          gdpr_compliant?: boolean | null
+          id?: string
+          industries: string[]
+          linkedin?: string | null
+          name: string
+          technical_level?: string | null
+          updated_at?: string | null
+          website: string
+        }
+        Update: {
+          ai_act_compliant?: boolean | null
+          business_types?: string[]
+          created_at?: string | null
+          data_residency?: boolean | null
+          description?: string
+          features?: string[] | null
+          functions?: string[]
+          gdpr_compliant?: boolean | null
+          id?: string
+          industries?: string[]
+          linkedin?: string | null
+          name?: string
+          technical_level?: string | null
+          updated_at?: string | null
+          website?: string
+        }
+        Relationships: []
+      }
+      email_subscriptions: {
+        Row: {
+          created_at: string | null
+          email: string
+          id: string
+        }
+        Insert: {
+          created_at?: string | null
+          email: string
+          id?: string
+        }
+        Update: {
+          created_at?: string | null
+          email?: string
+          id?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never

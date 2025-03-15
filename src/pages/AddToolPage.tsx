@@ -16,15 +16,17 @@ import { Input } from '@/components/ui/input';
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { Checkbox } from '@/components/ui/checkbox';
 import { toast } from '@/hooks/use-toast';
+import BetaBanner from '@/components/ui/beta-banner';
+import { supabase } from '@/integrations/supabase/client';
 
 const formSchema = z.object({
-  name: z.string().min(2, { message: 'Name must be at least 2 characters' }),
-  description: z.string().min(10, { message: 'Description must be at least 10 characters' }),
-  website: z.string().url({ message: 'Must be a valid URL' }),
-  linkedin: z.string().url({ message: 'Must be a valid URL' }).optional().or(z.literal('')),
-  industries: z.array(z.string()).min(1, { message: 'Select at least one industry' }),
-  functions: z.array(z.string()).min(1, { message: 'Select at least one function' }),
-  businessTypes: z.array(z.string()).min(1, { message: 'Select at least one business type' }),
+  name: z.string().min(2, { message: 'name must be at least 2 characters' }),
+  description: z.string().min(10, { message: 'description must be at least 10 characters' }),
+  website: z.string().url({ message: 'must be a valid url' }),
+  linkedin: z.string().url({ message: 'must be a valid url' }).optional().or(z.literal('')),
+  industries: z.array(z.string()).min(1, { message: 'select at least one industry' }),
+  functions: z.array(z.string()).min(1, { message: 'select at least one function' }),
+  businessTypes: z.array(z.string()).min(1, { message: 'select at least one business type' }),
   gdprCompliant: z.boolean().optional(),
   dataResidency: z.boolean().optional(),
   aiActCompliant: z.boolean().optional(),
@@ -57,20 +59,42 @@ const AddToolPage = () => {
     window.scrollTo(0, 0);
   }, []);
 
-  function onSubmit(data: FormValues) {
-    console.log(data);
-    
-    // In a real application, you would send this data to your backend
-    toast({
-      title: "Tool submitted",
-      description: `${data.name} has been submitted successfully.`,
-    });
-    
-    // Reset form
-    form.reset();
-    
-    // Redirect to database page
-    setTimeout(() => navigate('/'), 1500);
+  async function onSubmit(data: FormValues) {
+    try {
+      // Insert the tool data into Supabase
+      const { error } = await supabase.from('ai_tools').insert({
+        name: data.name,
+        description: data.description,
+        website: data.website,
+        linkedin: data.linkedin || null,
+        industries: data.industries,
+        functions: data.functions,
+        business_types: data.businessTypes,
+        gdpr_compliant: data.gdprCompliant,
+        data_residency: data.dataResidency,
+        ai_act_compliant: data.aiActCompliant,
+      });
+
+      if (error) throw error;
+      
+      toast({
+        title: "tool submitted",
+        description: `${data.name} has been added to the database.`,
+      });
+      
+      // Reset form
+      form.reset();
+      
+      // Redirect to database page
+      setTimeout(() => navigate('/'), 1500);
+    } catch (error: any) {
+      console.error('Error submitting tool:', error);
+      toast({
+        title: "submission failed",
+        description: error.message || 'there was an error submitting the tool. please try again.',
+        variant: "destructive"
+      });
+    }
   }
 
   return (

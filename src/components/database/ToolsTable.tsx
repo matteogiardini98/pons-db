@@ -65,7 +65,7 @@ const ToolsTable = ({ tools, isLoading }: ToolsTableProps) => {
                       "bg-transparent border-neutral-600",
                       isDarkMode ? "text-neutral-300" : "text-neutral-600"
                     )}>
-                      {industry}
+                      {industry.toLowerCase()}
                     </Badge>
                   ))}
                   {tool.industries.length > 2 && (
@@ -85,7 +85,7 @@ const ToolsTable = ({ tools, isLoading }: ToolsTableProps) => {
                       "bg-transparent border-neutral-600",
                       isDarkMode ? "text-neutral-300" : "text-neutral-600"
                     )}>
-                      {func}
+                      {func.toLowerCase()}
                     </Badge>
                   ))}
                   {tool.functions.length > 2 && (

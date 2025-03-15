@@ -62,7 +62,25 @@ const ToolDetailPage = () => {
             reviews: []
           };
           setTool(toolFromDb);
-          setReviews(toolFromDb.reviews);
+          
+          // Fetch reviews
+          const { data: reviewsData, error: reviewsError } = await supabase
+            .from('reviews')
+            .select('*')
+            .eq('tool_id', id)
+            .order('created_at', { ascending: false });
+            
+          if (!reviewsError && reviewsData) {
+            const mappedReviews: Review[] = reviewsData.map(review => ({
+              id: review.id,
+              text: review.text,
+              authorName: review.author_name || 'anonymous user',
+              date: review.created_at,
+              rating: review.rating || 5
+            }));
+            setReviews(mappedReviews);
+          }
+          
           setIsLoading(false);
         } else {
           // Fallback to mock data
@@ -84,7 +102,7 @@ const ToolDetailPage = () => {
     fetchTool();
   }, [id]);
 
-  const handleReviewSubmit = () => {
+  const handleReviewSubmit = async () => {
     if (reviewText.trim() === '') {
       toast({
         title: "error",
@@ -94,21 +112,56 @@ const ToolDetailPage = () => {
       return;
     }
 
-    const newReview: Review = {
-      id: `review-${Date.now()}`,
-      text: reviewText,
-      authorName: "anonymous user",
-      date: new Date().toISOString(),
-      rating: 5
-    };
+    try {
+      // Insert the review into Supabase
+      const { data, error } = await supabase
+        .from('reviews')
+        .insert({
+          tool_id: id,
+          text: reviewText,
+          author_name: 'anonymous user',
+          rating: 5
+        })
+        .select()
+        .single();
+      
+      if (error) throw error;
+      
+      const newReview: Review = {
+        id: data.id,
+        text: reviewText,
+        authorName: "anonymous user",
+        date: data.created_at,
+        rating: 5
+      };
 
-    setReviews(prev => [newReview, ...prev]);
-    setReviewText('');
-    
-    toast({
-      title: "success!",
-      description: "your review has been submitted",
-    });
+      setReviews(prev => [newReview, ...prev]);
+      setReviewText('');
+      
+      toast({
+        title: "success!",
+        description: "your review has been submitted",
+      });
+    } catch (error: any) {
+      console.error('Error submitting review:', error);
+      
+      // Fallback for offline/demo mode
+      const newReview: Review = {
+        id: `review-${Date.now()}`,
+        text: reviewText,
+        authorName: "anonymous user",
+        date: new Date().toISOString(),
+        rating: 5
+      };
+
+      setReviews(prev => [newReview, ...prev]);
+      setReviewText('');
+      
+      toast({
+        title: "success!",
+        description: "your review has been submitted",
+      });
+    }
   };
 
   if (isLoading) {
@@ -159,7 +212,7 @@ const ToolDetailPage = () => {
       <Sidebar />
       <BetaBanner />
       <main className="flex-grow pl-16 md:pl-64 pt-0">
-        <motion.div className="container-tight p-4 md:p-6 pt-16" {...pageTransition}>
+        <motion.div className="container-tight p-4 md:p-6 pt-10" {...pageTransition}>
           <Button 
             variant="outline" 
             size="sm" 
@@ -235,7 +288,7 @@ const ToolDetailPage = () => {
                       "bg-transparent border-neutral-600 text-white",
                       theme === 'dark' ? "text-white" : "text-black"
                     )}>
-                      {industry}
+                      {industry.toLowerCase()}
                     </Badge>
                   ))}
                 </div>
@@ -249,7 +302,7 @@ const ToolDetailPage = () => {
                       "bg-transparent border-neutral-600",
                       theme === 'dark' ? "text-white" : "text-black"
                     )}>
-                      {func}
+                      {func.toLowerCase()}
                     </Badge>
                   ))}
                 </div>
@@ -263,7 +316,7 @@ const ToolDetailPage = () => {
                       "bg-transparent border-neutral-600",
                       theme === 'dark' ? "text-white" : "text-black"
                     )}>
-                      {type}
+                      {type.toLowerCase()}
                     </Badge>
                   ))}
                 </div>

@@ -104,14 +104,14 @@ const AddToolPage = () => {
     )}>
       <Sidebar />
       <main className="flex-grow pl-16 md:pl-64 pt-0">
-        <motion.div className="container-tight p-4 md:p-6 pt-16" {...pageTransition}>
+        <motion.div className="container-tight p-4 md:p-6 pt-10" {...pageTransition}>
           <div className="mb-8">
-            <h1 className="text-3xl md:text-4xl font-medium mb-6">Add New AI Tool</h1>
+            <h1 className="text-3xl md:text-4xl font-medium mb-6">add new ai tool</h1>
             <p className={cn(
               "mb-8 text-lg",
               theme === 'dark' ? 'text-neutral-300' : 'text-neutral-700'
             )}>
-              Submit a new AI tool to the pons41 database. Please provide as much information as possible.
+              submit a new ai tool to the pons41 database. please provide as much information as possible.
             </p>
             
             <div className={cn(
@@ -128,9 +128,9 @@ const AddToolPage = () => {
                       name="name"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel>Tool Name</FormLabel>
+                          <FormLabel>tool name</FormLabel>
                           <FormControl>
-                            <Input placeholder="e.g. ChatGPT" {...field} />
+                            <Input placeholder="e.g. chatgpt" {...field} />
                           </FormControl>
                           <FormMessage />
                         </FormItem>
@@ -142,7 +142,7 @@ const AddToolPage = () => {
                       name="website"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel>Website URL</FormLabel>
+                          <FormLabel>website url</FormLabel>
                           <FormControl>
                             <Input placeholder="https://example.com" {...field} />
                           </FormControl>
@@ -157,9 +157,9 @@ const AddToolPage = () => {
                     name="description"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>Description</FormLabel>
+                        <FormLabel>description</FormLabel>
                         <FormControl>
-                          <Input placeholder="Brief description of what the tool does" {...field} />
+                          <Input placeholder="brief description of what the tool does" {...field} />
                         </FormControl>
                         <FormMessage />
                       </FormItem>
@@ -171,7 +171,7 @@ const AddToolPage = () => {
                     name="linkedin"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>LinkedIn Page (optional)</FormLabel>
+                        <FormLabel>linkedin page (optional)</FormLabel>
                         <FormControl>
                           <Input placeholder="https://linkedin.com/company/example" {...field} />
                         </FormControl>
@@ -181,7 +181,7 @@ const AddToolPage = () => {
                   />
                   
                   <div className="space-y-4">
-                    <FormLabel className="block mb-2">Industries</FormLabel>
+                    <FormLabel className="block mb-2">industries</FormLabel>
                     <div className="grid grid-cols-2 md:grid-cols-3 gap-2">
                       {INDUSTRIES.map((industry) => (
                         <FormField
@@ -201,7 +201,7 @@ const AddToolPage = () => {
                                 />
                               </FormControl>
                               <FormLabel className="font-normal cursor-pointer">
-                                {industry}
+                                {industry.toLowerCase()}
                               </FormLabel>
                             </FormItem>
                           )}
@@ -212,7 +212,7 @@ const AddToolPage = () => {
                   </div>
                   
                   <div className="space-y-4">
-                    <FormLabel className="block mb-2">Functions</FormLabel>
+                    <FormLabel className="block mb-2">functions</FormLabel>
                     <div className="grid grid-cols-2 md:grid-cols-3 gap-2">
                       {FUNCTIONS.map((func) => (
                         <FormField
@@ -232,7 +232,7 @@ const AddToolPage = () => {
                                 />
                               </FormControl>
                               <FormLabel className="font-normal cursor-pointer">
-                                {func}
+                                {func.toLowerCase()}
                               </FormLabel>
                             </FormItem>
                           )}
@@ -243,7 +243,7 @@ const AddToolPage = () => {
                   </div>
                   
                   <div className="space-y-4">
-                    <FormLabel className="block mb-2">Business Types</FormLabel>
+                    <FormLabel className="block mb-2">business types</FormLabel>
                     <div className="grid grid-cols-2 md:grid-cols-3 gap-2">
                       {BUSINESS_TYPES.map((type) => (
                         <FormField
@@ -263,7 +263,7 @@ const AddToolPage = () => {
                                 />
                               </FormControl>
                               <FormLabel className="font-normal cursor-pointer">
-                                {type}
+                                {type.toLowerCase()}
                               </FormLabel>
                             </FormItem>
                           )}
@@ -274,7 +274,7 @@ const AddToolPage = () => {
                   </div>
                   
                   <div className="space-y-4">
-                    <FormLabel className="block mb-2">EU Compliance</FormLabel>
+                    <FormLabel className="block mb-2">eu compliance</FormLabel>
                     <div className="space-y-2">
                       <FormField
                         control={form.control}
@@ -288,7 +288,7 @@ const AddToolPage = () => {
                               />
                             </FormControl>
                             <FormLabel className="font-normal cursor-pointer">
-                              GDPR Compliant
+                              gdpr compliant
                             </FormLabel>
                           </FormItem>
                         )}
@@ -306,7 +306,7 @@ const AddToolPage = () => {
                               />
                             </FormControl>
                             <FormLabel className="font-normal cursor-pointer">
-                              EU Data Residency
+                              eu data residency
                             </FormLabel>
                           </FormItem>
                         )}
@@ -324,7 +324,7 @@ const AddToolPage = () => {
                               />
                             </FormControl>
                             <FormLabel className="font-normal cursor-pointer">
-                              EU AI Act Compliant
+                              eu ai act compliant
                             </FormLabel>
                           </FormItem>
                         )}
@@ -333,7 +333,7 @@ const AddToolPage = () => {
                   </div>
                   
                   <Button type="submit" className="w-full md:w-auto">
-                    Submit Tool
+                    submit tool
                   </Button>
                 </form>
               </Form>

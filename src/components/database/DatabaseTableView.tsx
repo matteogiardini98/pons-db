@@ -12,6 +12,8 @@ import FilterDropdown from './FilterDropdown';
 import EUComplianceFilter from './EUComplianceFilter';
 import ToolsTable from './ToolsTable';
 import { INDUSTRIES, FUNCTIONS } from './filterConstants';
+import { supabase } from '@/integrations/supabase/client';
+
 const DatabaseTableView = () => {
   const {
     theme
@@ -34,17 +36,55 @@ const DatabaseTableView = () => {
   const [showIndustryDropdown, setShowIndustryDropdown] = useState(false);
   const [showFunctionDropdown, setShowFunctionDropdown] = useState(false);
   const [showEUDropdown, setShowEUDropdown] = useState(false);
+
   useEffect(() => {
-    // Simulate API loading
-    const timer = setTimeout(() => {
-      setTools(mockTools);
-      setIsLoading(false);
-    }, 800);
-    return () => clearTimeout(timer);
+    const fetchTools = async () => {
+      try {
+        const { data, error } = await supabase
+          .from('ai_tools')
+          .select('*');
+        
+        if (error) throw error;
+        
+        if (data && data.length > 0) {
+          const mappedTools: AiTool[] = data.map(tool => ({
+            id: tool.id,
+            name: tool.name,
+            description: tool.description,
+            url: tool.website,
+            logo: '',
+            industries: tool.industries,
+            functions: tool.functions,
+            businessTypes: tool.business_types,
+            technicalLevel: tool.technical_level || 'medium',
+            features: tool.features || [],
+            euCompliant: {
+              gdpr: tool.gdpr_compliant || false,
+              dataResidency: tool.data_residency || false,
+              aiAct: tool.ai_act_compliant || false
+            },
+            reviews: []
+          }));
+          
+          setTools(mappedTools);
+        } else {
+          setTools(mockTools);
+        }
+      } catch (error) {
+        console.error("Error fetching tools:", error);
+        setTools(mockTools);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+    
+    fetchTools();
   }, []);
+
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchTerm(e.target.value);
   };
+
   const toggleIndustryFilter = industry => {
     setFilters(prev => {
       const industries = prev.industries.includes(industry) ? prev.industries.filter(i => i !== industry) : [...prev.industries, industry];
@@ -54,6 +94,7 @@ const DatabaseTableView = () => {
       };
     });
   };
+
   const toggleFunctionFilter = func => {
     setFilters(prev => {
       const functions = prev.functions.includes(func) ? prev.functions.filter(f => f !== func) : [...prev.functions, func];
@@ -63,6 +104,7 @@ const DatabaseTableView = () => {
       };
     });
   };
+
   const toggleEUFilter = (type: 'gdpr' | 'dataResidency' | 'aiAct') => {
     setFilters(prev => ({
       ...prev,
@@ -72,6 +114,7 @@ const DatabaseTableView = () => {
       }
     }));
   };
+
   const clearFilters = () => {
     setFilters({
       industries: [],
@@ -85,38 +128,38 @@ const DatabaseTableView = () => {
       }
     });
   };
+
   const toggleIndustryDropdown = () => {
     setShowIndustryDropdown(!showIndustryDropdown);
     setShowFunctionDropdown(false);
     setShowEUDropdown(false);
   };
+
   const toggleFunctionDropdown = () => {
     setShowFunctionDropdown(!showFunctionDropdown);
     setShowIndustryDropdown(false);
     setShowEUDropdown(false);
   };
+
   const toggleEUDropdown = () => {
     setShowEUDropdown(!showEUDropdown);
     setShowIndustryDropdown(false);
     setShowFunctionDropdown(false);
   };
+
   const filteredTools = tools.filter(tool => {
-    // Search filter
     if (searchTerm && !tool.name.toLowerCase().includes(searchTerm.toLowerCase()) && !tool.description.toLowerCase().includes(searchTerm.toLowerCase())) {
       return false;
     }
 
-    // Industry filter
     if (filters.industries.length > 0 && !tool.industries.some(industry => filters.industries.includes(industry))) {
       return false;
     }
 
-    // Function filter
     if (filters.functions.length > 0 && !tool.functions.some(func => filters.functions.includes(func))) {
       return false;
     }
 
-    // EU Compliance filter
     if (filters.euCompliant.gdpr && !tool.euCompliant.gdpr) {
       return false;
     }
@@ -125,21 +168,25 @@ const DatabaseTableView = () => {
     }
     return true;
   });
+
   const isDarkMode = theme === 'dark';
   const textColor = isDarkMode ? 'text-white' : 'text-black';
   const mutedTextColor = isDarkMode ? 'text-neutral-400' : 'text-neutral-500';
   const hoverBgColor = isDarkMode ? 'hover:bg-neutral-800' : 'hover:bg-neutral-100';
   const buttonBgColor = isDarkMode ? 'bg-[#222222]' : 'bg-white';
   const logoUrl = isDarkMode ? '/lovable-uploads/0b439e01-d1aa-4e14-b75d-00cc947f78ef.png' : '/lovable-uploads/649e008f-f511-4467-97e6-d658be7b73e6.png';
+
   const handleImageError = () => {
     setLogoError(true);
     console.error("Logo image failed to load:", logoUrl);
   };
+
   const activeFilterCount = filters.industries.length + filters.functions.length + (filters.euCompliant.gdpr ? 1 : 0) + (filters.euCompliant.dataResidency ? 1 : 0) + (filters.euCompliant.aiAct ? 1 : 0);
-  return <motion.div className={cn("min-h-screen pt-16", textColor)} {...pageTransition}>
+
+  return <motion.div className={cn("min-h-screen", textColor)} {...pageTransition}>
       <div className="container-tight p-4 md:p-6">
-        <div className="mb-8">
-          <div className="flex items-center gap-3 mb-6">
+        <div className="mb-6">
+          <div className="flex items-center gap-3 mb-4">
             {logoError ? <div className="h-10 w-10 flex items-center justify-center bg-neutral-100 dark:bg-neutral-800 rounded">
                 <ImageOff className={isDarkMode ? 'text-neutral-400' : 'text-neutral-500'} />
               </div> : <img src={logoUrl} alt="pons logo" className="h-10 w-auto" onError={handleImageError} />}
@@ -150,12 +197,12 @@ const DatabaseTableView = () => {
             <SearchBar searchTerm={searchTerm} onSearchChange={handleSearchChange} />
             
             <div className="flex flex-wrap gap-2">
-              <FilterDropdown title="industry" icon={<Tag size={16} />} isOpen={showIndustryDropdown} onToggle={toggleIndustryDropdown} options={INDUSTRIES} selectedOptions={filters.industries} onOptionToggle={toggleIndustryFilter} onClear={() => setFilters(prev => ({
+              <FilterDropdown title="industry" icon={<Tag size={16} />} isOpen={showIndustryDropdown} onToggle={toggleIndustryDropdown} options={INDUSTRIES.map(industry => industry.toLowerCase())} selectedOptions={filters.industries} onOptionToggle={toggleIndustryFilter} onClear={() => setFilters(prev => ({
               ...prev,
               industries: []
             }))} />
               
-              <FilterDropdown title="function" icon={<Users size={16} />} isOpen={showFunctionDropdown} onToggle={toggleFunctionDropdown} options={FUNCTIONS} selectedOptions={filters.functions} onOptionToggle={toggleFunctionFilter} onClear={() => setFilters(prev => ({
+              <FilterDropdown title="function" icon={<Users size={16} />} isOpen={showFunctionDropdown} onToggle={toggleFunctionDropdown} options={FUNCTIONS.map(func => func.toLowerCase())} selectedOptions={filters.functions} onOptionToggle={toggleFunctionFilter} onClear={() => setFilters(prev => ({
               ...prev,
               functions: []
             }))} />
@@ -185,4 +232,5 @@ const DatabaseTableView = () => {
       </div>
     </motion.div>;
 };
+
 export default DatabaseTableView;

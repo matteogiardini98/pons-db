@@ -1,12 +1,16 @@
+
 import { Link } from 'react-router-dom';
+
 const Footer = () => {
   const currentYear = new Date().getFullYear();
-  return <footer className="border-t border-border py-12 mt-12">
+  
+  return (
+    <footer className="border-t border-border py-12 mt-12">
       <div className="container-tight">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-10">
           <div className="space-y-4">
             <h4 className="text-base font-semibold">pons database</h4>
-            <p className="text-sm text-muted-foreground">pons is an open-source database of AI solutions to help companies find the right tools for their business problems.</p>
+            <p className="text-sm text-muted-foreground">pons is an open-source database of ai solutions to help companies find the right tools for their business problems.</p>
           </div>
           
           <div className="space-y-4">
@@ -14,17 +18,17 @@ const Footer = () => {
             <ul className="space-y-3">
               <li>
                 <Link to="/" className="text-sm text-muted-foreground hover:text-primary transition-colors link-underline">
-                  Database
-                </Link>
-              </li>
-              <li>
-                <Link to="/dashboard" className="text-sm text-muted-foreground hover:text-primary transition-colors link-underline">
-                  Dashboard
+                  database
                 </Link>
               </li>
               <li>
                 <Link to="/add-tool" className="text-sm text-muted-foreground hover:text-primary transition-colors link-underline">
-                  Add a Tool
+                  add a tool
+                </Link>
+              </li>
+              <li>
+                <Link to="/manifesto" className="text-sm text-muted-foreground hover:text-primary transition-colors link-underline">
+                  manifesto
                 </Link>
               </li>
             </ul>
@@ -34,18 +38,18 @@ const Footer = () => {
             <h4 className="text-base font-semibold">about</h4>
             <ul className="space-y-3">
               <li>
-                <Link to="#" className="text-sm text-muted-foreground hover:text-primary transition-colors link-underline">
-                  Manifesto
+                <Link to="/manifesto" className="text-sm text-muted-foreground hover:text-primary transition-colors link-underline">
+                  manifesto
                 </Link>
               </li>
               <li>
                 <Link to="#" className="text-sm text-muted-foreground hover:text-primary transition-colors link-underline">
-                  Changelog
+                  changelog
                 </Link>
               </li>
               <li>
                 <Link to="#" className="text-sm text-muted-foreground hover:text-primary transition-colors link-underline">
-                  Roadmap
+                  roadmap
                 </Link>
               </li>
             </ul>
@@ -56,17 +60,17 @@ const Footer = () => {
             <ul className="space-y-3">
               <li>
                 <a href="https://github.com" target="_blank" rel="noreferrer" className="text-sm text-muted-foreground hover:text-primary transition-colors link-underline">
-                  GitHub
+                  github
                 </a>
               </li>
               <li>
                 <a href="mailto:info@aisolutionsdatabase.com" className="text-sm text-muted-foreground hover:text-primary transition-colors link-underline">
-                  Contact Us
+                  contact us
                 </a>
               </li>
               <li>
                 <a href="#" className="text-sm text-muted-foreground hover:text-primary transition-colors link-underline">
-                  Newsletter
+                  newsletter
                 </a>
               </li>
             </ul>
@@ -74,14 +78,16 @@ const Footer = () => {
         </div>
         
         <div className="border-t border-border mt-10 pt-6 flex flex-col md:flex-row justify-between items-center text-sm text-muted-foreground">
-          <p>© {currentYear} AI Solutions Database. Open-source project.</p>
+          <p>© {currentYear} ai solutions database. open-source project.</p>
           <div className="flex gap-6 mt-4 md:mt-0">
-            <Link to="#" className="hover:text-primary transition-colors">Privacy</Link>
-            <Link to="#" className="hover:text-primary transition-colors">Terms</Link>
-            <Link to="#" className="hover:text-primary transition-colors">Cookie Policy</Link>
+            <Link to="#" className="hover:text-primary transition-colors">privacy</Link>
+            <Link to="#" className="hover:text-primary transition-colors">terms</Link>
+            <Link to="#" className="hover:text-primary transition-colors">cookie policy</Link>
           </div>
         </div>
       </div>
-    </footer>;
+    </footer>
+  );
 };
+
 export default Footer;

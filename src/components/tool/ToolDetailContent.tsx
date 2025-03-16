@@ -34,7 +34,7 @@ const ToolDetailContent = ({ tool }: ToolDetailContentProps) => {
         name={tool.name}
         description={tool.problem_solved_description}
         url={tool.website || ''}
-        company={tool.company}
+        linkedin={tool.linkedin}
       />
       
       <Separator className={isDarkMode ? 'bg-neutral-700' : 'bg-neutral-200'} />

@@ -8,12 +8,10 @@ interface ToolHeaderProps {
   name: string;
   description: string;
   url: string;
-  company?: {
-    name: string;
-  };
+  linkedin?: string[];
 }
 
-const ToolHeader = ({ name, description, url, company }: ToolHeaderProps) => {
+const ToolHeader = ({ name, description, url, linkedin }: ToolHeaderProps) => {
   const { theme } = useTheme();
   const isDarkMode = theme === 'dark';
 
@@ -47,9 +45,9 @@ const ToolHeader = ({ name, description, url, company }: ToolHeaderProps) => {
             </a>
           )}
           
-          {company && company.name && (
+          {linkedin && linkedin.length > 0 && linkedin[0] && (
             <a 
-              href={`https://www.linkedin.com/company/${encodeURIComponent(company.name)}`} 
+              href={linkedin[0]} 
               target="_blank" 
               rel="noopener noreferrer"
               className={cn(

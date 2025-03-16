@@ -57,7 +57,7 @@ const ToolsTable = ({ tools, isLoading }: ToolsTableProps) => {
                 <div className="font-medium">{tool.name}</div>
               </TableCell>
               <TableCell className="max-w-xs hidden md:table-cell">
-                <div className={cn("line-clamp-2", isDarkMode ? "text-neutral-300" : "text-neutral-600")}>{tool.description}</div>
+                <div className={cn("line-clamp-2", isDarkMode ? "text-neutral-300" : "text-neutral-600")}>{tool.problem_solved_description}</div>
               </TableCell>
               <TableCell className="hidden md:table-cell">
                 <div className="flex flex-wrap gap-1.5">

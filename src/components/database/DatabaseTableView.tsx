@@ -11,7 +11,7 @@ import SearchBar from './SearchBar';
 import FilterDropdown from './FilterDropdown';
 import EUComplianceFilter from './EUComplianceFilter';
 import ToolsTable from './ToolsTable';
-import { FUNCTIONS, ROLES, USE_CASES } from './filterConstants';
+import { FUNCTIONS, ROLES, USE_CASES, TECHNICAL_LEVELS } from './filterConstants';
 import { supabase } from '@/integrations/supabase/client';
 
 const DatabaseTableView = () => {
@@ -51,7 +51,7 @@ const DatabaseTableView = () => {
           const mappedTools: AiTool[] = data.map(tool => ({
             id: tool.id,
             name: tool.name,
-            description: tool.problem_solved_description,
+            problem_solved_description: tool.problem_solved_description,
             url: tool.website || '',
             logo: '',
             function: tool.function || [],
@@ -59,7 +59,7 @@ const DatabaseTableView = () => {
             useCase: tool.use_case_tag || '',
             technicalLevel: tool.technical_level || '',
             euCompliant: {
-              gdpr: tool.gdpr_compliant || false,
+              gdpr: Boolean(tool.gdpr_compliant) || false,
               dataResidency: tool.data_residency || false,
               aiAct: tool.ai_act_compliant || false
             }
@@ -84,7 +84,7 @@ const DatabaseTableView = () => {
     setSearchTerm(e.target.value);
   };
 
-  const toggleFunctionFilter = func => {
+  const toggleFunctionFilter = (func: string) => {
     setFilters(prev => {
       const functions = prev.functions.includes(func) ? prev.functions.filter(f => f !== func) : [...prev.functions, func];
       return {
@@ -94,7 +94,7 @@ const DatabaseTableView = () => {
     });
   };
 
-  const toggleRoleFilter = role => {
+  const toggleRoleFilter = (role: string) => {
     setFilters(prev => {
       const roles = prev.roles.includes(role) ? prev.roles.filter(r => r !== role) : [...prev.roles, role];
       return {
@@ -104,7 +104,7 @@ const DatabaseTableView = () => {
     });
   };
 
-  const toggleUseCaseFilter = useCase => {
+  const toggleUseCaseFilter = (useCase: string) => {
     setFilters(prev => {
       const useCases = prev.useCases.includes(useCase) ? prev.useCases.filter(uc => uc !== useCase) : [...prev.useCases, useCase];
       return {
@@ -167,7 +167,7 @@ const DatabaseTableView = () => {
   };
 
   const filteredTools = tools.filter(tool => {
-    if (searchTerm && !tool.name.toLowerCase().includes(searchTerm.toLowerCase()) && !tool.description.toLowerCase().includes(searchTerm.toLowerCase())) {
+    if (searchTerm && !tool.name.toLowerCase().includes(searchTerm.toLowerCase()) && !tool.problem_solved_description.toLowerCase().includes(searchTerm.toLowerCase())) {
       return false;
     }
 

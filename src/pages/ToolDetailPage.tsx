@@ -7,7 +7,6 @@ import { pageTransition } from '@/utils/animations';
 import { useTheme } from '@/hooks/use-theme';
 import { cn } from '@/lib/utils';
 import { AiTool, Review } from '@/utils/types';
-import { mockTools } from '@/utils/data';
 import Sidebar from '@/components/layout/Sidebar';
 import Footer from '@/components/layout/Footer';
 import { Badge } from '@/components/ui/badge';
@@ -45,20 +44,18 @@ const ToolDetailPage = () => {
           const toolFromDb: AiTool = {
             id: data.id,
             name: data.name,
-            description: data.description,
+            problem_solved_description: data.problem_solved_description,
             url: data.website,
             logo: '',
-            industries: data.industries,
-            functions: data.functions,
-            businessTypes: data.business_types,
-            technicalLevel: data.technical_level,
-            features: data.features || [],
+            function: data.function || [],
+            role: data.role || [],
+            useCase: data.use_case_tag,
+            technicalLevel: data.technical_level || '',
             euCompliant: {
-              gdpr: data.gdpr_compliant,
-              dataResidency: data.data_residency,
-              aiAct: data.ai_act_compliant
-            },
-            reviews: []
+              gdpr: Boolean(data.gdpr_compliant),
+              dataResidency: data.data_residency || false,
+              aiAct: data.ai_act_compliant || false
+            }
           };
           setTool(toolFromDb);
           
@@ -82,18 +79,12 @@ const ToolDetailPage = () => {
           
           setIsLoading(false);
         } else {
-          // Fallback to mock data
-          const foundTool = mockTools.find(t => t.id === id);
-          setTool(foundTool || null);
-          setReviews(foundTool?.reviews || []);
+          setTool(null);
           setIsLoading(false);
         }
       } catch (error) {
         console.error('Error fetching tool:', error);
-        // Fallback to mock data
-        const foundTool = mockTools.find(t => t.id === id);
-        setTool(foundTool || null);
-        setReviews(foundTool?.reviews || []);
+        setTool(null);
         setIsLoading(false);
       }
     };
@@ -168,32 +159,18 @@ const ToolDetailPage = () => {
           )}>
             <ToolHeader 
               name={tool.name}
-              description={tool.description}
-              url={tool.url}
+              description={tool.problem_solved_description}
+              url={tool.url || ''}
               company={tool.company}
             />
             
             <Separator className={theme === 'dark' ? 'bg-neutral-700' : 'bg-neutral-200'} />
             
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mt-8">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mt-8">
               <div>
-                <h3 className="text-xl font-medium mb-4">industries</h3>
+                <h3 className="text-xl font-medium mb-4">function</h3>
                 <div className="flex flex-wrap gap-2">
-                  {tool.industries.map((industry) => (
-                    <Badge key={industry} variant="outline" className={cn(
-                      "bg-transparent border-neutral-600 text-white",
-                      theme === 'dark' ? "text-white" : "text-black"
-                    )}>
-                      {industry.toLowerCase()}
-                    </Badge>
-                  ))}
-                </div>
-              </div>
-              
-              <div>
-                <h3 className="text-xl font-medium mb-4">functions</h3>
-                <div className="flex flex-wrap gap-2">
-                  {tool.functions.map((func) => (
+                  {tool.function.map((func) => (
                     <Badge key={func} variant="outline" className={cn(
                       "bg-transparent border-neutral-600",
                       theme === 'dark' ? "text-white" : "text-black"
@@ -205,16 +182,28 @@ const ToolDetailPage = () => {
               </div>
               
               <div>
-                <h3 className="text-xl font-medium mb-4">business types</h3>
+                <h3 className="text-xl font-medium mb-4">role</h3>
                 <div className="flex flex-wrap gap-2">
-                  {tool.businessTypes.map((type) => (
-                    <Badge key={type} variant="outline" className={cn(
+                  {tool.role.map((role) => (
+                    <Badge key={role} variant="outline" className={cn(
                       "bg-transparent border-neutral-600",
                       theme === 'dark' ? "text-white" : "text-black"
                     )}>
-                      {type.toLowerCase()}
+                      {role.toLowerCase()}
                     </Badge>
                   ))}
+                </div>
+              </div>
+              
+              <div>
+                <h3 className="text-xl font-medium mb-4">use case</h3>
+                <div className="flex flex-wrap gap-2">
+                  <Badge variant="outline" className={cn(
+                    "bg-transparent border-neutral-600",
+                    theme === 'dark' ? "text-white" : "text-black"
+                  )}>
+                    {tool.useCase.toLowerCase()}
+                  </Badge>
                 </div>
               </div>
             </div>
@@ -227,18 +216,6 @@ const ToolDetailPage = () => {
               )}>
                 {tool.technicalLevel}
               </Badge>
-            </div>
-            
-            <div className="mt-8">
-              <h3 className="text-xl font-medium mb-4">main features</h3>
-              <ul className={cn(
-                "list-disc pl-5 space-y-1",
-                theme === 'dark' ? 'text-neutral-300' : 'text-neutral-700'
-              )}>
-                {tool.features.map((feature, index) => (
-                  <li key={index}>{feature}</li>
-                ))}
-              </ul>
             </div>
             
             <EUCompliance euCompliant={tool.euCompliant} />

@@ -2,9 +2,9 @@
 export interface AiTool {
   id: string;
   name: string;
-  description: string;
-  url: string;
-  logo: string;
+  problem_solved_description: string;
+  url?: string;
+  logo?: string;
   function: string[];
   role: string[];
   useCase: string;

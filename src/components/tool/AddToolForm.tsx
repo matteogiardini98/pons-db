@@ -6,25 +6,26 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { useTheme } from '@/hooks/use-theme';
 import { cn } from '@/lib/utils';
-import { INDUSTRIES, FUNCTIONS, BUSINESS_TYPES } from '@/utils/data';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Button } from '@/components/ui/button';
 import { toast } from '@/hooks/use-toast';
 import { supabase } from '@/integrations/supabase/client';
+import { FUNCTIONS, ROLES, USE_CASES, TECHNICAL_LEVELS } from '../database/filterConstants';
 
 const formSchema = z.object({
   name: z.string().min(2, { message: 'name must be at least 2 characters' }),
-  description: z.string().min(10, { message: 'description must be at least 10 characters' }),
+  problem_solved_description: z.string().min(10, { message: 'description must be at least 10 characters' }),
   website: z.string().url({ message: 'must be a valid url' }),
   linkedin: z.string().url({ message: 'must be a valid url' }).optional().or(z.literal('')),
-  industries: z.array(z.string()).min(1, { message: 'select at least one industry' }),
-  functions: z.array(z.string()).min(1, { message: 'select at least one function' }),
-  businessTypes: z.array(z.string()).min(1, { message: 'select at least one business type' }),
-  gdprCompliant: z.boolean().optional(),
-  dataResidency: z.boolean().optional(),
-  aiActCompliant: z.boolean().optional(),
+  function: z.array(z.string()).min(1, { message: 'select at least one function' }),
+  role: z.array(z.string()).min(1, { message: 'select at least one role' }),
+  use_case_tag: z.string().min(1, { message: 'select a use case' }),
+  technical_level: z.string().min(1, { message: 'select a technical level' }),
+  gdpr_compliant: z.boolean().optional(),
+  data_residency: z.boolean().optional(),
+  ai_act_compliant: z.boolean().optional(),
 });
 
 type FormValues = z.infer<typeof formSchema>;
@@ -37,15 +38,16 @@ const AddToolForm = () => {
     resolver: zodResolver(formSchema),
     defaultValues: {
       name: '',
-      description: '',
+      problem_solved_description: '',
       website: '',
       linkedin: '',
-      industries: [],
-      functions: [],
-      businessTypes: [],
-      gdprCompliant: false,
-      dataResidency: false,
-      aiActCompliant: false,
+      function: [],
+      role: [],
+      use_case_tag: '',
+      technical_level: '',
+      gdpr_compliant: false,
+      data_residency: false,
+      ai_act_compliant: false,
     },
   });
 
@@ -54,15 +56,16 @@ const AddToolForm = () => {
       // Insert the tool data into Supabase
       const { error } = await supabase.from('ai_tools').insert({
         name: data.name,
-        description: data.description,
+        problem_solved_description: data.problem_solved_description,
         website: data.website,
-        linkedin: data.linkedin || null,
-        industries: data.industries,
-        functions: data.functions,
-        business_types: data.businessTypes,
-        gdpr_compliant: data.gdprCompliant,
-        data_residency: data.dataResidency,
-        ai_act_compliant: data.aiActCompliant,
+        linkedin: [data.linkedin || ''],
+        function: data.function,
+        role: data.role,
+        use_case_tag: data.use_case_tag,
+        technical_level: data.technical_level,
+        gdpr_compliant: data.gdpr_compliant ? ['true'] : [],
+        data_residency: data.data_residency,
+        ai_act_compliant: data.ai_act_compliant,
       });
 
       if (error) throw error;
@@ -128,7 +131,7 @@ const AddToolForm = () => {
           
           <FormField
             control={form.control}
-            name="description"
+            name="problem_solved_description"
             render={({ field }) => (
               <FormItem>
                 <FormLabel>description</FormLabel>
@@ -154,36 +157,59 @@ const AddToolForm = () => {
             )}
           />
           
-          <div className="space-y-4">
-            <FormLabel className="block mb-2">industries</FormLabel>
-            <div className="grid grid-cols-2 md:grid-cols-3 gap-2">
-              {INDUSTRIES.map((industry) => (
-                <FormField
-                  key={industry}
-                  control={form.control}
-                  name="industries"
-                  render={({ field }) => (
-                    <FormItem className="flex items-center space-x-2">
-                      <FormControl>
-                        <Checkbox
-                          checked={field.value?.includes(industry)}
-                          onCheckedChange={(checked) => {
-                            return checked
-                              ? field.onChange([...field.value, industry])
-                              : field.onChange(field.value?.filter((value) => value !== industry))
-                          }}
-                        />
-                      </FormControl>
-                      <FormLabel className="font-normal cursor-pointer">
-                        {industry.toLowerCase()}
-                      </FormLabel>
-                    </FormItem>
-                  )}
-                />
-              ))}
-            </div>
-            <FormMessage>{form.formState.errors.industries?.message}</FormMessage>
-          </div>
+          <FormField
+            control={form.control}
+            name="use_case_tag"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>use case</FormLabel>
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-2">
+                  {USE_CASES.map((useCase) => (
+                    <div key={useCase} className="flex items-center space-x-2">
+                      <input
+                        type="radio"
+                        id={`useCase-${useCase}`}
+                        checked={field.value === useCase.toLowerCase()}
+                        onChange={() => field.onChange(useCase.toLowerCase())}
+                        className="form-radio h-4 w-4"
+                      />
+                      <label htmlFor={`useCase-${useCase}`} className="text-sm font-normal cursor-pointer">
+                        {useCase.toLowerCase()}
+                      </label>
+                    </div>
+                  ))}
+                </div>
+                <FormMessage>{form.formState.errors.use_case_tag?.message}</FormMessage>
+              </FormItem>
+            )}
+          />
+          
+          <FormField
+            control={form.control}
+            name="technical_level"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>technical level</FormLabel>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
+                  {TECHNICAL_LEVELS.map((level) => (
+                    <div key={level} className="flex items-center space-x-2">
+                      <input
+                        type="radio"
+                        id={`level-${level}`}
+                        checked={field.value === level.toLowerCase()}
+                        onChange={() => field.onChange(level.toLowerCase())}
+                        className="form-radio h-4 w-4"
+                      />
+                      <label htmlFor={`level-${level}`} className="text-sm font-normal cursor-pointer">
+                        {level.toLowerCase()}
+                      </label>
+                    </div>
+                  ))}
+                </div>
+                <FormMessage>{form.formState.errors.technical_level?.message}</FormMessage>
+              </FormItem>
+            )}
+          />
           
           <div className="space-y-4">
             <FormLabel className="block mb-2">functions</FormLabel>
@@ -192,16 +218,16 @@ const AddToolForm = () => {
                 <FormField
                   key={func}
                   control={form.control}
-                  name="functions"
+                  name="function"
                   render={({ field }) => (
                     <FormItem className="flex items-center space-x-2">
                       <FormControl>
                         <Checkbox
-                          checked={field.value?.includes(func)}
+                          checked={field.value?.includes(func.toLowerCase())}
                           onCheckedChange={(checked) => {
                             return checked
-                              ? field.onChange([...field.value, func])
-                              : field.onChange(field.value?.filter((value) => value !== func))
+                              ? field.onChange([...field.value, func.toLowerCase()])
+                              : field.onChange(field.value?.filter((value) => value !== func.toLowerCase()))
                           }}
                         />
                       </FormControl>
@@ -213,38 +239,38 @@ const AddToolForm = () => {
                 />
               ))}
             </div>
-            <FormMessage>{form.formState.errors.functions?.message}</FormMessage>
+            <FormMessage>{form.formState.errors.function?.message}</FormMessage>
           </div>
           
           <div className="space-y-4">
-            <FormLabel className="block mb-2">business types</FormLabel>
+            <FormLabel className="block mb-2">roles</FormLabel>
             <div className="grid grid-cols-2 md:grid-cols-3 gap-2">
-              {BUSINESS_TYPES.map((type) => (
+              {ROLES.map((role) => (
                 <FormField
-                  key={type}
+                  key={role}
                   control={form.control}
-                  name="businessTypes"
+                  name="role"
                   render={({ field }) => (
                     <FormItem className="flex items-center space-x-2">
                       <FormControl>
                         <Checkbox
-                          checked={field.value?.includes(type)}
+                          checked={field.value?.includes(role.toLowerCase())}
                           onCheckedChange={(checked) => {
                             return checked
-                              ? field.onChange([...field.value, type])
-                              : field.onChange(field.value?.filter((value) => value !== type))
+                              ? field.onChange([...field.value, role.toLowerCase()])
+                              : field.onChange(field.value?.filter((value) => value !== role.toLowerCase()))
                           }}
                         />
                       </FormControl>
                       <FormLabel className="font-normal cursor-pointer">
-                        {type.toLowerCase()}
+                        {role.toLowerCase()}
                       </FormLabel>
                     </FormItem>
                   )}
                 />
               ))}
             </div>
-            <FormMessage>{form.formState.errors.businessTypes?.message}</FormMessage>
+            <FormMessage>{form.formState.errors.role?.message}</FormMessage>
           </div>
           
           <div className="space-y-4">
@@ -252,7 +278,7 @@ const AddToolForm = () => {
             <div className="space-y-2">
               <FormField
                 control={form.control}
-                name="gdprCompliant"
+                name="gdpr_compliant"
                 render={({ field }) => (
                   <FormItem className="flex items-center space-x-2">
                     <FormControl>
@@ -270,7 +296,7 @@ const AddToolForm = () => {
               
               <FormField
                 control={form.control}
-                name="dataResidency"
+                name="data_residency"
                 render={({ field }) => (
                   <FormItem className="flex items-center space-x-2">
                     <FormControl>
@@ -288,7 +314,7 @@ const AddToolForm = () => {
               
               <FormField
                 control={form.control}
-                name="aiActCompliant"
+                name="ai_act_compliant"
                 render={({ field }) => (
                   <FormItem className="flex items-center space-x-2">
                     <FormControl>

@@ -30,7 +30,11 @@ const DatabasePage = () => {
           <h1 className="text-3xl md:text-4xl font-medium mb-6">pons database</h1>
           <DatabaseTableView />
           <div className="flex justify-center mt-8 mb-16">
-            <Button onClick={handleAddNewTool} className="flex items-center gap-2">
+            <Button 
+              onClick={handleAddNewTool} 
+              className="flex items-center gap-2"
+              variant="cta" // Using the CTA variant instead of default
+            >
               <Plus size={16} />
               add new tool
             </Button>

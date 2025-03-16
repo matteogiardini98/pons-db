@@ -15,8 +15,8 @@ const FilterChip = ({ label, selected, onClick }: FilterChipProps) => (
     className={cn(
       "inline-flex items-center px-3 py-1 rounded-full text-sm transition-colors",
       selected
-        ? "bg-pons-green text-white" // Change to green when selected
-        : "bg-secondary text-muted-foreground hover:bg-pons-green hover:text-white" // Add hover effect
+        ? "bg-pons-green text-white" // Keep the selected state green
+        : "bg-secondary text-muted-foreground hover:bg-pons-green hover:text-white" // Add hover effect to turn green
     )}
   >
     {selected && <Check className="mr-1 h-3 w-3" />}

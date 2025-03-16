@@ -111,91 +111,47 @@ const ToolReviews = ({ toolId, reviews, setReviews }: ToolReviewsProps) => {
   };
 
   return (
-    <>
-      <div className="mt-8">
-        <h3 className="text-xl font-medium mb-4">what users have to say about this tool</h3>
-        {reviews.length === 0 ? (
-          <div className={cn(
-            "p-6 rounded-lg text-center",
-            theme === 'dark' ? 'bg-neutral-800' : 'bg-neutral-100'
-          )}>
-            <p className={theme === 'dark' ? 'text-neutral-400' : 'text-neutral-600'}>
-              no reviews yet. be the first to share your experience!
-            </p>
-          </div>
-        ) : (
-          <div className="space-y-4">
-            {reviews.map((review) => (
-              <div 
-                key={review.id}
-                className={cn(
-                  "p-4 rounded-lg",
-                  theme === 'dark' ? 'bg-neutral-800' : 'bg-neutral-100'
-                )}
-              >
-                <div className="flex justify-between mb-2">
-                  <span className="font-medium">{review.authorName}</span>
-                  <span className={cn(
-                    "text-sm",
-                    theme === 'dark' ? 'text-neutral-400' : 'text-neutral-600'
-                  )}>
-                    {new Date(review.date).toLocaleDateString()}
-                  </span>
-                </div>
-                <p className={theme === 'dark' ? 'text-neutral-300' : 'text-neutral-700'}>
-                  {review.text}
-                </p>
-              </div>
-            ))}
-          </div>
+    <div className={cn(
+      "p-4 rounded-lg",
+      theme === 'dark' ? 'bg-neutral-800' : 'bg-neutral-100'
+    )}>
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-3 mb-3">
+        <Input
+          placeholder="your name (optional)"
+          className={cn(
+            theme === 'dark' ? 'bg-neutral-700 border-neutral-600 text-white' : 'bg-white border-neutral-300'
+          )}
+          value={userName}
+          onChange={(e) => setUserName(e.target.value)}
+        />
+        <Input
+          placeholder="your email (optional)"
+          type="email"
+          className={cn(
+            theme === 'dark' ? 'bg-neutral-700 border-neutral-600 text-white' : 'bg-white border-neutral-300'
+          )}
+          value={userEmail}
+          onChange={(e) => setUserEmail(e.target.value)}
+        />
+      </div>
+      <Textarea
+        placeholder="write your review here..."
+        className={cn(
+          "mb-3 min-h-24",
+          theme === 'dark' ? 'bg-neutral-700 border-neutral-600 text-white' : 'bg-white border-neutral-300'
         )}
-      </div>
-      
-      <div className="mt-8">
-        <h3 className="text-xl font-medium mb-4">share your experience</h3>
-        <div className={cn(
-          "p-4 rounded-lg",
-          theme === 'dark' ? 'bg-neutral-800' : 'bg-neutral-100'
-        )}>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-3 mb-3">
-            <Input
-              placeholder="your name (optional)"
-              className={cn(
-                theme === 'dark' ? 'bg-neutral-700 border-neutral-600 text-white' : 'bg-white border-neutral-300'
-              )}
-              value={userName}
-              onChange={(e) => setUserName(e.target.value)}
-            />
-            <Input
-              placeholder="your email (optional)"
-              type="email"
-              className={cn(
-                theme === 'dark' ? 'bg-neutral-700 border-neutral-600 text-white' : 'bg-white border-neutral-300'
-              )}
-              value={userEmail}
-              onChange={(e) => setUserEmail(e.target.value)}
-            />
-          </div>
-          <Textarea
-            placeholder="write your review here..."
-            className={cn(
-              "mb-3 min-h-24",
-              theme === 'dark' ? 'bg-neutral-700 border-neutral-600 text-white' : 'bg-white border-neutral-300'
-            )}
-            value={reviewText}
-            onChange={(e) => setReviewText(e.target.value)}
-          />
-          <Button 
-            onClick={handleReviewSubmit}
-            variant="cta"
-            className="flex items-center gap-2"
-          >
-            <Send size={16} />
-            submit review
-          </Button>
-        </div>
-      </div>
-    </>
+        value={reviewText}
+        onChange={(e) => setReviewText(e.target.value)}
+      />
+      <Button 
+        onClick={handleReviewSubmit}
+        variant="cta"
+        className="flex items-center gap-2"
+      >
+        <Send size={16} />
+        submit review
+      </Button>
+    </div>
   );
 };
 

@@ -91,11 +91,31 @@ const ToolDetailContent = ({ tool }: ToolDetailContentProps) => {
         </Badge>
       </div>
       
-      <EUCompliance euCompliant={{
-        gdpr: isGdprCompliant,
-        dataResidency: tool.euCompliant.data_residency,
-        aiAct: tool.euCompliant.ai_act_compliant
-      }} />
+      <div className="mt-8">
+        <h3 className="text-xl font-medium mb-4">eu compliance</h3>
+        <div className="flex flex-wrap gap-2">
+          <Badge variant="outline" className={cn(
+            "bg-transparent border-neutral-600",
+            isDarkMode ? "text-white" : "text-black"
+          )}>
+            {isGdprCompliant ? 'gdpr compliant' : 'not gdpr compliant'}
+          </Badge>
+          
+          <Badge variant="outline" className={cn(
+            "bg-transparent border-neutral-600",
+            isDarkMode ? "text-white" : "text-black"
+          )}>
+            {tool.euCompliant.data_residency ? 'eu data residency' : 'no eu data residency'}
+          </Badge>
+          
+          <Badge variant="outline" className={cn(
+            "bg-transparent border-neutral-600",
+            isDarkMode ? "text-white" : "text-black"
+          )}>
+            {tool.euCompliant.ai_act_compliant ? 'ai act compliant' : 'not ai act compliant'}
+          </Badge>
+        </div>
+      </div>
       
       {tool.company && (
         <div className="mt-8">
@@ -151,7 +171,51 @@ const ToolDetailContent = ({ tool }: ToolDetailContentProps) => {
         </div>
       )}
       
-      <ToolReviews toolId={tool.id} reviews={reviews} setReviews={setReviews} />
+      {/* Share your experience section - now first */}
+      <div className="mt-8">
+        <h3 className="text-xl font-medium mb-4">share your experience</h3>
+        <ToolReviews toolId={tool.id} reviews={reviews} setReviews={setReviews} />
+      </div>
+      
+      {/* What users have to say section - now second */}
+      <div className="mt-8">
+        <h3 className="text-xl font-medium mb-4">what users have to say about this tool</h3>
+        {reviews.length === 0 ? (
+          <div className={cn(
+            "p-6 rounded-lg text-center",
+            theme === 'dark' ? 'bg-neutral-800' : 'bg-neutral-100'
+          )}>
+            <p className={theme === 'dark' ? 'text-neutral-400' : 'text-neutral-600'}>
+              no reviews yet. be the first to share your experience!
+            </p>
+          </div>
+        ) : (
+          <div className="space-y-4">
+            {reviews.map((review) => (
+              <div 
+                key={review.id}
+                className={cn(
+                  "p-4 rounded-lg",
+                  theme === 'dark' ? 'bg-neutral-800' : 'bg-neutral-100'
+                )}
+              >
+                <div className="flex justify-between mb-2">
+                  <span className="font-medium">{review.authorName}</span>
+                  <span className={cn(
+                    "text-sm",
+                    theme === 'dark' ? 'text-neutral-400' : 'text-neutral-600'
+                  )}>
+                    {new Date(review.date).toLocaleDateString()}
+                  </span>
+                </div>
+                <p className={theme === 'dark' ? 'text-neutral-300' : 'text-neutral-700'}>
+                  {review.text}
+                </p>
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
     </div>
   );
 };

@@ -30,23 +30,23 @@ export default function useToolDetail(id: string | undefined) {
           // Map Supabase data to AiTool type, handling potential missing fields
           const toolData: AiTool = {
             id: data.id,
-            name: data.name,
-            website: data.website,
+            name: data.name || '',
+            website: data.website || '',
+            linkedin: data.linkedin || [],
             function: data.function || [],
             role: data.role || [],
             problem_solved_description: data.problem_solved_description || '',
             use_case_tag: data.use_case_tag || '',
             technical_level: data.technical_level || '',
             euCompliant: {
-              // Handle potentially missing fields with safe fallbacks
-              gdpr_compliant: false, // Set default value
+              gdpr_compliant: data.gdpr_compliant || false,
               data_residency: data.data_residency || false,
               ai_act_compliant: data.ai_act_compliant || false
             },
-            // Handle potentially missing fields
-            company: undefined
+            company: data.company || undefined
           };
           
+          console.log("Processed tool data:", toolData);
           setTool(toolData);
           setError(null);
         } else if (error) {

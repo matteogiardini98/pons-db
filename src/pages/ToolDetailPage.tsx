@@ -37,11 +37,11 @@ const ToolDetailPage = () => {
       <main className="flex-grow pl-16 md:pl-64 pt-0">
         <motion.div className="container-tight p-4 md:p-6 pt-10" {...pageTransition}>
           <Button 
-            variant="default"
+            variant="outline"
             size="sm" 
             className={cn(
               "mb-6",
-              isDarkMode ? "bg-[#333333] hover:bg-[#444444]" : "bg-[#555555] hover:bg-[#666666] text-white"
+              isDarkMode ? "bg-neutral-800 hover:bg-neutral-700 text-white border-neutral-700" : "bg-neutral-200 hover:bg-neutral-300 text-black border-neutral-300"
             )}
             onClick={() => navigate('/')}
           >

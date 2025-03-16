@@ -40,24 +40,8 @@ const ToolDetailPage = () => {
           .single();
           
         if (data) {
-          // Map Supabase data to AiTool type
-          const toolFromDb: AiTool = {
-            id: data.id,
-            name: data.name,
-            problem_solved_description: data.problem_solved_description,
-            url: data.website,
-            logo: '',
-            function: data.function || [],
-            role: data.role || [],
-            useCase: data.use_case_tag,
-            technicalLevel: data.technical_level || '',
-            euCompliant: {
-              gdpr: Boolean(data.gdpr_compliant),
-              dataResidency: data.data_residency || false,
-              aiAct: data.ai_act_compliant || false
-            }
-          };
-          setTool(toolFromDb);
+          // Map Supabase data to AiTool type directly
+          setTool(data as AiTool);
           
           // Fetch reviews
           const { data: reviewsData, error: reviewsError } = await supabase
@@ -160,7 +144,7 @@ const ToolDetailPage = () => {
             <ToolHeader 
               name={tool.name}
               description={tool.problem_solved_description}
-              url={tool.url || ''}
+              url={tool.website || ''}
               company={tool.company}
             />
             
@@ -202,7 +186,7 @@ const ToolDetailPage = () => {
                     "bg-transparent border-neutral-600",
                     theme === 'dark' ? "text-white" : "text-black"
                   )}>
-                    {tool.useCase.toLowerCase()}
+                    {tool.use_case_tag.toLowerCase()}
                   </Badge>
                 </div>
               </div>
@@ -214,11 +198,15 @@ const ToolDetailPage = () => {
                 "bg-transparent border-neutral-600",
                 theme === 'dark' ? "text-white" : "text-black"
               )}>
-                {tool.technicalLevel}
+                {tool.technical_level}
               </Badge>
             </div>
             
-            <EUCompliance euCompliant={tool.euCompliant} />
+            <EUCompliance euCompliant={{
+              gdpr: Boolean(tool.euCompliant.gdpr_compliant),
+              dataResidency: tool.euCompliant.data_residency,
+              aiAct: tool.euCompliant.ai_act_compliant
+            }} />
             
             {tool.company && (
               <div className="mt-8">

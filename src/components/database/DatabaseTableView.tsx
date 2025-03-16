@@ -48,24 +48,7 @@ const DatabaseTableView = () => {
         if (error) throw error;
         
         if (data && data.length > 0) {
-          const mappedTools: AiTool[] = data.map(tool => ({
-            id: tool.id,
-            name: tool.name,
-            problem_solved_description: tool.problem_solved_description,
-            url: tool.website || '',
-            logo: '',
-            function: tool.function || [],
-            role: tool.role || [],
-            useCase: tool.use_case_tag || '',
-            technicalLevel: tool.technical_level || '',
-            euCompliant: {
-              gdpr: Boolean(tool.gdpr_compliant) || false,
-              dataResidency: tool.data_residency || false,
-              aiAct: tool.ai_act_compliant || false
-            }
-          }));
-          
-          setTools(mappedTools);
+          setTools(data as AiTool[]);
         } else {
           setTools([]);
         }
@@ -179,19 +162,30 @@ const DatabaseTableView = () => {
       return false;
     }
 
-    if (filters.useCases.length > 0 && !filters.useCases.includes(tool.useCase.toLowerCase())) {
+    if (filters.useCases.length > 0 && !filters.useCases.includes(tool.use_case_tag.toLowerCase())) {
       return false;
     }
 
-    if (filters.euCompliant.gdpr && !tool.euCompliant.gdpr) {
+    // Handle different types for gdpr_compliant
+    let isGdprCompliant = false;
+    if (typeof tool.euCompliant.gdpr_compliant === 'boolean') {
+      isGdprCompliant = tool.euCompliant.gdpr_compliant;
+    } else if (Array.isArray(tool.euCompliant.gdpr_compliant) && tool.euCompliant.gdpr_compliant.length > 0) {
+      isGdprCompliant = true;
+    }
+
+    if (filters.euCompliant.gdpr && !isGdprCompliant) {
       return false;
     }
-    if (filters.euCompliant.dataResidency && !tool.euCompliant.dataResidency) {
+    
+    if (filters.euCompliant.dataResidency && !tool.euCompliant.data_residency) {
       return false;
     }
-    if (filters.euCompliant.aiAct && !tool.euCompliant.aiAct) {
+    
+    if (filters.euCompliant.aiAct && !tool.euCompliant.ai_act_compliant) {
       return false;
     }
+    
     return true;
   });
 

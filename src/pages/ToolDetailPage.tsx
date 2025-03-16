@@ -40,8 +40,26 @@ const ToolDetailPage = () => {
           .single();
           
         if (data) {
-          // Map Supabase data to AiTool type directly
-          setTool(data as AiTool);
+          // Map Supabase data to AiTool type
+          const toolData: AiTool = {
+            id: data.id,
+            name: data.name,
+            problem_solved_description: data.problem_solved_description,
+            website: data.website,
+            linkedin: data.linkedin,
+            function: data.function,
+            role: data.role,
+            use_case_tag: data.use_case_tag,
+            technical_level: data.technical_level || '',
+            euCompliant: {
+              gdpr_compliant: data.gdpr_compliant || [],
+              data_residency: data.data_residency || false,
+              ai_act_compliant: data.ai_act_compliant || false
+            },
+            company: data.company
+          };
+          
+          setTool(toolData);
           
           // Fetch reviews
           const { data: reviewsData, error: reviewsError } = await supabase

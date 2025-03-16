@@ -48,7 +48,25 @@ const DatabaseTableView = () => {
         if (error) throw error;
         
         if (data && data.length > 0) {
-          setTools(data as AiTool[]);
+          // Map the database data directly to AiTool interface
+          const mappedTools: AiTool[] = data.map(tool => ({
+            id: tool.id,
+            name: tool.name,
+            problem_solved_description: tool.problem_solved_description,
+            website: tool.website,
+            linkedin: tool.linkedin,
+            function: tool.function,
+            role: tool.role,
+            use_case_tag: tool.use_case_tag,
+            technical_level: tool.technical_level || '',
+            euCompliant: {
+              gdpr_compliant: tool.gdpr_compliant || [],
+              data_residency: tool.data_residency || false,
+              ai_act_compliant: tool.ai_act_compliant || false
+            }
+          }));
+          
+          setTools(mappedTools);
         } else {
           setTools([]);
         }

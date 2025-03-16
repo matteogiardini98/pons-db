@@ -12,7 +12,8 @@ import { Checkbox } from '@/components/ui/checkbox';
 import { Button } from '@/components/ui/button';
 import { toast } from '@/hooks/use-toast';
 import { supabase } from '@/integrations/supabase/client';
-import { FUNCTIONS, ROLES, USE_CASES, TECHNICAL_LEVELS } from '../database/filterConstants';
+import { FUNCTIONS, ROLES, TECHNICAL_LEVELS } from '../database/filterConstants';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 
 const formSchema = z.object({
   name: z.string().min(2, { message: 'name must be at least 2 characters' }),
@@ -21,7 +22,7 @@ const formSchema = z.object({
   linkedin: z.string().url({ message: 'must be a valid url' }).optional().or(z.literal('')),
   function: z.array(z.string()).min(1, { message: 'select at least one function' }),
   role: z.array(z.string()).min(1, { message: 'select at least one role' }),
-  use_case_tag: z.string().min(1, { message: 'select a use case' }),
+  use_case_tag: z.string().min(1, { message: 'enter a use case' }),
   technical_level: z.string().min(1, { message: 'select a technical level' }),
   gdpr_compliant: z.boolean().optional(),
   data_residency: z.boolean().optional(),
@@ -163,23 +164,10 @@ const AddToolForm = () => {
             render={({ field }) => (
               <FormItem>
                 <FormLabel>use case</FormLabel>
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-2">
-                  {USE_CASES.map((useCase) => (
-                    <div key={useCase} className="flex items-center space-x-2">
-                      <input
-                        type="radio"
-                        id={`useCase-${useCase}`}
-                        checked={field.value === useCase.toLowerCase()}
-                        onChange={() => field.onChange(useCase.toLowerCase())}
-                        className="form-radio h-4 w-4"
-                      />
-                      <label htmlFor={`useCase-${useCase}`} className="text-sm font-normal cursor-pointer">
-                        {useCase.toLowerCase()}
-                      </label>
-                    </div>
-                  ))}
-                </div>
-                <FormMessage>{form.formState.errors.use_case_tag?.message}</FormMessage>
+                <FormControl>
+                  <Input placeholder="e.g. technical product demonstration" {...field} />
+                </FormControl>
+                <FormMessage />
               </FormItem>
             )}
           />
@@ -190,57 +178,80 @@ const AddToolForm = () => {
             render={({ field }) => (
               <FormItem>
                 <FormLabel>technical level</FormLabel>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
-                  {TECHNICAL_LEVELS.map((level) => (
-                    <div key={level} className="flex items-center space-x-2">
-                      <input
-                        type="radio"
-                        id={`level-${level}`}
-                        checked={field.value === level.toLowerCase()}
-                        onChange={() => field.onChange(level.toLowerCase())}
-                        className="form-radio h-4 w-4"
-                      />
-                      <label htmlFor={`level-${level}`} className="text-sm font-normal cursor-pointer">
+                <Select 
+                  value={field.value} 
+                  onValueChange={field.onChange}
+                >
+                  <SelectTrigger className="w-full">
+                    <SelectValue placeholder="Select technical level" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {TECHNICAL_LEVELS.map((level) => (
+                      <SelectItem key={level} value={level.toLowerCase()}>
                         {level.toLowerCase()}
-                      </label>
-                    </div>
-                  ))}
-                </div>
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
                 <FormMessage>{form.formState.errors.technical_level?.message}</FormMessage>
               </FormItem>
             )}
           />
           
-          <div className="space-y-4">
-            <FormLabel className="block mb-2">functions</FormLabel>
-            <div className="grid grid-cols-2 md:grid-cols-3 gap-2">
-              {FUNCTIONS.map((func) => (
-                <FormField
-                  key={func}
-                  control={form.control}
-                  name="function"
-                  render={({ field }) => (
-                    <FormItem className="flex items-center space-x-2">
-                      <FormControl>
-                        <Checkbox
-                          checked={field.value?.includes(func.toLowerCase())}
-                          onCheckedChange={(checked) => {
-                            return checked
-                              ? field.onChange([...field.value, func.toLowerCase()])
-                              : field.onChange(field.value?.filter((value) => value !== func.toLowerCase()))
+          <FormField
+            control={form.control}
+            name="function"
+            render={() => (
+              <FormItem>
+                <FormLabel>functions</FormLabel>
+                <div className="space-y-4">
+                  <Select
+                    value={""}
+                    onValueChange={(value) => {
+                      const currentValues = form.getValues().function || [];
+                      if (!currentValues.includes(value)) {
+                        form.setValue('function', [...currentValues, value]);
+                      }
+                    }}
+                  >
+                    <SelectTrigger className="w-full">
+                      <SelectValue placeholder="Select a function to add" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {FUNCTIONS.map((func) => (
+                        <SelectItem key={func} value={func.toLowerCase()}>
+                          {func.toLowerCase()}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                  
+                  <div className="space-y-2">
+                    {form.watch('function').map((func) => (
+                      <div key={func} className="flex items-center justify-between p-2 bg-muted rounded-md">
+                        <span>{func.toLowerCase()}</span>
+                        <Button 
+                          type="button" 
+                          variant="ghost" 
+                          size="sm"
+                          onClick={() => {
+                            const currentValues = form.getValues().function;
+                            form.setValue(
+                              'function',
+                              currentValues.filter((value) => value !== func)
+                            );
                           }}
-                        />
-                      </FormControl>
-                      <FormLabel className="font-normal cursor-pointer">
-                        {func.toLowerCase()}
-                      </FormLabel>
-                    </FormItem>
-                  )}
-                />
-              ))}
-            </div>
-            <FormMessage>{form.formState.errors.function?.message}</FormMessage>
-          </div>
+                        >
+                          remove
+                        </Button>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+                <FormMessage>{form.formState.errors.function?.message}</FormMessage>
+              </FormItem>
+            )}
+          />
           
           <div className="space-y-4">
             <FormLabel className="block mb-2">roles</FormLabel>

@@ -34,6 +34,33 @@ const ToolsTable = ({ tools, isLoading }: ToolsTableProps) => {
     );
   }
 
+  // Helper function to get all tags from a tool
+  const getAllTags = (tool: AiTool) => {
+    const tags = [
+      ...tool.function,
+      ...tool.role,
+      tool.use_case_tag,
+      tool.technical_level
+    ];
+    
+    // Add EU compliance tags if applicable
+    if (tool.euCompliant.gdpr_compliant && 
+        (typeof tool.euCompliant.gdpr_compliant === 'boolean' || 
+        (Array.isArray(tool.euCompliant.gdpr_compliant) && tool.euCompliant.gdpr_compliant.length > 0))) {
+      tags.push('gdpr compliant');
+    }
+    
+    if (tool.euCompliant.data_residency) {
+      tags.push('eu data residency');
+    }
+    
+    if (tool.euCompliant.ai_act_compliant) {
+      tags.push('ai act compliant');
+    }
+    
+    return tags.filter(Boolean);
+  };
+
   return (
     <div className={cn("rounded-lg overflow-hidden border", bgColor, borderColor)}>
       <Table className={textColor}>
@@ -41,9 +68,7 @@ const ToolsTable = ({ tools, isLoading }: ToolsTableProps) => {
           <TableRow className={borderColor}>
             <TableHead className={textColor}>name</TableHead>
             <TableHead className={cn("max-w-xs hidden md:table-cell", textColor)}>description</TableHead>
-            <TableHead className={cn("hidden md:table-cell", textColor)}>function</TableHead>
-            <TableHead className={cn("hidden md:table-cell", textColor)}>role</TableHead>
-            <TableHead className={cn("hidden md:table-cell", textColor)}>use case</TableHead>
+            <TableHead className={cn("hidden md:table-cell", textColor)}>tags</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
@@ -63,51 +88,23 @@ const ToolsTable = ({ tools, isLoading }: ToolsTableProps) => {
               </TableCell>
               <TableCell className="hidden md:table-cell">
                 <div className="flex flex-wrap gap-1.5">
-                  {tool.function.slice(0, 2).map((func) => (
-                    <Badge key={func} variant="outline" className={cn(
+                  {getAllTags(tool).slice(0, 5).map((tag, index) => (
+                    <Badge key={`${tag}-${index}`} variant="outline" className={cn(
                       "bg-transparent border-neutral-600",
                       isDarkMode ? "text-neutral-300" : "text-neutral-600"
                     )}>
-                      {func.toLowerCase()}
+                      {tag.toLowerCase()}
                     </Badge>
                   ))}
-                  {tool.function.length > 2 && (
+                  {getAllTags(tool).length > 5 && (
                     <Badge variant="outline" className={cn(
                       "bg-transparent border-neutral-600",
                       isDarkMode ? "text-neutral-300" : "text-neutral-600"
                     )}>
-                      +{tool.function.length - 2}
+                      +{getAllTags(tool).length - 5}
                     </Badge>
                   )}
                 </div>
-              </TableCell>
-              <TableCell className="hidden md:table-cell">
-                <div className="flex flex-wrap gap-1.5">
-                  {tool.role.slice(0, 2).map((role) => (
-                    <Badge key={role} variant="outline" className={cn(
-                      "bg-transparent border-neutral-600",
-                      isDarkMode ? "text-neutral-300" : "text-neutral-600"
-                    )}>
-                      {role.toLowerCase()}
-                    </Badge>
-                  ))}
-                  {tool.role.length > 2 && (
-                    <Badge variant="outline" className={cn(
-                      "bg-transparent border-neutral-600",
-                      isDarkMode ? "text-neutral-300" : "text-neutral-600"
-                    )}>
-                      +{tool.role.length - 2}
-                    </Badge>
-                  )}
-                </div>
-              </TableCell>
-              <TableCell className="hidden md:table-cell">
-                <Badge variant="outline" className={cn(
-                  "bg-transparent border-neutral-600",
-                  isDarkMode ? "text-neutral-300" : "text-neutral-600"
-                )}>
-                  {tool.use_case_tag?.toLowerCase() || ''}
-                </Badge>
               </TableCell>
             </TableRow>
           ))}

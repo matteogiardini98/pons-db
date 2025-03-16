@@ -1,6 +1,13 @@
 
 export const FUNCTIONS = [
-  'sales',
+  'marketing', 
+  'business development', 
+  'sales', 
+  'product development & engineering', 
+  'research & development', 
+  'customer support', 
+  'production & manufacturing', 
+  'finance & accounting'
 ];
 
 export const ROLES = [
@@ -16,4 +23,6 @@ export const USE_CASES = [
 export const TECHNICAL_LEVELS = [
   'plug & play without configuration',
   'requires setup & integrations',
+  'developer tool',
+  'other'
 ];

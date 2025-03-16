@@ -15,7 +15,6 @@ export type Database = {
           created_at: string | null
           data_residency: boolean | null
           function: string[]
-          gdpr_compliant: string[] | null
           id: string
           linkedin: string[]
           name: string
@@ -31,7 +30,6 @@ export type Database = {
           created_at?: string | null
           data_residency?: boolean | null
           function: string[]
-          gdpr_compliant?: string[] | null
           id?: string
           linkedin: string[]
           name: string
@@ -47,7 +45,6 @@ export type Database = {
           created_at?: string | null
           data_residency?: boolean | null
           function?: string[]
-          gdpr_compliant?: string[] | null
           id?: string
           linkedin?: string[]
           name?: string

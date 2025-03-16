@@ -56,7 +56,7 @@ const ToolDetailPage = () => {
               data_residency: data.data_residency || false,
               ai_act_compliant: data.ai_act_compliant || false
             },
-            company: data.company
+            company: data.company || undefined
           };
           
           setTool(toolData);
@@ -221,7 +221,9 @@ const ToolDetailPage = () => {
             </div>
             
             <EUCompliance euCompliant={{
-              gdpr: Boolean(tool.euCompliant.gdpr_compliant),
+              gdpr: Array.isArray(tool.euCompliant.gdpr_compliant) 
+                ? tool.euCompliant.gdpr_compliant.length > 0 
+                : Boolean(tool.euCompliant.gdpr_compliant),
               dataResidency: tool.euCompliant.data_residency,
               aiAct: tool.euCompliant.ai_act_compliant
             }} />

@@ -1,9 +1,9 @@
 
 import { Link, useLocation } from 'react-router-dom';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { cn } from '@/lib/utils';
 import { useTheme } from '@/hooks/use-theme';
-import { Database, PlusCircle, FileText, PanelLeftClose, Sun, Moon } from 'lucide-react';
+import { Database, PlusCircle, FileText, PanelLeftClose, PanelLeft, Sun, Moon } from 'lucide-react';
 import EmailSubscription from './EmailSubscription';
 import BetaBanner from '@/components/ui/beta-banner';
 
@@ -39,6 +39,19 @@ const Sidebar = ({ collapsed = false }: SidebarProps) => {
     console.error("Logo failed to load:", logoUrl);
   };
 
+  // Debug logo loading
+  useEffect(() => {
+    console.log("Attempting to load logo:", logoUrl);
+    // Reset logo error when URL changes
+    setLogoError(false);
+    
+    // Check if image exists
+    const img = new Image();
+    img.onload = () => console.log("Logo loaded successfully");
+    img.onerror = () => console.error("Logo failed to load in useEffect check");
+    img.src = logoUrl;
+  }, [logoUrl]);
+
   return (
     <div className={cn(
       "fixed inset-y-0 left-0 z-50 h-screen transition-all duration-300 ease-in-out",
@@ -56,7 +69,9 @@ const Sidebar = ({ collapsed = false }: SidebarProps) => {
                 onError={handleLogoError} 
               />
             ) : (
-              <div className="h-8 w-8 bg-neutral-200 dark:bg-neutral-700 rounded"></div>
+              <div className="h-8 w-8 bg-neutral-200 dark:bg-neutral-700 rounded flex items-center justify-center">
+                <span className="text-xs">logo</span>
+              </div>
             )}
             <span className={cn("font-medium text-lg", isCollapsed ? "hidden" : "hidden md:block")}>pons</span>
             <div className={cn(isCollapsed ? "hidden" : "hidden md:inline-block")}>
@@ -116,7 +131,7 @@ const Sidebar = ({ collapsed = false }: SidebarProps) => {
           </div>
           
           <div className="p-4 flex flex-col gap-2">
-            {/* Simplified theme toggle button */}
+            {/* Theme toggle button */}
             <button 
               onClick={toggleTheme}
               className={cn(
@@ -133,7 +148,7 @@ const Sidebar = ({ collapsed = false }: SidebarProps) => {
               </span>
             </button>
             
-            {/* Simplified collapse sidebar button */}
+            {/* Toggle button to collapse sidebar */}
             <button 
               onClick={toggleSidebar}
               className={cn(
@@ -144,6 +159,19 @@ const Sidebar = ({ collapsed = false }: SidebarProps) => {
             >
               <PanelLeftClose className="h-4 w-4" />
               <span>collapse sidebar</span>
+            </button>
+
+            {/* NEW: Toggle button to expand sidebar when collapsed */}
+            <button 
+              onClick={toggleSidebar}
+              className={cn(
+                "flex items-center justify-center rounded-md px-3 py-2 text-sm",
+                theme === 'dark' ? 'hover:bg-[#222222] text-gray-300' : 'hover:bg-neutral-100 text-gray-700',
+                !isCollapsed ? "hidden" : "flex"
+              )}
+              title="Expand sidebar"
+            >
+              <PanelLeft className="h-4 w-4" />
             </button>
           </div>
         </div>

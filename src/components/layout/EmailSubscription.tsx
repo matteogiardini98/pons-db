@@ -1,4 +1,3 @@
-
 import { useState } from 'react';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
@@ -8,25 +7,20 @@ import { Form, FormControl, FormField, FormItem, FormMessage } from '@/component
 import { Input } from '@/components/ui/input';
 import { toast } from '@/hooks/use-toast';
 import { supabase } from '@/integrations/supabase/client';
-
 const formSchema = z.object({
   email: z.string().email({
     message: 'please enter a valid email address'
   })
 });
-
 type FormValues = z.infer<typeof formSchema>;
-
 const EmailSubscription = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
-  
   const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
     defaultValues: {
       email: ''
     }
   });
-
   const onSubmit = async (data: FormValues) => {
     setIsSubmitting(true);
     try {
@@ -35,7 +29,6 @@ const EmailSubscription = () => {
       } = await supabase.from('email_subscriptions').insert({
         email: data.email
       });
-
       if (error) {
         if (error.code === '23505') {
           // Unique violation
@@ -64,7 +57,6 @@ const EmailSubscription = () => {
       setIsSubmitting(false);
     }
   };
-
   return <div className="w-full p-4">
       <h3 className="text-sm font-medium mb-2">receive one new AI tool every week</h3>
       <Form {...form}>
@@ -78,12 +70,11 @@ const EmailSubscription = () => {
                 <FormMessage className="text-xs" />
               </FormItem>} />
           
-          <Button type="submit" disabled={isSubmitting} size="sm" variant="cta" className="w-full text-xs h-8">
+          <Button type="submit" disabled={isSubmitting} size="sm" variant="cta" className="w-full text-xs h-8 bg-zinc-950 hover:bg-zinc-800">
             {isSubmitting ? "subscribing..." : "subscribe"}
           </Button>
         </form>
       </Form>
     </div>;
 };
-
 export default EmailSubscription;

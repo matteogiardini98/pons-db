@@ -34,7 +34,7 @@ const EUCompliance = ({ euCompliant }: EUComplianceProps) => {
             className={cn(
               "bg-transparent border-neutral-600",
               badge.isActive 
-                ? "border-green-500 text-green-500" // Highlight active badges in green
+                ? "border-green-500 text-green-500" 
                 : isDarkMode ? "text-white" : "text-black"
             )}
           >

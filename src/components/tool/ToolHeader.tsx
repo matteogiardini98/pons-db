@@ -15,6 +15,7 @@ interface ToolHeaderProps {
 
 const ToolHeader = ({ name, description, url, company }: ToolHeaderProps) => {
   const { theme } = useTheme();
+  const isDarkMode = theme === 'dark';
 
   return (
     <div className="flex flex-col md:flex-row md:items-center gap-6 mb-6">
@@ -35,7 +36,7 @@ const ToolHeader = ({ name, description, url, company }: ToolHeaderProps) => {
               rel="noopener noreferrer"
               className={cn(
                 "inline-flex items-center gap-2 px-3 py-1 rounded-md text-sm",
-                theme === 'dark' 
+                isDarkMode 
                   ? 'bg-neutral-800 hover:bg-neutral-700 text-white' 
                   : 'bg-neutral-100 hover:bg-neutral-200 text-black'
               )}
@@ -46,14 +47,14 @@ const ToolHeader = ({ name, description, url, company }: ToolHeaderProps) => {
             </a>
           )}
           
-          {company && (
+          {company && company.name && (
             <a 
               href={`https://www.linkedin.com/company/${encodeURIComponent(company.name)}`} 
               target="_blank" 
               rel="noopener noreferrer"
               className={cn(
                 "inline-flex items-center gap-2 px-3 py-1 rounded-md text-sm",
-                theme === 'dark' 
+                isDarkMode 
                   ? 'bg-neutral-800 hover:bg-neutral-700 text-white' 
                   : 'bg-neutral-100 hover:bg-neutral-200 text-black'
               )}

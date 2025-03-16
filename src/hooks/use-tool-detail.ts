@@ -27,7 +27,7 @@ export default function useToolDetail(id: string | undefined) {
         if (data) {
           console.log("Raw tool data:", data);
           
-          // Map Supabase data to AiTool type
+          // Map Supabase data to AiTool type, handling potential missing fields
           const toolData: AiTool = {
             id: data.id,
             name: data.name,
@@ -38,13 +38,13 @@ export default function useToolDetail(id: string | undefined) {
             use_case_tag: data.use_case_tag || '',
             technical_level: data.technical_level || '',
             euCompliant: {
-              // Handle gdpr_compliant which could be missing in older records
-              gdpr_compliant: data.gdpr_compliant !== undefined ? data.gdpr_compliant : [],
+              // Handle potentially missing fields with safe fallbacks
+              gdpr_compliant: false, // Set default value
               data_residency: data.data_residency || false,
               ai_act_compliant: data.ai_act_compliant || false
             },
-            // Handle company which could be missing
-            company: data.company || undefined
+            // Handle potentially missing fields
+            company: undefined
           };
           
           setTool(toolData);

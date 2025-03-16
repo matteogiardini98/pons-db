@@ -34,11 +34,12 @@ export default function useToolsData() {
             technical_level: tool.technical_level || '',
             euCompliant: {
               // Safely handle potentially missing properties
-              gdpr_compliant: tool.gdpr_compliant !== undefined ? tool.gdpr_compliant : [],
+              gdpr_compliant: false, // Set default value instead of accessing potentially missing field
               data_residency: tool.data_residency || false,
               ai_act_compliant: tool.ai_act_compliant || false
             },
-            company: tool.company || undefined
+            // Handle potentially missing fields
+            company: undefined
           }));
 
           setTools(mappedTools);

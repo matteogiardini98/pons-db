@@ -1,7 +1,6 @@
 
 import { useState, useEffect } from 'react';
 import { FilterState } from '@/utils/types';
-import { supabase } from '@/integrations/supabase/client';
 import { toast } from '@/components/ui/use-toast';
 import ToolsTable from './ToolsTable';
 import FilterBar from './FilterBar';
@@ -25,7 +24,9 @@ export default function DatabaseTableView() {
   });
 
   const getFilteredTools = () => {
-    let filteredTools = tools;
+    if (!tools) return [];
+    
+    let filteredTools = [...tools];
   
     // Apply search query filter
     if (searchQuery) {
@@ -65,9 +66,8 @@ export default function DatabaseTableView() {
     // Apply EU compliance filters
     if (filterState.euCompliant.gdpr) {
       filteredTools = filteredTools.filter(tool => {
-        // Handle the case where gdpr_compliant could be an array or boolean
-        const gdprValue = tool.euCompliant?.gdpr_compliant;
-        return Array.isArray(gdprValue) ? gdprValue.length > 0 : Boolean(gdprValue);
+        // Simplified check since we're now using a boolean
+        return Boolean(tool.euCompliant?.gdpr_compliant);
       });
     }
 

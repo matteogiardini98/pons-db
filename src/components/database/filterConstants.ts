@@ -1,28 +1,19 @@
 
-export const INDUSTRIES = [
-  'Retail',
-  'Automotive',
-  'Tech SaaS',
-  'Agriculture',
-  'Pharma',
-  'Food & Beverage',
-  'Construction & Real Estate',
-  'Financial Services',
-  'Education',
-  'Hospitality',
-  'Transportation & Logistics',
-  'Professional Services',
-  'Entertainment',
+export const FUNCTIONS = [
+  'Sales',
 ];
 
-export const FUNCTIONS = [
-  'Marketing',
-  'Business Development',
-  'Field Sales',
+export const ROLES = [
   'Sales Engineering',
-  'Product Development',
-  'Research & Development',
-  'Customer Support',
-  'Production / Manufacturing',
-  'Finance & Accounting',
+];
+
+export const USE_CASES = [
+  'Technical Product Demonstration',
+  'Proposal Generation & Customization',
+  'Sales Enablement & Training',
+];
+
+export const TECHNICAL_LEVELS = [
+  'Plug & Play Without Configuration',
+  'Requires Setup & Integrations',
 ];

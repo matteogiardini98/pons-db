@@ -41,8 +41,9 @@ const ToolsTable = ({ tools, isLoading }: ToolsTableProps) => {
           <TableRow className={borderColor}>
             <TableHead className={textColor}>name</TableHead>
             <TableHead className={cn("max-w-xs hidden md:table-cell", textColor)}>description</TableHead>
-            <TableHead className={cn("hidden md:table-cell", textColor)}>industry tags</TableHead>
-            <TableHead className={cn("hidden md:table-cell", textColor)}>function tags</TableHead>
+            <TableHead className={cn("hidden md:table-cell", textColor)}>function</TableHead>
+            <TableHead className={cn("hidden md:table-cell", textColor)}>role</TableHead>
+            <TableHead className={cn("hidden md:table-cell", textColor)}>use case</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
@@ -60,27 +61,7 @@ const ToolsTable = ({ tools, isLoading }: ToolsTableProps) => {
               </TableCell>
               <TableCell className="hidden md:table-cell">
                 <div className="flex flex-wrap gap-1.5">
-                  {tool.industries.slice(0, 2).map((industry) => (
-                    <Badge key={industry} variant="outline" className={cn(
-                      "bg-transparent border-neutral-600",
-                      isDarkMode ? "text-neutral-300" : "text-neutral-600"
-                    )}>
-                      {industry.toLowerCase()}
-                    </Badge>
-                  ))}
-                  {tool.industries.length > 2 && (
-                    <Badge variant="outline" className={cn(
-                      "bg-transparent border-neutral-600",
-                      isDarkMode ? "text-neutral-300" : "text-neutral-600"
-                    )}>
-                      +{tool.industries.length - 2}
-                    </Badge>
-                  )}
-                </div>
-              </TableCell>
-              <TableCell className="hidden md:table-cell">
-                <div className="flex flex-wrap gap-1.5">
-                  {tool.functions.slice(0, 2).map((func) => (
+                  {tool.function.slice(0, 2).map((func) => (
                     <Badge key={func} variant="outline" className={cn(
                       "bg-transparent border-neutral-600",
                       isDarkMode ? "text-neutral-300" : "text-neutral-600"
@@ -88,15 +69,43 @@ const ToolsTable = ({ tools, isLoading }: ToolsTableProps) => {
                       {func.toLowerCase()}
                     </Badge>
                   ))}
-                  {tool.functions.length > 2 && (
+                  {tool.function.length > 2 && (
                     <Badge variant="outline" className={cn(
                       "bg-transparent border-neutral-600",
                       isDarkMode ? "text-neutral-300" : "text-neutral-600"
                     )}>
-                      +{tool.functions.length - 2}
+                      +{tool.function.length - 2}
                     </Badge>
                   )}
                 </div>
+              </TableCell>
+              <TableCell className="hidden md:table-cell">
+                <div className="flex flex-wrap gap-1.5">
+                  {tool.role.slice(0, 2).map((role) => (
+                    <Badge key={role} variant="outline" className={cn(
+                      "bg-transparent border-neutral-600",
+                      isDarkMode ? "text-neutral-300" : "text-neutral-600"
+                    )}>
+                      {role.toLowerCase()}
+                    </Badge>
+                  ))}
+                  {tool.role.length > 2 && (
+                    <Badge variant="outline" className={cn(
+                      "bg-transparent border-neutral-600",
+                      isDarkMode ? "text-neutral-300" : "text-neutral-600"
+                    )}>
+                      +{tool.role.length - 2}
+                    </Badge>
+                  )}
+                </div>
+              </TableCell>
+              <TableCell className="hidden md:table-cell">
+                <Badge variant="outline" className={cn(
+                  "bg-transparent border-neutral-600",
+                  isDarkMode ? "text-neutral-300" : "text-neutral-600"
+                )}>
+                  {tool.useCase?.toLowerCase() || ''}
+                </Badge>
               </TableCell>
             </TableRow>
           ))}

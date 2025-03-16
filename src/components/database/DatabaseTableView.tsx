@@ -1,7 +1,7 @@
+
 import { useState, useEffect } from 'react';
-import { Tag, Users, ArrowUpDown, ImageOff } from 'lucide-react';
+import { Tag, Users, ArrowUpDown, ImageOff, Briefcase, TagIcon } from 'lucide-react';
 import { AiTool, FilterState } from '@/utils/types';
-import { mockTools } from '@/utils/data';
 import { Button } from '@/components/ui/button';
 import { pageTransition } from '@/utils/animations';
 import { motion } from 'framer-motion';
@@ -11,7 +11,7 @@ import SearchBar from './SearchBar';
 import FilterDropdown from './FilterDropdown';
 import EUComplianceFilter from './EUComplianceFilter';
 import ToolsTable from './ToolsTable';
-import { INDUSTRIES, FUNCTIONS } from './filterConstants';
+import { FUNCTIONS, ROLES, USE_CASES } from './filterConstants';
 import { supabase } from '@/integrations/supabase/client';
 
 const DatabaseTableView = () => {
@@ -23,9 +23,9 @@ const DatabaseTableView = () => {
   const [tools, setTools] = useState<AiTool[]>([]);
   const [logoError, setLogoError] = useState(false);
   const [filters, setFilters] = useState<FilterState>({
-    industries: [],
     functions: [],
-    businessTypes: [],
+    roles: [],
+    useCases: [],
     technicalLevel: [],
     euCompliant: {
       gdpr: false,
@@ -33,8 +33,9 @@ const DatabaseTableView = () => {
       aiAct: false
     }
   });
-  const [showIndustryDropdown, setShowIndustryDropdown] = useState(false);
   const [showFunctionDropdown, setShowFunctionDropdown] = useState(false);
+  const [showRoleDropdown, setShowRoleDropdown] = useState(false);
+  const [showUseCaseDropdown, setShowUseCaseDropdown] = useState(false);
   const [showEUDropdown, setShowEUDropdown] = useState(false);
 
   useEffect(() => {
@@ -50,29 +51,27 @@ const DatabaseTableView = () => {
           const mappedTools: AiTool[] = data.map(tool => ({
             id: tool.id,
             name: tool.name,
-            description: tool.description,
-            url: tool.website,
+            description: tool.problem_solved_description,
+            url: tool.website || '',
             logo: '',
-            industries: tool.industries,
-            functions: tool.functions,
-            businessTypes: tool.business_types,
-            technicalLevel: tool.technical_level || 'medium',
-            features: tool.features || [],
+            function: tool.function || [],
+            role: tool.role || [],
+            useCase: tool.use_case_tag || '',
+            technicalLevel: tool.technical_level || '',
             euCompliant: {
               gdpr: tool.gdpr_compliant || false,
               dataResidency: tool.data_residency || false,
               aiAct: tool.ai_act_compliant || false
-            },
-            reviews: []
+            }
           }));
           
           setTools(mappedTools);
         } else {
-          setTools(mockTools);
+          setTools([]);
         }
       } catch (error) {
         console.error("Error fetching tools:", error);
-        setTools(mockTools);
+        setTools([]);
       } finally {
         setIsLoading(false);
       }
@@ -85,22 +84,32 @@ const DatabaseTableView = () => {
     setSearchTerm(e.target.value);
   };
 
-  const toggleIndustryFilter = industry => {
-    setFilters(prev => {
-      const industries = prev.industries.includes(industry) ? prev.industries.filter(i => i !== industry) : [...prev.industries, industry];
-      return {
-        ...prev,
-        industries
-      };
-    });
-  };
-
   const toggleFunctionFilter = func => {
     setFilters(prev => {
       const functions = prev.functions.includes(func) ? prev.functions.filter(f => f !== func) : [...prev.functions, func];
       return {
         ...prev,
         functions
+      };
+    });
+  };
+
+  const toggleRoleFilter = role => {
+    setFilters(prev => {
+      const roles = prev.roles.includes(role) ? prev.roles.filter(r => r !== role) : [...prev.roles, role];
+      return {
+        ...prev,
+        roles
+      };
+    });
+  };
+
+  const toggleUseCaseFilter = useCase => {
+    setFilters(prev => {
+      const useCases = prev.useCases.includes(useCase) ? prev.useCases.filter(uc => uc !== useCase) : [...prev.useCases, useCase];
+      return {
+        ...prev,
+        useCases
       };
     });
   };
@@ -117,9 +126,9 @@ const DatabaseTableView = () => {
 
   const clearFilters = () => {
     setFilters({
-      industries: [],
       functions: [],
-      businessTypes: [],
+      roles: [],
+      useCases: [],
       technicalLevel: [],
       euCompliant: {
         gdpr: false,
@@ -129,22 +138,32 @@ const DatabaseTableView = () => {
     });
   };
 
-  const toggleIndustryDropdown = () => {
-    setShowIndustryDropdown(!showIndustryDropdown);
-    setShowFunctionDropdown(false);
+  const toggleFunctionDropdown = () => {
+    setShowFunctionDropdown(!showFunctionDropdown);
+    setShowRoleDropdown(false);
+    setShowUseCaseDropdown(false);
     setShowEUDropdown(false);
   };
 
-  const toggleFunctionDropdown = () => {
-    setShowFunctionDropdown(!showFunctionDropdown);
-    setShowIndustryDropdown(false);
+  const toggleRoleDropdown = () => {
+    setShowRoleDropdown(!showRoleDropdown);
+    setShowFunctionDropdown(false);
+    setShowUseCaseDropdown(false);
+    setShowEUDropdown(false);
+  };
+
+  const toggleUseCaseDropdown = () => {
+    setShowUseCaseDropdown(!showUseCaseDropdown);
+    setShowFunctionDropdown(false);
+    setShowRoleDropdown(false);
     setShowEUDropdown(false);
   };
 
   const toggleEUDropdown = () => {
     setShowEUDropdown(!showEUDropdown);
-    setShowIndustryDropdown(false);
     setShowFunctionDropdown(false);
+    setShowRoleDropdown(false);
+    setShowUseCaseDropdown(false);
   };
 
   const filteredTools = tools.filter(tool => {
@@ -152,11 +171,15 @@ const DatabaseTableView = () => {
       return false;
     }
 
-    if (filters.industries.length > 0 && !tool.industries.some(industry => filters.industries.includes(industry))) {
+    if (filters.functions.length > 0 && !tool.function.some(func => filters.functions.includes(func.toLowerCase()))) {
       return false;
     }
 
-    if (filters.functions.length > 0 && !tool.functions.some(func => filters.functions.includes(func))) {
+    if (filters.roles.length > 0 && !tool.role.some(role => filters.roles.includes(role.toLowerCase()))) {
+      return false;
+    }
+
+    if (filters.useCases.length > 0 && !filters.useCases.includes(tool.useCase.toLowerCase())) {
       return false;
     }
 
@@ -164,6 +187,9 @@ const DatabaseTableView = () => {
       return false;
     }
     if (filters.euCompliant.dataResidency && !tool.euCompliant.dataResidency) {
+      return false;
+    }
+    if (filters.euCompliant.aiAct && !tool.euCompliant.aiAct) {
       return false;
     }
     return true;
@@ -181,7 +207,7 @@ const DatabaseTableView = () => {
     console.error("Logo image failed to load:", logoUrl);
   };
 
-  const activeFilterCount = filters.industries.length + filters.functions.length + (filters.euCompliant.gdpr ? 1 : 0) + (filters.euCompliant.dataResidency ? 1 : 0) + (filters.euCompliant.aiAct ? 1 : 0);
+  const activeFilterCount = filters.functions.length + filters.roles.length + filters.useCases.length + (filters.euCompliant.gdpr ? 1 : 0) + (filters.euCompliant.dataResidency ? 1 : 0) + (filters.euCompliant.aiAct ? 1 : 0);
 
   return <motion.div className={cn("min-h-screen", textColor)} {...pageTransition}>
       <div className="container-tight p-4 md:p-6">
@@ -197,24 +223,62 @@ const DatabaseTableView = () => {
             <SearchBar searchTerm={searchTerm} onSearchChange={handleSearchChange} />
             
             <div className="flex flex-wrap gap-2">
-              <FilterDropdown title="industry" icon={<Tag size={16} />} isOpen={showIndustryDropdown} onToggle={toggleIndustryDropdown} options={INDUSTRIES.map(industry => industry.toLowerCase())} selectedOptions={filters.industries} onOptionToggle={toggleIndustryFilter} onClear={() => setFilters(prev => ({
-              ...prev,
-              industries: []
-            }))} />
+              <FilterDropdown 
+                title="function" 
+                icon={<Briefcase size={16} />} 
+                isOpen={showFunctionDropdown} 
+                onToggle={toggleFunctionDropdown} 
+                options={FUNCTIONS.map(func => func.toLowerCase())} 
+                selectedOptions={filters.functions} 
+                onOptionToggle={toggleFunctionFilter} 
+                onClear={() => setFilters(prev => ({
+                  ...prev,
+                  functions: []
+                }))} 
+              />
               
-              <FilterDropdown title="function" icon={<Users size={16} />} isOpen={showFunctionDropdown} onToggle={toggleFunctionDropdown} options={FUNCTIONS.map(func => func.toLowerCase())} selectedOptions={filters.functions} onOptionToggle={toggleFunctionFilter} onClear={() => setFilters(prev => ({
-              ...prev,
-              functions: []
-            }))} />
+              <FilterDropdown 
+                title="role" 
+                icon={<Users size={16} />} 
+                isOpen={showRoleDropdown} 
+                onToggle={toggleRoleDropdown} 
+                options={ROLES.map(role => role.toLowerCase())} 
+                selectedOptions={filters.roles} 
+                onOptionToggle={toggleRoleFilter} 
+                onClear={() => setFilters(prev => ({
+                  ...prev,
+                  roles: []
+                }))} 
+              />
               
-              <EUComplianceFilter isOpen={showEUDropdown} onToggle={toggleEUDropdown} filters={filters.euCompliant} onFilterToggle={toggleEUFilter} onClear={() => setFilters(prev => ({
-              ...prev,
-              euCompliant: {
-                gdpr: false,
-                dataResidency: false,
-                aiAct: false
-              }
-            }))} />
+              <FilterDropdown 
+                title="use case" 
+                icon={<TagIcon size={16} />} 
+                isOpen={showUseCaseDropdown} 
+                onToggle={toggleUseCaseDropdown} 
+                options={USE_CASES.map(useCase => useCase.toLowerCase())} 
+                selectedOptions={filters.useCases} 
+                onOptionToggle={toggleUseCaseFilter} 
+                onClear={() => setFilters(prev => ({
+                  ...prev,
+                  useCases: []
+                }))} 
+              />
+              
+              <EUComplianceFilter 
+                isOpen={showEUDropdown} 
+                onToggle={toggleEUDropdown} 
+                filters={filters.euCompliant} 
+                onFilterToggle={toggleEUFilter} 
+                onClear={() => setFilters(prev => ({
+                  ...prev,
+                  euCompliant: {
+                    gdpr: false,
+                    dataResidency: false,
+                    aiAct: false
+                  }
+                }))} 
+              />
               
               <Button variant="outline" size="sm" className={cn("border-neutral-700 gap-2", isDarkMode ? "bg-[#222222] hover:bg-neutral-800" : "bg-white hover:bg-neutral-100")}>
                 <ArrowUpDown size={16} />

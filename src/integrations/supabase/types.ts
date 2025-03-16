@@ -12,54 +12,51 @@ export type Database = {
       ai_tools: {
         Row: {
           ai_act_compliant: boolean | null
-          business_types: string[]
           created_at: string | null
           data_residency: boolean | null
-          description: string
-          features: string[] | null
-          functions: string[]
-          gdpr_compliant: boolean | null
+          function: string[]
+          gdpr_compliant: string[] | null
           id: string
-          industries: string[]
-          linkedin: string | null
+          linkedin: string[]
           name: string
+          problem_solved_description: string
+          role: string[]
           technical_level: string | null
           updated_at: string | null
-          website: string
+          use_case_tag: string
+          website: string | null
         }
         Insert: {
           ai_act_compliant?: boolean | null
-          business_types: string[]
           created_at?: string | null
           data_residency?: boolean | null
-          description: string
-          features?: string[] | null
-          functions: string[]
-          gdpr_compliant?: boolean | null
+          function: string[]
+          gdpr_compliant?: string[] | null
           id?: string
-          industries: string[]
-          linkedin?: string | null
+          linkedin: string[]
           name: string
+          problem_solved_description: string
+          role: string[]
           technical_level?: string | null
           updated_at?: string | null
-          website: string
+          use_case_tag: string
+          website?: string | null
         }
         Update: {
           ai_act_compliant?: boolean | null
-          business_types?: string[]
           created_at?: string | null
           data_residency?: boolean | null
-          description?: string
-          features?: string[] | null
-          functions?: string[]
-          gdpr_compliant?: boolean | null
+          function?: string[]
+          gdpr_compliant?: string[] | null
           id?: string
-          industries?: string[]
-          linkedin?: string | null
+          linkedin?: string[]
           name?: string
+          problem_solved_description?: string
+          role?: string[]
           technical_level?: string | null
           updated_at?: string | null
-          website?: string
+          use_case_tag?: string
+          website?: string | null
         }
         Relationships: []
       }

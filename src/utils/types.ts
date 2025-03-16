@@ -5,11 +5,10 @@ export interface AiTool {
   description: string;
   url: string;
   logo: string;
-  industries: string[];
-  functions: string[];
-  businessTypes: string[];
+  function: string[];
+  role: string[];
+  useCase: string;
   technicalLevel: string;
-  features: string[];
   euCompliant: {
     gdpr: boolean;
     dataResidency: boolean;
@@ -27,8 +26,7 @@ export interface AiTool {
     startingPrice?: number;
   };
   releaseDate?: string;
-  similarTools?: string[];
-  reviews: Review[];
+  reviews?: Review[];
 }
 
 export interface Review {
@@ -43,9 +41,9 @@ export interface Review {
 }
 
 export interface FilterState {
-  industries: string[];
   functions: string[];
-  businessTypes: string[];
+  roles: string[];
+  useCases: string[];
   technicalLevel: string[];
   euCompliant: {
     gdpr: boolean;

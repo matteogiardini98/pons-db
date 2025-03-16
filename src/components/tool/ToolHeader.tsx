@@ -15,6 +15,14 @@ const ToolHeader = ({ name, description, url, linkedin }: ToolHeaderProps) => {
   const { theme } = useTheme();
   const isDarkMode = theme === 'dark';
 
+  // Ensure URLs have proper protocol for external links
+  const formatUrl = (link: string) => {
+    if (!link) return '';
+    return link.startsWith('http://') || link.startsWith('https://') 
+      ? link 
+      : `https://${link}`;
+  };
+
   return (
     <div className="flex flex-col md:flex-row md:items-center gap-6 mb-6">
       <div className="flex-1">
@@ -29,7 +37,7 @@ const ToolHeader = ({ name, description, url, linkedin }: ToolHeaderProps) => {
         <div className="flex flex-wrap gap-2">
           {url && (
             <a 
-              href={url} 
+              href={formatUrl(url)} 
               target="_blank" 
               rel="noopener noreferrer"
               className={cn(
@@ -47,7 +55,7 @@ const ToolHeader = ({ name, description, url, linkedin }: ToolHeaderProps) => {
           
           {linkedin && linkedin.length > 0 && linkedin[0] && (
             <a 
-              href={linkedin[0]} 
+              href={formatUrl(linkedin[0])} 
               target="_blank" 
               rel="noopener noreferrer"
               className={cn(

@@ -39,11 +39,11 @@ export default function useToolDetail(id: string | undefined) {
             use_case_tag: data.use_case_tag || '',
             technical_level: data.technical_level || '',
             euCompliant: {
-              gdpr_compliant: data.gdpr_compliant || false,
+              gdpr_compliant: false, // Default values since these fields might not exist in the database
               data_residency: data.data_residency || false,
               ai_act_compliant: data.ai_act_compliant || false
-            },
-            company: data.company || undefined
+            }
+            // Company information is optional in AiTool type
           };
           
           console.log("Processed tool data:", toolData);

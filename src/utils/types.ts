@@ -3,16 +3,16 @@ export interface AiTool {
   id: string;
   name: string;
   problem_solved_description: string;
-  url?: string;
-  logo?: string;
+  website?: string;
+  linkedin?: string[];
   function: string[];
   role: string[];
-  useCase: string;
-  technicalLevel: string;
+  use_case_tag: string;
+  technical_level: string;
   euCompliant: {
-    gdpr: boolean;
-    dataResidency: boolean;
-    aiAct?: boolean;
+    gdpr_compliant: string[] | boolean;
+    data_residency: boolean;
+    ai_act_compliant?: boolean;
   };
   company?: {
     name: string;

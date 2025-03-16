@@ -1,19 +1,19 @@
 
 export const FUNCTIONS = [
-  'Sales',
+  'sales',
 ];
 
 export const ROLES = [
-  'Sales Engineering',
+  'sales engineering',
 ];
 
 export const USE_CASES = [
-  'Technical Product Demonstration',
-  'Proposal Generation & Customization',
-  'Sales Enablement & Training',
+  'technical product demonstration',
+  'proposal generation & customization',
+  'sales enablement & training',
 ];
 
 export const TECHNICAL_LEVELS = [
-  'Plug & Play Without Configuration',
-  'Requires Setup & Integrations',
+  'plug & play without configuration',
+  'requires setup & integrations',
 ];

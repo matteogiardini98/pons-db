@@ -6,7 +6,7 @@ import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover
 import { Separator } from '@/components/ui/separator';
 import { Badge } from '@/components/ui/badge';
 import { FilterState } from '@/utils/types';
-import { INDUSTRIES, FUNCTIONS, BUSINESS_TYPES, TECHNICAL_LEVELS } from '@/utils/data';
+import { FUNCTIONS, ROLES, USE_CASES, TECHNICAL_LEVELS } from '@/components/database/filterConstants';
 import { cn } from '@/lib/utils';
 
 interface FilterBarProps {
@@ -17,21 +17,10 @@ interface FilterBarProps {
 const FilterBar = ({ filters, onFilterChange }: FilterBarProps) => {
   const [isOpen, setIsOpen] = useState(false);
   
-  const handleIndustryToggle = (industry: string) => {
-    const newIndustries = filters.industries.includes(industry as any)
-      ? filters.industries.filter(i => i !== industry)
-      : [...filters.industries, industry as any];
-    
-    onFilterChange({
-      ...filters,
-      industries: newIndustries,
-    });
-  };
-
   const handleFunctionToggle = (func: string) => {
-    const newFunctions = filters.functions.includes(func as any)
+    const newFunctions = filters.functions.includes(func)
       ? filters.functions.filter(f => f !== func)
-      : [...filters.functions, func as any];
+      : [...filters.functions, func];
     
     onFilterChange({
       ...filters,
@@ -39,21 +28,32 @@ const FilterBar = ({ filters, onFilterChange }: FilterBarProps) => {
     });
   };
 
-  const handleBusinessTypeToggle = (type: string) => {
-    const newTypes = filters.businessTypes.includes(type as any)
-      ? filters.businessTypes.filter(t => t !== type)
-      : [...filters.businessTypes, type as any];
+  const handleRoleToggle = (role: string) => {
+    const newRoles = filters.roles.includes(role)
+      ? filters.roles.filter(r => r !== role)
+      : [...filters.roles, role];
     
     onFilterChange({
       ...filters,
-      businessTypes: newTypes,
+      roles: newRoles,
+    });
+  };
+
+  const handleUseCaseToggle = (useCase: string) => {
+    const newUseCases = filters.useCases.includes(useCase)
+      ? filters.useCases.filter(u => u !== useCase)
+      : [...filters.useCases, useCase];
+    
+    onFilterChange({
+      ...filters,
+      useCases: newUseCases,
     });
   };
 
   const handleTechnicalLevelToggle = (level: string) => {
-    const newLevels = filters.technicalLevel.includes(level as any)
+    const newLevels = filters.technicalLevel.includes(level)
       ? filters.technicalLevel.filter(l => l !== level)
-      : [...filters.technicalLevel, level as any];
+      : [...filters.technicalLevel, level];
     
     onFilterChange({
       ...filters,
@@ -83,9 +83,9 @@ const FilterBar = ({ filters, onFilterChange }: FilterBarProps) => {
 
   const resetFilters = () => {
     onFilterChange({
-      industries: [],
       functions: [],
-      businessTypes: [],
+      roles: [],
+      useCases: [],
       technicalLevel: [],
       euCompliant: {
         gdpr: false,
@@ -95,9 +95,9 @@ const FilterBar = ({ filters, onFilterChange }: FilterBarProps) => {
   };
 
   const activeFilterCount = 
-    filters.industries.length + 
     filters.functions.length + 
-    filters.businessTypes.length + 
+    filters.roles.length + 
+    filters.useCases.length + 
     filters.technicalLevel.length + 
     (filters.euCompliant.gdpr ? 1 : 0) + 
     (filters.euCompliant.dataResidency ? 1 : 0);
@@ -134,19 +134,6 @@ const FilterBar = ({ filters, onFilterChange }: FilterBarProps) => {
                 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 p-4">
                   <div className="space-y-4">
-                    <FilterSection title="Industry">
-                      <div className="flex flex-wrap gap-2">
-                        {INDUSTRIES.map((industry) => (
-                          <FilterChip
-                            key={industry}
-                            label={industry}
-                            selected={filters.industries.includes(industry)}
-                            onClick={() => handleIndustryToggle(industry)}
-                          />
-                        ))}
-                      </div>
-                    </FilterSection>
-                    
                     <FilterSection title="Function">
                       <div className="flex flex-wrap gap-2">
                         {FUNCTIONS.map((func) => (
@@ -159,17 +146,30 @@ const FilterBar = ({ filters, onFilterChange }: FilterBarProps) => {
                         ))}
                       </div>
                     </FilterSection>
+                    
+                    <FilterSection title="Role">
+                      <div className="flex flex-wrap gap-2">
+                        {ROLES.map((role) => (
+                          <FilterChip
+                            key={role}
+                            label={role}
+                            selected={filters.roles.includes(role)}
+                            onClick={() => handleRoleToggle(role)}
+                          />
+                        ))}
+                      </div>
+                    </FilterSection>
                   </div>
                   
                   <div className="space-y-4">
-                    <FilterSection title="Business Type">
+                    <FilterSection title="Use Case">
                       <div className="flex flex-wrap gap-2">
-                        {BUSINESS_TYPES.map((type) => (
+                        {USE_CASES.map((useCase) => (
                           <FilterChip
-                            key={type}
-                            label={type}
-                            selected={filters.businessTypes.includes(type)}
-                            onClick={() => handleBusinessTypeToggle(type)}
+                            key={useCase}
+                            label={useCase}
+                            selected={filters.useCases.includes(useCase)}
+                            onClick={() => handleUseCaseToggle(useCase)}
                           />
                         ))}
                       </div>
@@ -214,27 +214,27 @@ const FilterBar = ({ filters, onFilterChange }: FilterBarProps) => {
             
             {/* Active filter badges */}
             <div className="flex-wrap hidden md:flex gap-2">
-              {filters.industries.map((industry) => (
-                <ActiveFilterBadge
-                  key={`industry-${industry}`}
-                  label={industry}
-                  onRemove={() => handleIndustryToggle(industry)}
-                />
-              ))}
-              
               {filters.functions.map((func) => (
                 <ActiveFilterBadge
-                  key={`function-${func}`}
+                  key={`func-${func}`}
                   label={func}
                   onRemove={() => handleFunctionToggle(func)}
                 />
               ))}
               
-              {filters.businessTypes.map((type) => (
+              {filters.roles.map((role) => (
                 <ActiveFilterBadge
-                  key={`btype-${type}`}
-                  label={type}
-                  onRemove={() => handleBusinessTypeToggle(type)}
+                  key={`role-${role}`}
+                  label={role}
+                  onRemove={() => handleRoleToggle(role)}
+                />
+              ))}
+              
+              {filters.useCases.map((useCase) => (
+                <ActiveFilterBadge
+                  key={`useCase-${useCase}`}
+                  label={useCase}
+                  onRemove={() => handleUseCaseToggle(useCase)}
                 />
               ))}
               

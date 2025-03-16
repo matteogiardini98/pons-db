@@ -15,7 +15,7 @@ const ToolCard = ({ tool }: ToolCardProps) => {
   const [isHovered, setIsHovered] = useState(false);
   
   const getAverageRating = (tool: AiTool) => {
-    if (tool.reviews.length === 0) return null;
+    if (!tool.reviews || tool.reviews.length === 0) return null;
     
     const total = tool.reviews.reduce((sum, review) => sum + review.rating, 0);
     return (total / tool.reviews.length).toFixed(1);
@@ -46,7 +46,7 @@ const ToolCard = ({ tool }: ToolCardProps) => {
                     <span>{averageRating}</span>
                   </div>
                 )}
-                <span>{tool.reviews.length} reviews</span>
+                <span>{tool.reviews ? tool.reviews.length : 0} reviews</span>
               </div>
             </div>
             
@@ -60,37 +60,37 @@ const ToolCard = ({ tool }: ToolCardProps) => {
           </div>
           
           <p className="text-muted-foreground text-sm line-clamp-2 mb-6 flex-grow">
-            {tool.description}
+            {tool.problem_solved_description}
           </p>
           
           <div className="space-y-4 mt-auto">
             <div className="flex flex-wrap gap-1.5">
-              {tool.industries.slice(0, 3).map((industry) => (
-                <Badge key={industry} variant="outline" className="text-xs font-normal rounded-full">
-                  {industry}
+              {tool.function.slice(0, 3).map((func) => (
+                <Badge key={func} variant="outline" className="text-xs font-normal rounded-full">
+                  {func}
                 </Badge>
               ))}
-              {tool.industries.length > 3 && (
+              {tool.function.length > 3 && (
                 <Badge variant="outline" className="text-xs font-normal rounded-full">
-                  +{tool.industries.length - 3}
+                  +{tool.function.length - 3}
                 </Badge>
               )}
             </div>
             
             <div className="flex flex-wrap gap-2">
-              {tool.technicalLevel && (
+              {tool.technical_level && (
                 <div className="text-xs px-2 py-0.5 rounded-full bg-accent text-accent-foreground">
-                  {tool.technicalLevel}
+                  {tool.technical_level}
                 </div>
               )}
               
-              {tool.euCompliant.gdpr && (
+              {tool.euCompliant.gdpr_compliant && (
                 <div className="text-xs px-2 py-0.5 rounded-full bg-green-50 text-green-700">
                   GDPR Compliant
                 </div>
               )}
               
-              {tool.euCompliant.dataResidency && (
+              {tool.euCompliant.data_residency && (
                 <div className="text-xs px-2 py-0.5 rounded-full bg-blue-50 text-blue-700">
                   EU Data Residency
                 </div>

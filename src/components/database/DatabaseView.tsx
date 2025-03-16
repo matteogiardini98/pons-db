@@ -14,9 +14,9 @@ const DatabaseView = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [tools, setTools] = useState<AiTool[]>([]);
   const [filters, setFilters] = useState<FilterState>({
-    industries: [],
     functions: [],
-    businessTypes: [],
+    roles: [],
+    useCases: [],
     technicalLevel: [],
     euCompliant: {
       gdpr: false,
@@ -47,15 +47,7 @@ const DatabaseView = () => {
     if (
       searchTerm &&
       !tool.name.toLowerCase().includes(searchTerm.toLowerCase()) &&
-      !tool.description.toLowerCase().includes(searchTerm.toLowerCase())
-    ) {
-      return false;
-    }
-
-    // Industry filter
-    if (
-      filters.industries.length > 0 &&
-      !tool.industries.some((industry) => filters.industries.includes(industry))
+      !tool.problem_solved_description.toLowerCase().includes(searchTerm.toLowerCase())
     ) {
       return false;
     }
@@ -63,15 +55,23 @@ const DatabaseView = () => {
     // Function filter
     if (
       filters.functions.length > 0 &&
-      !tool.functions.some((func) => filters.functions.includes(func))
+      !tool.function.some((func) => filters.functions.includes(func))
     ) {
       return false;
     }
 
-    // Business type filter
+    // Role filter
     if (
-      filters.businessTypes.length > 0 &&
-      !tool.businessTypes.some((type) => filters.businessTypes.includes(type))
+      filters.roles.length > 0 &&
+      !tool.role.some((role) => filters.roles.includes(role))
+    ) {
+      return false;
+    }
+
+    // Use case filter
+    if (
+      filters.useCases.length > 0 &&
+      !filters.useCases.includes(tool.use_case_tag)
     ) {
       return false;
     }
@@ -79,17 +79,20 @@ const DatabaseView = () => {
     // Technical level filter
     if (
       filters.technicalLevel.length > 0 &&
-      !filters.technicalLevel.includes(tool.technicalLevel)
+      !filters.technicalLevel.includes(tool.technical_level)
     ) {
       return false;
     }
 
     // EU compliance filters
-    if (filters.euCompliant.gdpr && !tool.euCompliant.gdpr) {
+    if (filters.euCompliant.gdpr && 
+        (!tool.euCompliant.gdpr_compliant || 
+         (Array.isArray(tool.euCompliant.gdpr_compliant) && 
+          tool.euCompliant.gdpr_compliant.length === 0))) {
       return false;
     }
 
-    if (filters.euCompliant.dataResidency && !tool.euCompliant.dataResidency) {
+    if (filters.euCompliant.dataResidency && !tool.euCompliant.data_residency) {
       return false;
     }
 
@@ -103,7 +106,7 @@ const DatabaseView = () => {
           <h2 className="text-3xl font-display font-medium mb-4">AI Solutions Database</h2>
           <p className="text-muted-foreground max-w-2xl">
             Discover AI tools that solve real business challenges for European companies. 
-            Filter by industry, function, and technical requirements.
+            Filter by function, role, and technical requirements.
           </p>
         </div>
 
@@ -153,9 +156,9 @@ const DatabaseView = () => {
               </p>
               <Button variant="outline" onClick={() => {
                 setFilters({
-                  industries: [],
                   functions: [],
-                  businessTypes: [],
+                  roles: [],
+                  useCases: [],
                   technicalLevel: [],
                   euCompliant: {
                     gdpr: false,

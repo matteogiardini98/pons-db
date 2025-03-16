@@ -76,22 +76,24 @@ const Sidebar = ({ collapsed = false }: SidebarProps) => {
             <div className={cn(isCollapsed ? "hidden" : "hidden md:inline-block")}>
               <BetaBanner inSidebar={true} />
             </div>
-            
-            {/* Moved collapse/expand button to the top */}
-            <button 
-              onClick={toggleSidebar}
-              className={cn(
-                "flex items-center justify-center rounded-md p-1 text-sm",
-                theme === 'dark' ? 'text-gray-300 hover:bg-[#222222]' : 'text-gray-700 hover:bg-neutral-100'
-              )}
-              title={isCollapsed ? "Expand sidebar" : "Collapse sidebar"}
-            >
-              {isCollapsed ? <PanelLeft className="h-4 w-4" /> : <PanelLeftClose className="h-4 w-4" />}
-            </button>
           </div>
         </div>
         
-        <nav className="flex-1 overflow-auto py-4">
+        {/* Moved collapse button here - between logo and navigation */}
+        <div className="flex justify-center py-4">
+          <button 
+            onClick={toggleSidebar}
+            className={cn(
+              "flex items-center justify-center rounded-md p-1.5 text-sm",
+              theme === 'dark' ? 'text-gray-300 hover:bg-[#222222]' : 'text-gray-700 hover:bg-neutral-100'
+            )}
+            title={isCollapsed ? "Expand sidebar" : "Collapse sidebar"}
+          >
+            {isCollapsed ? <PanelLeft className="h-4 w-4" /> : <PanelLeftClose className="h-4 w-4" />}
+          </button>
+        </div>
+        
+        <nav className="flex-1 overflow-auto py-2">
           <ul className="space-y-1 px-2">
             <li>
               <Link

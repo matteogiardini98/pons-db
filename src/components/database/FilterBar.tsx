@@ -1,4 +1,3 @@
-
 import { useState } from 'react';
 import { Sliders, X, Check, ChevronDown } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -49,7 +48,7 @@ const FilterBar = ({ filters, onFilterChange }: FilterBarProps) => {
       useCases: newUseCases,
     });
   };
-
+  
   const handleTechnicalLevelToggle = (level: string) => {
     const newLevels = filters.technicalLevel.includes(level)
       ? filters.technicalLevel.filter(l => l !== level)

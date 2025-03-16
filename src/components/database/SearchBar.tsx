@@ -7,9 +7,10 @@ import { useTheme } from '@/hooks/use-theme';
 interface SearchBarProps {
   searchTerm: string;
   onSearchChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  placeholder?: string;
 }
 
-const SearchBar = ({ searchTerm, onSearchChange }: SearchBarProps) => {
+const SearchBar = ({ searchTerm, onSearchChange, placeholder = "Search for AI tools..." }: SearchBarProps) => {
   const { theme } = useTheme();
   const isDarkMode = theme === 'dark';
   const mutedTextColor = isDarkMode ? 'text-neutral-400' : 'text-neutral-500';
@@ -19,7 +20,7 @@ const SearchBar = ({ searchTerm, onSearchChange }: SearchBarProps) => {
       <Search className={cn("absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4", mutedTextColor)} />
       <Input
         type="search"
-        placeholder="Search for AI tools..."
+        placeholder={placeholder}
         className={cn("pl-10", 
           isDarkMode 
             ? "bg-[#333333] border-neutral-700 text-white" 

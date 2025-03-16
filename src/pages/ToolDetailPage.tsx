@@ -1,3 +1,4 @@
+
 import { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
@@ -11,7 +12,7 @@ import Footer from '@/components/layout/Footer';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
-import { supabaseClient } from '@/integrations/supabase/client';
+import { supabase } from '@/integrations/supabase/client';
 import BetaBanner from '@/components/ui/beta-banner';
 import ToolHeader from '@/components/tool/ToolHeader';
 import EUCompliance from '@/components/tool/EUCompliance';
@@ -30,7 +31,7 @@ const ToolDetailPage = () => {
     const fetchToolDetails = async () => {
       setIsLoading(true);
       try {
-        const { data, error } = await supabaseClient
+        const { data, error } = await supabase
           .from('ai_tools')
           .select('*')
           .eq('id', id)

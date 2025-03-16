@@ -1,8 +1,9 @@
+
 import { useState, useEffect } from 'react';
 import { Tag, Users, ArrowUpDown, ImageOff, Briefcase, TagIcon } from 'lucide-react';
 import { AiTool, FilterState } from '@/utils/types';
 import { useTheme } from '@/hooks/use-theme';
-import { supabaseClient } from '@/integrations/supabase/client';
+import { supabase } from '@/integrations/supabase/client';
 import { toast } from '@/components/ui/use-toast';
 import { cn } from '@/lib/utils';
 import ToolsTable from './ToolsTable';
@@ -19,8 +20,8 @@ export default function DatabaseTableView() {
     functions: [],
     roles: [],
     useCases: [],
-    technicalLevels: [],
-    euCompliance: {
+    technicalLevel: [],
+    euCompliant: {
       gdpr: false,
       dataResidency: false,
       aiAct: false
@@ -32,7 +33,7 @@ export default function DatabaseTableView() {
     const fetchTools = async () => {
       setIsLoading(true);
       try {
-        const { data, error } = await supabaseClient
+        const { data, error } = await supabase
           .from('ai_tools')
           .select('*');
           
@@ -109,24 +110,26 @@ export default function DatabaseTableView() {
     }
   
     // Apply technical level filters
-    if (filterState.technicalLevels.length > 0) {
+    if (filterState.technicalLevel.length > 0) {
       filteredTools = filteredTools.filter(tool =>
-        filterState.technicalLevels.includes(tool.technical_level)
+        filterState.technicalLevel.includes(tool.technical_level)
       );
     }
   
     // Apply EU compliance filters
-    if (filterState.euCompliance.gdpr) {
-      filteredTools = filteredTools.filter(tool =>
-        tool.euCompliant.gdpr_compliant.length > 0
-      );
+    if (filterState.euCompliant.gdpr) {
+      filteredTools = filteredTools.filter(tool => {
+        // Handle the case where gdpr_compliant could be an array or boolean
+        const gdprValue = tool.euCompliant.gdpr_compliant;
+        return Array.isArray(gdprValue) ? gdprValue.length > 0 : Boolean(gdprValue);
+      });
     }
-    if (filterState.euCompliance.dataResidency) {
+    if (filterState.euCompliant.dataResidency) {
       filteredTools = filteredTools.filter(tool =>
         tool.euCompliant.data_residency
       );
     }
-    if (filterState.euCompliance.aiAct) {
+    if (filterState.euCompliant.aiAct) {
       filteredTools = filteredTools.filter(tool =>
         tool.euCompliant.ai_act_compliant
       );
@@ -139,12 +142,13 @@ export default function DatabaseTableView() {
     <div className="mx-auto w-full max-w-8xl">
       <div className="flex flex-col gap-4 mb-6">
         <SearchBar 
-          onSearch={setSearchQuery} 
+          searchTerm={searchQuery} 
+          onSearchChange={(e) => setSearchQuery(e.target.value)} 
           placeholder="Search AI tools by name..." 
         />
         <FilterBar 
-          filterState={filterState} 
-          setFilterState={setFilterState} 
+          filters={filterState} 
+          onFilterChange={setFilterState} 
         />
       </div>
       
@@ -154,63 +158,4 @@ export default function DatabaseTableView() {
       />
     </div>
   );
-}
-
-// Helper function to filter tools based on search query and filter state
-function getFilteredTools() {
-  let filteredTools = tools;
-
-  // Apply search query filter
-  if (searchQuery) {
-    filteredTools = filteredTools.filter(tool =>
-      tool.name.toLowerCase().includes(searchQuery.toLowerCase())
-    );
-  }
-
-  // Apply function filters
-  if (filterState.functions.length > 0) {
-    filteredTools = filteredTools.filter(tool =>
-      tool.function.some(func => filterState.functions.includes(func))
-    );
-  }
-
-  // Apply role filters
-  if (filterState.roles.length > 0) {
-    filteredTools = filteredTools.filter(tool =>
-      tool.role.some(role => filterState.roles.includes(role))
-    );
-  }
-
-  // Apply use case filters
-  if (filterState.useCases.length > 0) {
-    filteredTools = filteredTools.filter(tool =>
-      filterState.useCases.includes(tool.use_case_tag)
-    );
-  }
-
-  // Apply technical level filters
-  if (filterState.technicalLevels.length > 0) {
-    filteredTools = filteredTools.filter(tool =>
-      filterState.technicalLevels.includes(tool.technical_level)
-    );
-  }
-
-  // Apply EU compliance filters
-  if (filterState.euCompliance.gdpr) {
-    filteredTools = filteredTools.filter(tool =>
-      tool.euCompliant.gdpr_compliant.length > 0
-    );
-  }
-  if (filterState.euCompliance.dataResidency) {
-    filteredTools = filteredTools.filter(tool =>
-      tool.euCompliant.data_residency
-    );
-  }
-  if (filterState.euCompliance.aiAct) {
-    filteredTools = filteredTools.filter(tool =>
-      tool.euCompliant.ai_act_compliant
-    );
-  }
-
-  return filteredTools;
 }

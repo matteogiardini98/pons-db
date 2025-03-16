@@ -8,7 +8,6 @@ import { cn } from '@/lib/utils';
 import { useTheme } from '@/hooks/use-theme';
 import { Button } from '@/components/ui/button';
 import { Plus } from 'lucide-react';
-import BetaBanner from '@/components/ui/beta-banner';
 
 const DatabasePage = () => {
   const { theme } = useTheme();
@@ -27,17 +26,16 @@ const DatabasePage = () => {
     <div className={cn("min-h-screen flex", theme === 'dark' ? 'bg-[#111111] text-white' : 'bg-white text-black')}>
       <Sidebar />
       <main className="flex-grow pl-16 md:pl-64">
-        <div className="p-4 md:p-6 pt-10">
-          {/* Empty header area with reduced spacing */}
+        <div className="container-tight p-4 md:p-6 pt-10 max-w-6xl mx-auto">
+          <h1 className="text-3xl md:text-4xl font-medium mb-6">pons database</h1>
+          <DatabaseTableView />
+          <div className="flex justify-center mt-8 mb-16">
+            <Button onClick={handleAddNewTool} className="flex items-center gap-2">
+              <Plus size={16} />
+              add new tool
+            </Button>
+          </div>
         </div>
-        <DatabaseTableView />
-        <div className="flex justify-center mt-8 mb-16">
-          <Button onClick={handleAddNewTool} className="flex items-center gap-2">
-            <Plus size={16} />
-            add new tool
-          </Button>
-        </div>
-        <BetaBanner />
         <Footer />
       </main>
     </div>

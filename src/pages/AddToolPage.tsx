@@ -6,7 +6,6 @@ import { useTheme } from '@/hooks/use-theme';
 import { cn } from '@/lib/utils';
 import Sidebar from '@/components/layout/Sidebar';
 import Footer from '@/components/layout/Footer';
-import BetaBanner from '@/components/ui/beta-banner';
 import AddToolForm from '@/components/tool/AddToolForm';
 
 const AddToolPage = () => {
@@ -24,18 +23,16 @@ const AddToolPage = () => {
     )}>
       <Sidebar />
       <main className="flex-grow pl-16 md:pl-64 pt-0">
-        <motion.div className="container-tight p-4 md:p-6 pt-10" {...pageTransition}>
-          <div className="mb-8">
-            <h1 className="text-3xl md:text-4xl font-medium mb-6">add new ai tool</h1>
-            <p className={cn(
-              "mb-8 text-lg",
-              theme === 'dark' ? 'text-neutral-300' : 'text-neutral-700'
-            )}>
-              submit a new ai tool to the pons database. please provide as much information as possible.
-            </p>
-            
-            <AddToolForm />
-          </div>
+        <motion.div className="container-tight p-4 md:p-6 pt-10 max-w-6xl mx-auto" {...pageTransition}>
+          <h1 className="text-3xl md:text-4xl font-medium mb-6">add new ai tool</h1>
+          <p className={cn(
+            "mb-8 text-lg",
+            theme === 'dark' ? 'text-neutral-300' : 'text-neutral-700'
+          )}>
+            submit a new ai tool to the pons database. please provide as much information as possible.
+          </p>
+          
+          <AddToolForm />
         </motion.div>
         <Footer />
       </main>

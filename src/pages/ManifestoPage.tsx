@@ -5,24 +5,13 @@ import { useTheme } from '@/hooks/use-theme';
 import { cn } from '@/lib/utils';
 import Sidebar from '@/components/layout/Sidebar';
 import Footer from '@/components/layout/Footer';
-import { ImageOff } from 'lucide-react';
 import { useState } from 'react';
 import { Separator } from '@/components/ui/separator';
 
 const ManifestoPage = () => {
   const { theme } = useTheme();
-  const [logoError, setLogoError] = useState(false);
   const isDarkMode = theme === 'dark';
   
-  const logoUrl = isDarkMode 
-    ? '/lovable-uploads/0b439e01-d1aa-4e14-b75d-00cc947f78ef.png'
-    : '/lovable-uploads/649e008f-f511-4467-97e6-d658be7b73e6.png';
-
-  const handleImageError = () => {
-    setLogoError(true);
-    console.error("Logo image failed to load:", logoUrl);
-  };
-
   return (
     <div className={cn(
       "min-h-screen flex",
@@ -31,26 +20,10 @@ const ManifestoPage = () => {
       <Sidebar />
       <main className="flex-grow pl-16 md:pl-64 pt-0">
         <motion.div 
-          className="container-tight p-4 md:p-6 pt-16 max-w-4xl mx-auto"
+          className="container-tight p-4 md:p-6 pt-10 max-w-6xl mx-auto"
           {...pageTransition}
         >
-          <div className="flex flex-col items-center mb-12">
-            {logoError ? (
-              <div className="h-16 w-16 flex items-center justify-center bg-neutral-100 dark:bg-neutral-800 rounded-full mb-4">
-                <ImageOff className={isDarkMode ? 'text-neutral-400' : 'text-neutral-500'} />
-              </div>
-            ) : (
-              <img 
-                src={logoUrl} 
-                alt="pons logo" 
-                className="h-16 w-auto mb-4"
-                onError={handleImageError}
-              />
-            )}
-            <h1 className="text-3xl md:text-4xl font-medium text-center">
-              manifesto
-            </h1>
-          </div>
+          <h1 className="text-3xl md:text-4xl font-medium mb-6">manifesto</h1>
 
           <div className={cn(
             "rounded-lg border p-8 mb-8 prose max-w-none",

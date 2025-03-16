@@ -13,7 +13,6 @@ import { Button } from '@/components/ui/button';
 import { toast } from '@/hooks/use-toast';
 import { supabase } from '@/integrations/supabase/client';
 import { FUNCTIONS, ROLES, TECHNICAL_LEVELS } from '../database/filterConstants';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 
 const formSchema = z.object({
   name: z.string().min(2, { message: 'name must be at least 2 characters' }),
@@ -172,86 +171,67 @@ const AddToolForm = () => {
             )}
           />
           
-          <FormField
-            control={form.control}
-            name="technical_level"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>technical level</FormLabel>
-                <Select 
-                  value={field.value} 
-                  onValueChange={field.onChange}
-                >
-                  <SelectTrigger className="w-full">
-                    <SelectValue placeholder="Select technical level" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {TECHNICAL_LEVELS.map((level) => (
-                      <SelectItem key={level} value={level.toLowerCase()}>
-                        {level.toLowerCase()}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-                <FormMessage>{form.formState.errors.technical_level?.message}</FormMessage>
-              </FormItem>
-            )}
-          />
-          
-          <FormField
-            control={form.control}
-            name="function"
-            render={() => (
-              <FormItem>
-                <FormLabel>functions</FormLabel>
-                <div className="space-y-4">
-                  <Select
-                    value={""}
-                    onValueChange={(value) => {
-                      const currentValues = form.getValues().function || [];
-                      if (!currentValues.includes(value)) {
-                        form.setValue('function', [...currentValues, value]);
-                      }
-                    }}
-                  >
-                    <SelectTrigger className="w-full">
-                      <SelectValue placeholder="Select a function to add" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {FUNCTIONS.map((func) => (
-                        <SelectItem key={func} value={func.toLowerCase()}>
-                          {func.toLowerCase()}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                  
-                  <div className="space-y-2">
-                    {form.watch('function').map((func) => (
-                      <div key={func} className="flex items-center justify-between p-2 bg-muted rounded-md">
-                        <span>{func.toLowerCase()}</span>
-                        <Button 
-                          type="button" 
-                          variant="ghost" 
-                          size="sm"
-                          onClick={() => {
-                            const currentValues = form.getValues().function;
-                            form.setValue(
-                              'function',
-                              currentValues.filter((value) => value !== func)
-                            );
+          <div className="space-y-4">
+            <FormLabel className="block mb-2">technical level</FormLabel>
+            <div className="grid grid-cols-2 md:grid-cols-3 gap-2">
+              {TECHNICAL_LEVELS.map((level) => (
+                <FormField
+                  key={level}
+                  control={form.control}
+                  name="technical_level"
+                  render={({ field }) => (
+                    <FormItem className="flex items-center space-x-2">
+                      <FormControl>
+                        <Checkbox
+                          checked={field.value === level.toLowerCase()}
+                          onCheckedChange={(checked) => {
+                            if (checked) {
+                              field.onChange(level.toLowerCase());
+                            }
                           }}
-                        >
-                          remove
-                        </Button>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-                <FormMessage>{form.formState.errors.function?.message}</FormMessage>
-              </FormItem>
-            )}
-          />
+                        />
+                      </FormControl>
+                      <FormLabel className="font-normal cursor-pointer">
+                        {level.toLowerCase()}
+                      </FormLabel>
+                    </FormItem>
+                  )}
+                />
+              ))}
+            </div>
+            <FormMessage>{form.formState.errors.technical_level?.message}</FormMessage>
+          </div>
+          
+          <div className="space-y-4">
+            <FormLabel className="block mb-2">functions</FormLabel>
+            <div className="grid grid-cols-2 md:grid-cols-3 gap-2">
+              {FUNCTIONS.map((func) => (
+                <FormField
+                  key={func}
+                  control={form.control}
+                  name="function"
+                  render={({ field }) => (
+                    <FormItem className="flex items-center space-x-2">
+                      <FormControl>
+                        <Checkbox
+                          checked={field.value?.includes(func.toLowerCase())}
+                          onCheckedChange={(checked) => {
+                            return checked
+                              ? field.onChange([...field.value, func.toLowerCase()])
+                              : field.onChange(field.value?.filter((value) => value !== func.toLowerCase()))
+                          }}
+                        />
+                      </FormControl>
+                      <FormLabel className="font-normal cursor-pointer">
+                        {func.toLowerCase()}
+                      </FormLabel>
+                    </FormItem>
+                  )}
+                />
+              ))}
+            </div>
+            <FormMessage>{form.formState.errors.function?.message}</FormMessage>
+          </div>
           
           <div className="space-y-4">
             <FormLabel className="block mb-2">roles</FormLabel>

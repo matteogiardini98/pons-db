@@ -15,6 +15,7 @@ const Sidebar = ({ collapsed = false }: SidebarProps) => {
   const location = useLocation();
   const { theme, setTheme } = useTheme();
   const [isCollapsed, setIsCollapsed] = useState(collapsed);
+  const [logoError, setLogoError] = useState(false);
   
   const isActive = (path: string) => {
     return location.pathname === path;
@@ -28,6 +29,16 @@ const Sidebar = ({ collapsed = false }: SidebarProps) => {
     setTheme(theme === 'dark' ? 'light' : 'dark');
   };
 
+  // Logo URLs based on theme
+  const logoUrl = theme === 'dark' 
+    ? '/lovable-uploads/Group 2 (1).png'
+    : '/lovable-uploads/Group 1 (1).png';
+
+  const handleLogoError = () => {
+    setLogoError(true);
+    console.error("Logo failed to load:", logoUrl);
+  };
+
   return (
     <div className={cn(
       "fixed inset-y-0 left-0 z-50 h-screen transition-all duration-300 ease-in-out",
@@ -35,8 +46,18 @@ const Sidebar = ({ collapsed = false }: SidebarProps) => {
       theme === 'dark' ? 'bg-[#111111] border-r border-[#222222]' : 'bg-white border-r border-neutral-200'
     )}>
       <div className="flex h-full flex-col">
-        <div className="flex items-center justify-center h-16 md:justify-start md:pl-6">
+        <div className="flex items-center h-16 md:justify-start px-2 md:px-4">
           <Link to="/" className="flex items-center gap-2">
+            {!logoError ? (
+              <img 
+                src={logoUrl} 
+                alt="pons logo" 
+                className="h-8 w-auto"
+                onError={handleLogoError} 
+              />
+            ) : (
+              <div className="h-8 w-8 bg-neutral-200 dark:bg-neutral-700 rounded"></div>
+            )}
             <span className={cn("font-medium text-lg", isCollapsed ? "hidden" : "hidden md:block")}>pons</span>
             <div className={cn(isCollapsed ? "hidden" : "hidden md:inline-block")}>
               <BetaBanner inSidebar={true} />
@@ -90,7 +111,9 @@ const Sidebar = ({ collapsed = false }: SidebarProps) => {
         
         <div className={cn("border-t mt-auto")} 
           style={{ borderColor: theme === 'dark' ? '#222222' : '#e5e5e5' }}>
-          <EmailSubscription />
+          <div className={cn(isCollapsed ? "hidden" : "hidden md:block")}>
+            <EmailSubscription />
+          </div>
           
           <div className="p-4 flex flex-col gap-2">
             {/* Simplified theme toggle button */}

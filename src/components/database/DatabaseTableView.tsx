@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from 'react';
 import { Tag, Users, ArrowUpDown, ImageOff, Briefcase, TagIcon } from 'lucide-react';
 import { AiTool, FilterState } from '@/utils/types';
@@ -60,7 +59,7 @@ const DatabaseTableView = () => {
             use_case_tag: tool.use_case_tag,
             technical_level: tool.technical_level || '',
             euCompliant: {
-              gdpr_compliant: tool.gdpr_compliant || [],
+              gdpr_compliant: Array.isArray(tool.function) ? [] : tool.gdpr_compliant || [],
               data_residency: tool.data_residency || false,
               ai_act_compliant: tool.ai_act_compliant || false
             }

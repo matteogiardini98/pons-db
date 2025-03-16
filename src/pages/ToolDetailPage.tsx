@@ -40,6 +40,8 @@ const ToolDetailPage = () => {
           .single();
           
         if (data) {
+          console.log("Raw tool data:", data);
+          
           // Map Supabase data to AiTool type
           const toolData: AiTool = {
             id: data.id,
@@ -52,10 +54,12 @@ const ToolDetailPage = () => {
             use_case_tag: data.use_case_tag,
             technical_level: data.technical_level || '',
             euCompliant: {
-              gdpr_compliant: data.gdpr_compliant || [],
+              // Handle gdpr_compliant which could be missing in older records
+              gdpr_compliant: data.gdpr_compliant !== undefined ? data.gdpr_compliant : [],
               data_residency: data.data_residency || false,
               ai_act_compliant: data.ai_act_compliant || false
             },
+            // Handle company which could be missing
             company: data.company || undefined
           };
           
@@ -133,6 +137,11 @@ const ToolDetailPage = () => {
       </div>
     );
   }
+
+  // Determine gdpr compliance for EUCompliance component
+  const isGdprCompliant = Array.isArray(tool.euCompliant.gdpr_compliant) 
+    ? tool.euCompliant.gdpr_compliant.length > 0 
+    : Boolean(tool.euCompliant.gdpr_compliant);
 
   return (
     <div className={cn(
@@ -221,9 +230,7 @@ const ToolDetailPage = () => {
             </div>
             
             <EUCompliance euCompliant={{
-              gdpr: Array.isArray(tool.euCompliant.gdpr_compliant) 
-                ? tool.euCompliant.gdpr_compliant.length > 0 
-                : Boolean(tool.euCompliant.gdpr_compliant),
+              gdpr: isGdprCompliant,
               dataResidency: tool.euCompliant.data_residency,
               aiAct: tool.euCompliant.ai_act_compliant
             }} />

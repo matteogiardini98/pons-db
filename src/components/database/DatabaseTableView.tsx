@@ -5,11 +5,18 @@ import { toast } from '@/components/ui/use-toast';
 import ToolsTable from './ToolsTable';
 import FilterBar from './FilterBar';
 import SearchBar from './SearchBar';
+import FilterDropdown from './FilterDropdown';
+import EUComplianceFilter from './EUComplianceFilter';
+import { FUNCTIONS, ROLES } from './filterConstants';
 import useToolsData from '@/hooks/use-tools-data';
+import { DatabaseIcon, Users } from 'lucide-react';
 
 export default function DatabaseTableView() {
   const [searchQuery, setSearchQuery] = useState('');
   const { tools, isLoading, error } = useToolsData();
+  const [functionsOpen, setFunctionsOpen] = useState(false);
+  const [rolesOpen, setRolesOpen] = useState(false);
+  const [euComplianceOpen, setEUComplianceOpen] = useState(false);
   
   const [filterState, setFilterState] = useState<FilterState>({
     functions: [],
@@ -22,6 +29,63 @@ export default function DatabaseTableView() {
       aiAct: false
     }
   });
+
+  const handleFunctionToggle = (func: string) => {
+    const newFunctions = filterState.functions.includes(func)
+      ? filterState.functions.filter(f => f !== func)
+      : [...filterState.functions, func];
+    
+    setFilterState({
+      ...filterState,
+      functions: newFunctions,
+    });
+  };
+
+  const handleRoleToggle = (role: string) => {
+    const newRoles = filterState.roles.includes(role)
+      ? filterState.roles.filter(r => r !== role)
+      : [...filterState.roles, role];
+    
+    setFilterState({
+      ...filterState,
+      roles: newRoles,
+    });
+  };
+
+  const handleEUComplianceToggle = (type: 'gdpr' | 'dataResidency' | 'aiAct') => {
+    setFilterState({
+      ...filterState,
+      euCompliant: {
+        ...filterState.euCompliant,
+        [type]: !filterState.euCompliant[type],
+      },
+    });
+  };
+
+  const clearFunctionsFilter = () => {
+    setFilterState({
+      ...filterState,
+      functions: [],
+    });
+  };
+
+  const clearRolesFilter = () => {
+    setFilterState({
+      ...filterState,
+      roles: [],
+    });
+  };
+
+  const clearEUComplianceFilter = () => {
+    setFilterState({
+      ...filterState,
+      euCompliant: {
+        gdpr: false,
+        dataResidency: false,
+        aiAct: false,
+      },
+    });
+  };
 
   const getFilteredTools = () => {
     if (!tools) return [];
@@ -89,15 +153,57 @@ export default function DatabaseTableView() {
   return (
     <div className="mx-auto w-full max-w-8xl">
       <div className="flex flex-col gap-4 mb-6">
-        <SearchBar 
-          searchTerm={searchQuery} 
-          onSearchChange={(e) => setSearchQuery(e.target.value)} 
-          placeholder="Search AI tools by name..." 
-        />
-        <FilterBar 
-          filters={filterState} 
-          onFilterChange={setFilterState} 
-        />
+        <div className="flex flex-wrap gap-2 items-center">
+          <SearchBar 
+            searchTerm={searchQuery} 
+            onSearchChange={(e) => setSearchQuery(e.target.value)} 
+            placeholder="Search AI tools by name..." 
+          />
+          
+          <div className="flex flex-wrap gap-2">
+            <FilterDropdown
+              title="Function"
+              icon={<DatabaseIcon size={16} />}
+              isOpen={functionsOpen}
+              onToggle={() => {
+                setFunctionsOpen(!functionsOpen);
+                setRolesOpen(false);
+                setEUComplianceOpen(false);
+              }}
+              options={FUNCTIONS}
+              selectedOptions={filterState.functions}
+              onOptionToggle={handleFunctionToggle}
+              onClear={clearFunctionsFilter}
+            />
+            
+            <FilterDropdown
+              title="Role"
+              icon={<Users size={16} />}
+              isOpen={rolesOpen}
+              onToggle={() => {
+                setRolesOpen(!rolesOpen);
+                setFunctionsOpen(false);
+                setEUComplianceOpen(false);
+              }}
+              options={ROLES}
+              selectedOptions={filterState.roles}
+              onOptionToggle={handleRoleToggle}
+              onClear={clearRolesFilter}
+            />
+            
+            <EUComplianceFilter
+              isOpen={euComplianceOpen}
+              onToggle={() => {
+                setEUComplianceOpen(!euComplianceOpen);
+                setFunctionsOpen(false);
+                setRolesOpen(false);
+              }}
+              filters={filterState.euCompliant}
+              onFilterToggle={handleEUComplianceToggle}
+              onClear={clearEUComplianceFilter}
+            />
+          </div>
+        </div>
       </div>
       
       <ToolsTable 

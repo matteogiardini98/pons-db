@@ -29,10 +29,10 @@ const Sidebar = ({ collapsed = false }: SidebarProps) => {
     setTheme(theme === 'dark' ? 'light' : 'dark');
   };
 
-  // Logo URLs based on theme
+  // Updated logo URLs to use Supabase direct URLs
   const logoUrl = theme === 'dark' 
-    ? '/lovable-uploads/Group 2 (1).png'
-    : '/lovable-uploads/Group 1 (1).png';
+    ? 'https://zxfarummeappffvjfplm.supabase.co/storage/v1/object/public/logo//Group%202%20(1).png'
+    : 'https://zxfarummeappffvjfplm.supabase.co/storage/v1/object/public/logo//Group%201%20(1).png';
 
   const handleLogoError = () => {
     setLogoError(true);
@@ -44,12 +44,6 @@ const Sidebar = ({ collapsed = false }: SidebarProps) => {
     console.log("Attempting to load logo:", logoUrl);
     // Reset logo error when URL changes
     setLogoError(false);
-    
-    // Check if image exists
-    const img = new Image();
-    img.onload = () => console.log("Logo loaded successfully");
-    img.onerror = () => console.error("Logo failed to load in useEffect check");
-    img.src = logoUrl;
   }, [logoUrl]);
 
   return (
@@ -161,7 +155,7 @@ const Sidebar = ({ collapsed = false }: SidebarProps) => {
               <span>collapse sidebar</span>
             </button>
 
-            {/* NEW: Toggle button to expand sidebar when collapsed */}
+            {/* Toggle button to expand sidebar when collapsed */}
             <button 
               onClick={toggleSidebar}
               className={cn(

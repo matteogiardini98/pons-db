@@ -43,6 +43,9 @@ export default {
           DEFAULT: "hsl(var(--card))",
           foreground: "hsl(var(--card-foreground))",
         },
+        pons: {
+          green: "#4AD295", // Added Pons green color from the image
+        },
       },
       borderRadius: {
         lg: "var(--radius)",

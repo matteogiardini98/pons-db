@@ -92,6 +92,16 @@
   .container-tight {
     @apply max-w-screen-lg mx-auto px-4 sm:px-6 lg:px-8;
   }
+  
+  /* Add styles for filter buttons hover */
+  .filter-button-hover {
+    @apply hover:bg-pons-green hover:text-white transition-colors duration-200;
+  }
+  
+  /* Add styles for CTA buttons */
+  .cta-button {
+    @apply bg-pons-green hover:bg-pons-green/90 text-white;
+  }
 }
 
 @layer utilities {

@@ -53,25 +53,42 @@ const Sidebar = ({ collapsed = false }: SidebarProps) => {
       theme === 'dark' ? 'bg-[#111111] border-r border-[#222222]' : 'bg-white border-r border-neutral-200'
     )}>
       <div className="flex h-full flex-col">
-        <div className="flex items-center h-16 md:justify-start px-2 md:px-4">
+        <div className="flex items-center h-16 md:justify-between px-2 md:px-4">
           <Link to="/" className="flex items-center gap-2">
-            {!logoError ? (
-              <img 
-                src={logoUrl} 
-                alt="pons logo" 
-                className="h-8 w-auto"
-                onError={handleLogoError} 
-              />
-            ) : (
-              <div className="h-8 w-8 bg-neutral-200 dark:bg-neutral-700 rounded flex items-center justify-center">
-                <span className="text-xs">logo</span>
-              </div>
-            )}
+            <div className="h-8 w-8 flex-shrink-0"> {/* Fixed size container for logo */}
+              {!logoError ? (
+                <img 
+                  src={logoUrl} 
+                  alt="pons logo" 
+                  className="h-8 w-auto object-contain"
+                  onError={handleLogoError} 
+                />
+              ) : (
+                <div className="h-8 w-8 bg-neutral-200 dark:bg-neutral-700 rounded flex items-center justify-center">
+                  <span className="text-xs">logo</span>
+                </div>
+              )}
+            </div>
             <span className={cn("font-medium text-lg", isCollapsed ? "hidden" : "hidden md:block")}>pons</span>
+          </Link>
+          
+          <div className="flex items-center gap-1">
             <div className={cn(isCollapsed ? "hidden" : "hidden md:inline-block")}>
               <BetaBanner inSidebar={true} />
             </div>
-          </Link>
+            
+            {/* Moved collapse/expand button to the top */}
+            <button 
+              onClick={toggleSidebar}
+              className={cn(
+                "flex items-center justify-center rounded-md p-1 text-sm",
+                theme === 'dark' ? 'text-gray-300 hover:bg-[#222222]' : 'text-gray-700 hover:bg-neutral-100'
+              )}
+              title={isCollapsed ? "Expand sidebar" : "Collapse sidebar"}
+            >
+              {isCollapsed ? <PanelLeft className="h-4 w-4" /> : <PanelLeftClose className="h-4 w-4" />}
+            </button>
+          </div>
         </div>
         
         <nav className="flex-1 overflow-auto py-4">
@@ -140,32 +157,6 @@ const Sidebar = ({ collapsed = false }: SidebarProps) => {
               <span className={cn(isCollapsed ? "hidden" : "hidden md:block")}>
                 {theme === 'dark' ? 'light mode' : 'dark mode'}
               </span>
-            </button>
-            
-            {/* Toggle button to collapse sidebar */}
-            <button 
-              onClick={toggleSidebar}
-              className={cn(
-                "flex items-center gap-2 rounded-md px-3 py-2 text-sm",
-                theme === 'dark' ? 'hover:bg-[#222222] text-gray-300' : 'hover:bg-neutral-100 text-gray-700',
-                isCollapsed ? "hidden" : "hidden md:flex"
-              )}
-            >
-              <PanelLeftClose className="h-4 w-4" />
-              <span>collapse sidebar</span>
-            </button>
-
-            {/* Toggle button to expand sidebar when collapsed */}
-            <button 
-              onClick={toggleSidebar}
-              className={cn(
-                "flex items-center justify-center rounded-md px-3 py-2 text-sm",
-                theme === 'dark' ? 'hover:bg-[#222222] text-gray-300' : 'hover:bg-neutral-100 text-gray-700',
-                !isCollapsed ? "hidden" : "flex"
-              )}
-              title="Expand sidebar"
-            >
-              <PanelLeft className="h-4 w-4" />
             </button>
           </div>
         </div>

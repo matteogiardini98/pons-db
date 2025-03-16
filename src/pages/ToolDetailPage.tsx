@@ -8,7 +8,6 @@ import { cn } from '@/lib/utils';
 import Sidebar from '@/components/layout/Sidebar';
 import Footer from '@/components/layout/Footer';
 import { Button } from '@/components/ui/button';
-import BetaBanner from '@/components/ui/beta-banner';
 import useToolDetail from '@/hooks/use-tool-detail';
 import ToolDetailContent from '@/components/tool/ToolDetailContent';
 import ToolDetailSkeleton from '@/components/tool/ToolDetailSkeleton';
@@ -35,11 +34,10 @@ const ToolDetailPage = () => {
       isDarkMode ? 'bg-[#111111] text-white' : 'bg-white text-black'
     )}>
       <Sidebar />
-      <BetaBanner />
       <main className="flex-grow pl-16 md:pl-64 pt-0">
         <motion.div className="container-tight p-4 md:p-6 pt-10" {...pageTransition}>
           <Button 
-            variant="outline" 
+            variant={isDarkMode ? "outline" : "secondary"} 
             size="sm" 
             className="mb-6" 
             onClick={() => navigate('/')}

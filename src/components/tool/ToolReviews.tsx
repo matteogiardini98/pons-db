@@ -101,6 +101,7 @@ const ToolReviews = ({ toolId, reviews, setReviews }: ToolReviewsProps) => {
           />
           <Button 
             onClick={handleReviewSubmit}
+            variant="cta"
             className="flex items-center gap-2"
           >
             <Send size={16} />

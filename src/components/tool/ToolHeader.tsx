@@ -28,25 +28,27 @@ const ToolHeader = ({ name, description, url, company }: ToolHeaderProps) => {
         </p>
         
         <div className="flex flex-wrap gap-2">
-          <a 
-            href={url} 
-            target="_blank" 
-            rel="noopener noreferrer"
-            className={cn(
-              "inline-flex items-center gap-2 px-3 py-1 rounded-md text-sm",
-              theme === 'dark' 
-                ? 'bg-neutral-800 hover:bg-neutral-700 text-white' 
-                : 'bg-neutral-100 hover:bg-neutral-200 text-black'
-            )}
-          >
-            <Globe className="h-4 w-4" />
-            website
-            <ExternalLink className="h-3 w-3" />
-          </a>
+          {url && (
+            <a 
+              href={url} 
+              target="_blank" 
+              rel="noopener noreferrer"
+              className={cn(
+                "inline-flex items-center gap-2 px-3 py-1 rounded-md text-sm",
+                theme === 'dark' 
+                  ? 'bg-neutral-800 hover:bg-neutral-700 text-white' 
+                  : 'bg-neutral-100 hover:bg-neutral-200 text-black'
+              )}
+            >
+              <Globe className="h-4 w-4" />
+              website
+              <ExternalLink className="h-3 w-3" />
+            </a>
+          )}
           
           {company && (
             <a 
-              href={`https://linkedin.com/company/${company.name}`} 
+              href={`https://www.linkedin.com/company/${encodeURIComponent(company.name)}`} 
               target="_blank" 
               rel="noopener noreferrer"
               className={cn(

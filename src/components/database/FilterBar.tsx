@@ -1,12 +1,16 @@
+
 import { useState } from 'react';
 import { Sliders, X, Check, ChevronDown } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
-import { Separator } from '@/components/ui/separator';
 import { Badge } from '@/components/ui/badge';
 import { FilterState } from '@/utils/types';
 import { FUNCTIONS, ROLES, USE_CASES, TECHNICAL_LEVELS } from '@/components/database/filterConstants';
 import { cn } from '@/lib/utils';
+import FilterSection from './FilterSection';
+import FilterChip from './FilterChip';
+import ActiveFilterBadge from './ActiveFilterBadge';
+import SortingPopover from './SortingPopover';
 
 interface FilterBarProps {
   filters: FilterState;
@@ -80,6 +84,16 @@ const FilterBar = ({ filters, onFilterChange }: FilterBarProps) => {
     });
   };
 
+  const handleAiActToggle = () => {
+    onFilterChange({
+      ...filters,
+      euCompliant: {
+        ...filters.euCompliant,
+        aiAct: !filters.euCompliant.aiAct,
+      },
+    });
+  };
+
   const resetFilters = () => {
     onFilterChange({
       functions: [],
@@ -89,6 +103,7 @@ const FilterBar = ({ filters, onFilterChange }: FilterBarProps) => {
       euCompliant: {
         gdpr: false,
         dataResidency: false,
+        aiAct: false
       },
     });
   };
@@ -99,198 +114,30 @@ const FilterBar = ({ filters, onFilterChange }: FilterBarProps) => {
     filters.useCases.length + 
     filters.technicalLevel.length + 
     (filters.euCompliant.gdpr ? 1 : 0) + 
-    (filters.euCompliant.dataResidency ? 1 : 0);
+    (filters.euCompliant.dataResidency ? 1 : 0) +
+    (filters.euCompliant.aiAct ? 1 : 0);
 
   return (
     <div className="w-full bg-white shadow-sm border-b sticky top-16 z-30 py-3">
       <div className="container-tight">
         <div className="flex flex-wrap justify-between items-center gap-2">
-          <div className="flex items-center gap-2">
-            <Popover open={isOpen} onOpenChange={setIsOpen}>
-              <PopoverTrigger asChild>
-                <Button variant="outline" className="gap-2">
-                  <Sliders size={16} />
-                  Filters
-                  {activeFilterCount > 0 && (
-                    <Badge variant="secondary" className="ml-1 h-5 min-w-5 px-1.5 flex items-center justify-center rounded-full">
-                      {activeFilterCount}
-                    </Badge>
-                  )}
-                </Button>
-              </PopoverTrigger>
-              <PopoverContent className="w-[340px] sm:w-[500px] p-0">
-                <div className="flex items-center justify-between border-b p-3">
-                  <h4 className="font-medium">Filters</h4>
-                  <Button 
-                    variant="ghost" 
-                    size="sm" 
-                    className="h-8 px-2 text-muted-foreground" 
-                    onClick={resetFilters}
-                  >
-                    Reset
-                  </Button>
-                </div>
-                
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 p-4">
-                  <div className="space-y-4">
-                    <FilterSection title="Function">
-                      <div className="flex flex-wrap gap-2">
-                        {FUNCTIONS.map((func) => (
-                          <FilterChip
-                            key={func}
-                            label={func}
-                            selected={filters.functions.includes(func)}
-                            onClick={() => handleFunctionToggle(func)}
-                          />
-                        ))}
-                      </div>
-                    </FilterSection>
-                    
-                    <FilterSection title="Role">
-                      <div className="flex flex-wrap gap-2">
-                        {ROLES.map((role) => (
-                          <FilterChip
-                            key={role}
-                            label={role}
-                            selected={filters.roles.includes(role)}
-                            onClick={() => handleRoleToggle(role)}
-                          />
-                        ))}
-                      </div>
-                    </FilterSection>
-                  </div>
-                  
-                  <div className="space-y-4">
-                    <FilterSection title="Use Case">
-                      <div className="flex flex-wrap gap-2">
-                        {USE_CASES.map((useCase) => (
-                          <FilterChip
-                            key={useCase}
-                            label={useCase}
-                            selected={filters.useCases.includes(useCase)}
-                            onClick={() => handleUseCaseToggle(useCase)}
-                          />
-                        ))}
-                      </div>
-                    </FilterSection>
-                    
-                    <FilterSection title="Technical Level">
-                      <div className="flex flex-wrap gap-2">
-                        {TECHNICAL_LEVELS.map((level) => (
-                          <FilterChip
-                            key={level}
-                            label={level}
-                            selected={filters.technicalLevel.includes(level)}
-                            onClick={() => handleTechnicalLevelToggle(level)}
-                          />
-                        ))}
-                      </div>
-                    </FilterSection>
-                    
-                    <FilterSection title="EU Specific">
-                      <div className="flex flex-wrap gap-2">
-                        <FilterChip
-                          label="GDPR Compliant"
-                          selected={filters.euCompliant.gdpr}
-                          onClick={handleGdprToggle}
-                        />
-                        <FilterChip
-                          label="EU Data Residency"
-                          selected={filters.euCompliant.dataResidency}
-                          onClick={handleDataResidencyToggle}
-                        />
-                      </div>
-                    </FilterSection>
-                  </div>
-                </div>
-                
-                <div className="flex justify-end gap-2 border-t p-3">
-                  <Button variant="outline" onClick={() => setIsOpen(false)}>Cancel</Button>
-                  <Button onClick={() => setIsOpen(false)}>Apply Filters</Button>
-                </div>
-              </PopoverContent>
-            </Popover>
-            
-            {/* Active filter badges */}
-            <div className="flex-wrap hidden md:flex gap-2">
-              {filters.functions.map((func) => (
-                <ActiveFilterBadge
-                  key={`func-${func}`}
-                  label={func}
-                  onRemove={() => handleFunctionToggle(func)}
-                />
-              ))}
-              
-              {filters.roles.map((role) => (
-                <ActiveFilterBadge
-                  key={`role-${role}`}
-                  label={role}
-                  onRemove={() => handleRoleToggle(role)}
-                />
-              ))}
-              
-              {filters.useCases.map((useCase) => (
-                <ActiveFilterBadge
-                  key={`useCase-${useCase}`}
-                  label={useCase}
-                  onRemove={() => handleUseCaseToggle(useCase)}
-                />
-              ))}
-              
-              {filters.technicalLevel.map((level) => (
-                <ActiveFilterBadge
-                  key={`tech-${level}`}
-                  label={level}
-                  onRemove={() => handleTechnicalLevelToggle(level)}
-                />
-              ))}
-              
-              {filters.euCompliant.gdpr && (
-                <ActiveFilterBadge
-                  key="gdpr"
-                  label="GDPR Compliant"
-                  onRemove={handleGdprToggle}
-                />
-              )}
-              
-              {filters.euCompliant.dataResidency && (
-                <ActiveFilterBadge
-                  key="data-residency"
-                  label="EU Data Residency"
-                  onRemove={handleDataResidencyToggle}
-                />
-              )}
-            </div>
-            
-            {activeFilterCount > 0 && (
-              <Button 
-                variant="ghost" 
-                size="sm" 
-                className="h-8 px-2 text-muted-foreground" 
-                onClick={resetFilters}
-              >
-                Clear all
-              </Button>
-            )}
-          </div>
+          <FilterControls 
+            isOpen={isOpen} 
+            setIsOpen={setIsOpen} 
+            activeFilterCount={activeFilterCount} 
+            filters={filters}
+            handleFunctionToggle={handleFunctionToggle}
+            handleRoleToggle={handleRoleToggle}
+            handleUseCaseToggle={handleUseCaseToggle}
+            handleTechnicalLevelToggle={handleTechnicalLevelToggle}
+            handleGdprToggle={handleGdprToggle}
+            handleDataResidencyToggle={handleDataResidencyToggle}
+            handleAiActToggle={handleAiActToggle}
+            resetFilters={resetFilters}
+          />
           
           <div className="flex items-center gap-2">
-            <Popover>
-              <PopoverTrigger asChild>
-                <Button variant="outline" className="flex items-center gap-1">
-                  Sort by
-                  <ChevronDown size={16} />
-                </Button>
-              </PopoverTrigger>
-              <PopoverContent className="w-[200px] p-1">
-                <div className="space-y-1">
-                  <Button variant="ghost" className="w-full justify-start font-normal text-sm">Relevance</Button>
-                  <Button variant="ghost" className="w-full justify-start font-normal text-sm">Name (A-Z)</Button>
-                  <Button variant="ghost" className="w-full justify-start font-normal text-sm">Newest First</Button>
-                  <Button variant="ghost" className="w-full justify-start font-normal text-sm">Rating (High to Low)</Button>
-                </div>
-              </PopoverContent>
-            </Popover>
+            <SortingPopover />
           </div>
         </div>
       </div>
@@ -298,52 +145,253 @@ const FilterBar = ({ filters, onFilterChange }: FilterBarProps) => {
   );
 };
 
-interface FilterSectionProps {
-  title: string;
-  children: React.ReactNode;
+interface FilterControlsProps {
+  isOpen: boolean;
+  setIsOpen: (value: boolean) => void;
+  activeFilterCount: number;
+  filters: FilterState;
+  handleFunctionToggle: (func: string) => void;
+  handleRoleToggle: (role: string) => void;
+  handleUseCaseToggle: (useCase: string) => void;
+  handleTechnicalLevelToggle: (level: string) => void;
+  handleGdprToggle: () => void;
+  handleDataResidencyToggle: () => void;
+  handleAiActToggle: () => void;
+  resetFilters: () => void;
 }
 
-const FilterSection = ({ title, children }: FilterSectionProps) => (
-  <div className="space-y-2">
-    <h5 className="text-sm font-medium">{title}</h5>
-    {children}
-  </div>
-);
+const FilterControls = ({
+  isOpen,
+  setIsOpen,
+  activeFilterCount,
+  filters,
+  handleFunctionToggle,
+  handleRoleToggle,
+  handleUseCaseToggle,
+  handleTechnicalLevelToggle,
+  handleGdprToggle,
+  handleDataResidencyToggle,
+  handleAiActToggle,
+  resetFilters
+}: FilterControlsProps) => {
+  return (
+    <div className="flex items-center gap-2">
+      <Popover open={isOpen} onOpenChange={setIsOpen}>
+        <PopoverTrigger asChild>
+          <Button variant="outline" className="gap-2">
+            <Sliders size={16} />
+            Filters
+            {activeFilterCount > 0 && (
+              <Badge variant="secondary" className="ml-1 h-5 min-w-5 px-1.5 flex items-center justify-center rounded-full">
+                {activeFilterCount}
+              </Badge>
+            )}
+          </Button>
+        </PopoverTrigger>
+        <PopoverContent className="w-[340px] sm:w-[500px] p-0">
+          <div className="flex items-center justify-between border-b p-3">
+            <h4 className="font-medium">Filters</h4>
+            <Button 
+              variant="ghost" 
+              size="sm" 
+              className="h-8 px-2 text-muted-foreground" 
+              onClick={resetFilters}
+            >
+              Reset
+            </Button>
+          </div>
+          
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 p-4">
+            <div className="space-y-4">
+              <FilterSection title="Function">
+                <div className="flex flex-wrap gap-2">
+                  {FUNCTIONS.map((func) => (
+                    <FilterChip
+                      key={func}
+                      label={func}
+                      selected={filters.functions.includes(func)}
+                      onClick={() => handleFunctionToggle(func)}
+                    />
+                  ))}
+                </div>
+              </FilterSection>
+              
+              <FilterSection title="Role">
+                <div className="flex flex-wrap gap-2">
+                  {ROLES.map((role) => (
+                    <FilterChip
+                      key={role}
+                      label={role}
+                      selected={filters.roles.includes(role)}
+                      onClick={() => handleRoleToggle(role)}
+                    />
+                  ))}
+                </div>
+              </FilterSection>
+            </div>
+            
+            <div className="space-y-4">
+              <FilterSection title="Use Case">
+                <div className="flex flex-wrap gap-2">
+                  {USE_CASES.map((useCase) => (
+                    <FilterChip
+                      key={useCase}
+                      label={useCase}
+                      selected={filters.useCases.includes(useCase)}
+                      onClick={() => handleUseCaseToggle(useCase)}
+                    />
+                  ))}
+                </div>
+              </FilterSection>
+              
+              <FilterSection title="Technical Level">
+                <div className="flex flex-wrap gap-2">
+                  {TECHNICAL_LEVELS.map((level) => (
+                    <FilterChip
+                      key={level}
+                      label={level}
+                      selected={filters.technicalLevel.includes(level)}
+                      onClick={() => handleTechnicalLevelToggle(level)}
+                    />
+                  ))}
+                </div>
+              </FilterSection>
+              
+              <FilterSection title="EU Specific">
+                <div className="flex flex-wrap gap-2">
+                  <FilterChip
+                    label="GDPR Compliant"
+                    selected={filters.euCompliant.gdpr}
+                    onClick={handleGdprToggle}
+                  />
+                  <FilterChip
+                    label="EU Data Residency"
+                    selected={filters.euCompliant.dataResidency}
+                    onClick={handleDataResidencyToggle}
+                  />
+                  <FilterChip
+                    label="AI Act Compliant"
+                    selected={filters.euCompliant.aiAct}
+                    onClick={handleAiActToggle}
+                  />
+                </div>
+              </FilterSection>
+            </div>
+          </div>
+          
+          <div className="flex justify-end gap-2 border-t p-3">
+            <Button variant="outline" onClick={() => setIsOpen(false)}>Cancel</Button>
+            <Button onClick={() => setIsOpen(false)}>Apply Filters</Button>
+          </div>
+        </PopoverContent>
+      </Popover>
+      
+      {/* Active filter badges */}
+      <ActiveFilterBadges 
+        filters={filters}
+        handleFunctionToggle={handleFunctionToggle}
+        handleRoleToggle={handleRoleToggle}
+        handleUseCaseToggle={handleUseCaseToggle}
+        handleTechnicalLevelToggle={handleTechnicalLevelToggle}
+        handleGdprToggle={handleGdprToggle}
+        handleDataResidencyToggle={handleDataResidencyToggle}
+        handleAiActToggle={handleAiActToggle}
+      />
+      
+      {activeFilterCount > 0 && (
+        <Button 
+          variant="ghost" 
+          size="sm" 
+          className="h-8 px-2 text-muted-foreground" 
+          onClick={resetFilters}
+        >
+          Clear all
+        </Button>
+      )}
+    </div>
+  );
+};
 
-interface FilterChipProps {
-  label: string;
-  selected: boolean;
-  onClick: () => void;
+interface ActiveFilterBadgesProps {
+  filters: FilterState;
+  handleFunctionToggle: (func: string) => void;
+  handleRoleToggle: (role: string) => void;
+  handleUseCaseToggle: (useCase: string) => void;
+  handleTechnicalLevelToggle: (level: string) => void;
+  handleGdprToggle: () => void;
+  handleDataResidencyToggle: () => void;
+  handleAiActToggle: () => void;
 }
 
-const FilterChip = ({ label, selected, onClick }: FilterChipProps) => (
-  <button
-    type="button"
-    onClick={onClick}
-    className={cn(
-      "inline-flex items-center px-3 py-1 rounded-full text-sm transition-colors",
-      selected
-        ? "bg-primary text-primary-foreground"
-        : "bg-secondary text-muted-foreground hover:bg-secondary/80"
-    )}
-  >
-    {selected && <Check className="mr-1 h-3 w-3" />}
-    {label}
-  </button>
-);
-
-interface ActiveFilterBadgeProps {
-  label: string;
-  onRemove: () => void;
-}
-
-const ActiveFilterBadge = ({ label, onRemove }: ActiveFilterBadgeProps) => (
-  <Badge variant="secondary" className="gap-1">
-    {label}
-    <button onClick={onRemove} className="ml-1 hover:text-destructive">
-      <X size={12} />
-    </button>
-  </Badge>
-);
+const ActiveFilterBadges = ({
+  filters,
+  handleFunctionToggle,
+  handleRoleToggle,
+  handleUseCaseToggle,
+  handleTechnicalLevelToggle,
+  handleGdprToggle,
+  handleDataResidencyToggle,
+  handleAiActToggle
+}: ActiveFilterBadgesProps) => {
+  return (
+    <div className="flex-wrap hidden md:flex gap-2">
+      {filters.functions.map((func) => (
+        <ActiveFilterBadge
+          key={`func-${func}`}
+          label={func}
+          onRemove={() => handleFunctionToggle(func)}
+        />
+      ))}
+      
+      {filters.roles.map((role) => (
+        <ActiveFilterBadge
+          key={`role-${role}`}
+          label={role}
+          onRemove={() => handleRoleToggle(role)}
+        />
+      ))}
+      
+      {filters.useCases.map((useCase) => (
+        <ActiveFilterBadge
+          key={`useCase-${useCase}`}
+          label={useCase}
+          onRemove={() => handleUseCaseToggle(useCase)}
+        />
+      ))}
+      
+      {filters.technicalLevel.map((level) => (
+        <ActiveFilterBadge
+          key={`tech-${level}`}
+          label={level}
+          onRemove={() => handleTechnicalLevelToggle(level)}
+        />
+      ))}
+      
+      {filters.euCompliant.gdpr && (
+        <ActiveFilterBadge
+          key="gdpr"
+          label="GDPR Compliant"
+          onRemove={handleGdprToggle}
+        />
+      )}
+      
+      {filters.euCompliant.dataResidency && (
+        <ActiveFilterBadge
+          key="data-residency"
+          label="EU Data Residency"
+          onRemove={handleDataResidencyToggle}
+        />
+      )}
+      
+      {filters.euCompliant.aiAct && (
+        <ActiveFilterBadge
+          key="ai-act"
+          label="AI Act Compliant"
+          onRemove={handleAiActToggle}
+        />
+      )}
+    </div>
+  );
+};
 
 export default FilterBar;

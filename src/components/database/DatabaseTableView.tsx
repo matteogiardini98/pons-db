@@ -1,21 +1,17 @@
 
 import { useState, useEffect } from 'react';
-import { Tag, Users, ArrowUpDown, ImageOff, Briefcase, TagIcon } from 'lucide-react';
-import { AiTool, FilterState } from '@/utils/types';
-import { useTheme } from '@/hooks/use-theme';
+import { FilterState } from '@/utils/types';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from '@/components/ui/use-toast';
-import { cn } from '@/lib/utils';
 import ToolsTable from './ToolsTable';
 import FilterBar from './FilterBar';
 import SearchBar from './SearchBar';
+import useToolsData from '@/hooks/use-tools-data';
 
 export default function DatabaseTableView() {
-  const { theme } = useTheme();
-  const isDarkMode = theme === 'dark';
-
-  const [tools, setTools] = useState<AiTool[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
+  const [searchQuery, setSearchQuery] = useState('');
+  const { tools, isLoading, error } = useToolsData();
+  
   const [filterState, setFilterState] = useState<FilterState>({
     functions: [],
     roles: [],
@@ -27,56 +23,6 @@ export default function DatabaseTableView() {
       aiAct: false
     }
   });
-  const [searchQuery, setSearchQuery] = useState('');
-
-  useEffect(() => {
-    const fetchTools = async () => {
-      setIsLoading(true);
-      try {
-        const { data, error } = await supabase
-          .from('ai_tools')
-          .select('*');
-          
-        if (error) {
-          throw error;
-        }
-        
-        if (data) {
-          // Map the Supabase data to the AiTool type
-          const mappedTools: AiTool[] = data.map(tool => ({
-            id: tool.id,
-            name: tool.name,
-            website: tool.website,
-            function: tool.function || [],
-            role: tool.role || [],
-            problem_solved_description: tool.problem_solved_description || '',
-            use_case_tag: tool.use_case_tag || '',
-            technical_level: tool.technical_level || '',
-            euCompliant: {
-              // Safely handle potentially missing properties
-              gdpr_compliant: tool.gdpr_compliant !== undefined ? tool.gdpr_compliant : [],
-              data_residency: tool.data_residency || false,
-              ai_act_compliant: tool.ai_act_compliant || false
-            },
-            company: tool.company || undefined
-          }));
-
-          setTools(mappedTools);
-        }
-      } catch (error) {
-        console.error('Error fetching tools:', error);
-        toast({
-          variant: "destructive",
-          title: "Error fetching tools",
-          description: "Please try again later.",
-        });
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    fetchTools();
-  }, []);
 
   const getFilteredTools = () => {
     let filteredTools = tools;
@@ -120,18 +66,20 @@ export default function DatabaseTableView() {
     if (filterState.euCompliant.gdpr) {
       filteredTools = filteredTools.filter(tool => {
         // Handle the case where gdpr_compliant could be an array or boolean
-        const gdprValue = tool.euCompliant.gdpr_compliant;
+        const gdprValue = tool.euCompliant?.gdpr_compliant;
         return Array.isArray(gdprValue) ? gdprValue.length > 0 : Boolean(gdprValue);
       });
     }
+
     if (filterState.euCompliant.dataResidency) {
       filteredTools = filteredTools.filter(tool =>
-        tool.euCompliant.data_residency
+        Boolean(tool.euCompliant?.data_residency)
       );
     }
+
     if (filterState.euCompliant.aiAct) {
       filteredTools = filteredTools.filter(tool =>
-        tool.euCompliant.ai_act_compliant
+        Boolean(tool.euCompliant?.ai_act_compliant)
       );
     }
   

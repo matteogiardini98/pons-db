@@ -5,7 +5,7 @@ import { useTheme } from '@/hooks/use-theme';
 import { cn } from '@/lib/utils';
 import Sidebar from '@/components/layout/Sidebar';
 import Footer from '@/components/layout/Footer';
-import { ImageOff, X, ArrowDown } from 'lucide-react';
+import { ImageOff } from 'lucide-react';
 import { useState } from 'react';
 import { Separator } from '@/components/ui/separator';
 
@@ -97,60 +97,6 @@ const ManifestoPage = () => {
                 valuable and who it has been valuable to while doing which task. the idea is to put together an online 
                 open-source database which contains information about ai solutions relevant for european companies.
               </p>
-            </section>
-
-            {/* AI Adoption Gap Diagram */}
-            <section className="mb-10 pt-8">
-              <h3 className="font-medium text-lg md:text-xl mb-10 text-center italic">
-                connecting the dots to bridge the AI adoption gap in Europe
-              </h3>
-              
-              <div className="relative w-full h-[420px] my-8">
-                {/* Left side - Development */}
-                <div className="absolute left-0 top-0 text-center w-1/3">
-                  <p className="text-xl mb-6 italic">development of AI</p>
-                  <div className="flex flex-col items-center">
-                    <span className="text-4xl font-bold">10</span>
-                    <div className="h-[300px] border-l border-white relative">
-                      <div className="absolute -left-[10px] top-[50px]">
-                        <X className="w-6 h-6" />
-                      </div>
-                      <span className="absolute -left-[10px] bottom-0 text-4xl font-bold">0</span>
-                    </div>
-                  </div>
-                </div>
-                
-                {/* Right side - Adoption */}
-                <div className="absolute right-0 top-0 text-center w-1/3">
-                  <p className="text-xl mb-6 italic">adoption of AI</p>
-                  <div className="flex flex-col items-center">
-                    <span className="text-4xl font-bold">10</span>
-                    <div className="h-[300px] border-l border-white relative">
-                      <div className="absolute -left-[10px] bottom-[50px]">
-                        <X className="w-6 h-6" />
-                      </div>
-                      <span className="absolute -left-[10px] bottom-0 text-4xl font-bold">0</span>
-                    </div>
-                  </div>
-                </div>
-                
-                {/* Connecting lines */}
-                <div className="absolute top-[115px] left-1/3 right-1/3 border-t border-dashed border-white"></div>
-                <div className="absolute bottom-[50px] left-1/3 right-1/3 border-t border-dashed border-white"></div>
-                
-                {/* Middle vertical line */}
-                <div className="absolute left-1/2 top-[115px] h-[235px] -ml-[1px] border-l border-white"></div>
-                
-                {/* Curved arrow */}
-                <div className="absolute bottom-[100px] left-1/2 -ml-6 transform -rotate-45">
-                  <ArrowDown className="w-12 h-12 text-white" />
-                </div>
-                
-                {/* Gap label */}
-                <div className="absolute bottom-0 left-0 right-0 text-center">
-                  <p className="text-2xl italic">the AI adoption gap</p>
-                </div>
-              </div>
             </section>
           </div>
         </motion.div>

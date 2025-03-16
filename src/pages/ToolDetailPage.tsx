@@ -1,4 +1,3 @@
-
 import { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
@@ -12,7 +11,7 @@ import Footer from '@/components/layout/Footer';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
-import { supabase } from '@/integrations/supabase/client';
+import { supabaseClient } from '@/integrations/supabase/client';
 import BetaBanner from '@/components/ui/beta-banner';
 import ToolHeader from '@/components/tool/ToolHeader';
 import EUCompliance from '@/components/tool/EUCompliance';
@@ -25,15 +24,13 @@ const ToolDetailPage = () => {
   const [tool, setTool] = useState<AiTool | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [reviews, setReviews] = useState<Review[]>([]);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    // Apply scroll restoration on page load
-    window.scrollTo(0, 0);
-    
-    const fetchTool = async () => {
+    const fetchToolDetails = async () => {
+      setIsLoading(true);
       try {
-        // First try to fetch from Supabase
-        const { data, error } = await supabase
+        const { data, error } = await supabaseClient
           .from('ai_tools')
           .select('*')
           .eq('id', id)
@@ -46,12 +43,11 @@ const ToolDetailPage = () => {
           const toolData: AiTool = {
             id: data.id,
             name: data.name,
-            problem_solved_description: data.problem_solved_description,
             website: data.website,
-            linkedin: data.linkedin,
-            function: data.function,
-            role: data.role,
-            use_case_tag: data.use_case_tag,
+            function: data.function || [],
+            role: data.role || [],
+            problem_solved_description: data.problem_solved_description || '',
+            use_case_tag: data.use_case_tag || '',
             technical_level: data.technical_level || '',
             euCompliant: {
               // Handle gdpr_compliant which could be missing in older records
@@ -64,38 +60,21 @@ const ToolDetailPage = () => {
           };
           
           setTool(toolData);
-          
-          // Fetch reviews
-          const { data: reviewsData, error: reviewsError } = await supabase
-            .from('reviews')
-            .select('*')
-            .eq('tool_id', id)
-            .order('created_at', { ascending: false });
-            
-          if (!reviewsError && reviewsData) {
-            const mappedReviews: Review[] = reviewsData.map(review => ({
-              id: review.id,
-              text: review.text,
-              authorName: review.author_name || 'anonymous user',
-              date: review.created_at,
-              rating: review.rating || 5
-            }));
-            setReviews(mappedReviews);
-          }
-          
-          setIsLoading(false);
-        } else {
-          setTool(null);
-          setIsLoading(false);
+        } else if (error) {
+          console.error('Error fetching tool details:', error);
+          setError('Could not fetch tool details');
         }
       } catch (error) {
-        console.error('Error fetching tool:', error);
-        setTool(null);
+        console.error('Error in data fetching:', error);
+        setError('An unexpected error occurred');
+      } finally {
         setIsLoading(false);
       }
     };
-    
-    fetchTool();
+
+    if (id) {
+      fetchToolDetails();
+    }
   }, [id]);
 
   if (isLoading) {
@@ -107,6 +86,32 @@ const ToolDetailPage = () => {
         <Sidebar />
         <main className="flex-grow pl-16 md:pl-64 pt-16 flex items-center justify-center">
           <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-primary"></div>
+        </main>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className={cn(
+        "min-h-screen flex",
+        theme === 'dark' ? 'bg-[#111111] text-white' : 'bg-white text-black'
+      )}>
+        <Sidebar />
+        <main className="flex-grow pl-16 md:pl-64 pt-16 container-tight p-6">
+          <div className="text-center py-12">
+            <h2 className="text-2xl font-medium mb-4">tool not found</h2>
+            <p className={cn(
+              "mb-6",
+              theme === 'dark' ? 'text-neutral-300' : 'text-neutral-700'
+            )}>
+              the tool you're looking for doesn't exist or has been removed.
+            </p>
+            <Button onClick={() => navigate('/')}>
+              <ArrowLeft className="mr-2 h-4 w-4" />
+              back to database
+            </Button>
+          </div>
         </main>
       </div>
     );
@@ -139,9 +144,9 @@ const ToolDetailPage = () => {
   }
 
   // Determine gdpr compliance for EUCompliance component
-  const isGdprCompliant = Array.isArray(tool.euCompliant.gdpr_compliant) 
+  const isGdprCompliant = Array.isArray(tool?.euCompliant?.gdpr_compliant) 
     ? tool.euCompliant.gdpr_compliant.length > 0 
-    : Boolean(tool.euCompliant.gdpr_compliant);
+    : Boolean(tool?.euCompliant?.gdpr_compliant);
 
   return (
     <div className={cn(

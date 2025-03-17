@@ -66,9 +66,9 @@ const AddToolForm = () => {
         linkedin: []
       };
 
-      // Using the raw query method to insert into our custom table
+      // Using the existing ai_tools table instead of ai_tool_staging
       const { error } = await supabase
-        .from('ai_tool_staging')
+        .from('ai_tools')
         .insert([toolData]);
 
       if (error) throw error;

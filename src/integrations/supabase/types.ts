@@ -9,6 +9,54 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
+      ai_tool_staging: {
+        Row: {
+          ai_act_compliant: boolean | null
+          created_at: string | null
+          data_residency: boolean | null
+          function: string[]
+          id: string
+          linkedin: string[] | null
+          name: string
+          problem_solved_description: string
+          role: string[] | null
+          technical_level: string | null
+          updated_at: string | null
+          use_case_tag: string | null
+          website: string | null
+        }
+        Insert: {
+          ai_act_compliant?: boolean | null
+          created_at?: string | null
+          data_residency?: boolean | null
+          function: string[]
+          id?: string
+          linkedin?: string[] | null
+          name: string
+          problem_solved_description: string
+          role?: string[] | null
+          technical_level?: string | null
+          updated_at?: string | null
+          use_case_tag?: string | null
+          website?: string | null
+        }
+        Update: {
+          ai_act_compliant?: boolean | null
+          created_at?: string | null
+          data_residency?: boolean | null
+          function?: string[]
+          id?: string
+          linkedin?: string[] | null
+          name?: string
+          problem_solved_description?: string
+          role?: string[] | null
+          technical_level?: string | null
+          updated_at?: string | null
+          use_case_tag?: string | null
+          website?: string | null
+        }
+        Relationships: []
+      }
       ai_tools: {
         Row: {
           ai_act_compliant: boolean | null

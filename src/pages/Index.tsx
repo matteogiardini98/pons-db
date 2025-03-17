@@ -4,7 +4,7 @@ import Hero from '@/components/hero/Hero';
 import DatabaseView from '@/components/database/DatabaseView';
 import Navbar from '@/components/layout/Navbar';
 import Footer from '@/components/layout/Footer';
-import UserQueryForm from '@/components/database/UserQueryForm';
+import ProblemQueryInput from '@/components/database/ProblemQueryInput';
 
 const Index = () => {
   // Apply scroll restoration on page load
@@ -18,7 +18,7 @@ const Index = () => {
       <main className="flex-grow">
         <Hero />
         <div className="container-tight py-8">
-          <UserQueryForm />
+          <ProblemQueryInput />
         </div>
         <DatabaseView />
       </main>

@@ -53,22 +53,18 @@ const AddToolForm = () => {
 
   async function onSubmit(data: FormValues) {
     try {
-      // Create a complete record with default values for required fields in ai_tools
+      // Create a record with only the required fields for ai_tool_staging
       const toolData = {
         name: data.name,
-        website: data.website,
+        website: data.website || '',
         problem_solved_description: data.problem_solved_description,
         technical_level: data.technical_level,
         function: data.function,
-        // Add required fields from ai_tools schema with default values
-        role: [],
-        use_case_tag: '',
-        linkedin: []
       };
 
-      // Using the existing ai_tools table instead of ai_tool_staging
+      // Using the new ai_tool_staging table
       const { error } = await supabase
-        .from('ai_tools')
+        .from('ai_tool_staging')
         .insert([toolData]);
 
       if (error) throw error;

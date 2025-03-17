@@ -4,7 +4,6 @@ import Hero from '@/components/hero/Hero';
 import DatabaseView from '@/components/database/DatabaseView';
 import Navbar from '@/components/layout/Navbar';
 import Footer from '@/components/layout/Footer';
-import ProblemQueryInput from '@/components/database/ProblemQueryInput';
 
 const Index = () => {
   // Apply scroll restoration on page load
@@ -17,9 +16,6 @@ const Index = () => {
       <Navbar />
       <main className="flex-grow">
         <Hero />
-        <div className="container max-w-4xl mx-auto px-4 pt-12 pb-8">
-          <ProblemQueryInput />
-        </div>
         <DatabaseView />
       </main>
       <Footer />

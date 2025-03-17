@@ -5,7 +5,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { useTheme } from '@/hooks/use-theme';
 import { cn } from '@/lib/utils';
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
+import { Form, FormControl, FormField, FormItem, FormMessage } from '@/components/ui/form';
 import { Textarea } from '@/components/ui/textarea';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
@@ -13,6 +13,7 @@ import { toast } from '@/hooks/use-toast';
 import { supabase } from '@/integrations/supabase/client';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from '@/components/ui/dialog';
 import { Checkbox } from '@/components/ui/checkbox';
+import { Send } from 'lucide-react';
 
 const formSchema = z.object({
   query: z.string().min(10, {
@@ -94,36 +95,38 @@ const ProblemQueryInput = () => {
         theme === 'dark' ? 'bg-[#222222] border-neutral-700' : 'bg-white border-neutral-200 shadow-sm')}>
         <h2 className="text-xl font-medium mb-4">what problem are you trying to solve?</h2>
         <p className={cn("mb-6", theme === 'dark' ? 'text-neutral-300' : 'text-neutral-700')}>
-          let us know which tasks you think AI can help you with. we will find the right tool for your use case
-          and send you an email with everything you need to know.
+          let us know how you think ai can help you. we will find the right tool for your use case and send is to you via email.
         </p>
         
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-            <FormField
-              control={form.control}
-              name="query"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>your problem or task</FormLabel>
-                  <FormControl>
-                    <Textarea 
-                      placeholder="describe what problems or tasks you're looking to solve with ai tools..."
-                      className="min-h-24"
-                      {...field} 
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            
-            <Button
-              type="submit"
-              className="w-full md:w-auto bg-emerald-600 hover:bg-emerald-500 text-center rounded-sm"
-            >
-              submit
-            </Button>
+            <div className="flex gap-2 items-center">
+              <FormField
+                control={form.control}
+                name="query"
+                render={({ field }) => (
+                  <FormItem className="flex-grow">
+                    <FormControl>
+                      <Textarea 
+                        placeholder="describe what problems or tasks you're looking to solve with ai tools..."
+                        className={cn("min-h-12 h-12 resize-none py-3 bg-gray-50", 
+                          theme === 'dark' ? 'bg-neutral-800' : 'bg-gray-50')}
+                        {...field} 
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              
+              <Button
+                type="submit"
+                className="bg-emerald-600 hover:bg-emerald-500 h-12 aspect-square p-0"
+                aria-label="Submit query"
+              >
+                <Send size={18} />
+              </Button>
+            </div>
           </form>
         </Form>
       </div>

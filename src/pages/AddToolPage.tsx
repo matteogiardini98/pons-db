@@ -29,7 +29,7 @@ const AddToolPage = () => {
             "mb-8 text-lg",
             theme === 'dark' ? 'text-neutral-300' : 'text-neutral-700'
           )}>
-            submit a new ai tool to the pons database. please provide as much information as possible.
+            submit a new ai tool to the pons database. all submissions will be reviewed before being published.
           </p>
           
           <AddToolForm />

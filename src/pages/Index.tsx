@@ -17,7 +17,7 @@ const Index = () => {
       <Navbar />
       <main className="flex-grow">
         <Hero />
-        <div className="container-tight py-8">
+        <div className="container max-w-4xl mx-auto px-4 pt-12 pb-8">
           <ProblemQueryInput />
         </div>
         <DatabaseView />

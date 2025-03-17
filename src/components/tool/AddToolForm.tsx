@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
@@ -52,15 +53,23 @@ const AddToolForm = () => {
 
   async function onSubmit(data: FormValues) {
     try {
-      // Insert the tool data into the staging table
-      const { error } = await supabase.from('ai_tool_staging').insert({
+      // Create a complete record with default values for required fields in ai_tools
+      const toolData = {
         name: data.name,
         website: data.website,
         problem_solved_description: data.problem_solved_description,
         technical_level: data.technical_level,
         function: data.function,
-        // Other fields will use their default values
-      });
+        // Add required fields from ai_tools schema with default values
+        role: [],
+        use_case_tag: '',
+        linkedin: []
+      };
+
+      // Using the raw query method to insert into our custom table
+      const { error } = await supabase
+        .from('ai_tool_staging')
+        .insert([toolData]);
 
       if (error) throw error;
 

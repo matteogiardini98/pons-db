@@ -17,6 +17,8 @@ import {
 import { Checkbox } from "@/components/ui/checkbox";
 import { Card, CardContent } from '@/components/ui/card';
 import { Link } from 'react-router-dom';
+import Footer from '@/components/layout/Footer';
+import AnimatedCard from '@/components/ui/AnimatedCard';
 
 const StartFromZeroPage = () => {
   const { theme } = useTheme();
@@ -130,14 +132,14 @@ const StartFromZeroPage = () => {
 
   return (
     <div className="flex min-h-screen flex-col">
-      <div className="flex flex-grow">
+      <div className="flex-1 flex">
         <Sidebar />
         <div className={cn(
           "flex-1 overflow-auto pt-16 md:ml-16 md:ml-64 transition-all duration-300",
           theme === 'dark' ? 'bg-[#111111]' : 'bg-gray-50'
         )}>
-          <div className="container-tight max-w-5xl mx-auto px-4 py-8 flex flex-col h-full">
-            <div className="space-y-6 mb-12">
+          <div className="container-tight max-w-6xl mx-auto px-4 py-8 flex flex-col h-full">
+            <div className="space-y-6 mb-8">
               <h1 className={cn(
                 "text-2xl md:text-3xl lg:text-4xl font-medium leading-normal text-center",
                 theme === 'dark' ? 'text-white' : 'text-black'
@@ -170,40 +172,49 @@ const StartFromZeroPage = () => {
               </form>
             </div>
             
-            <div className="mt-8 mb-16">
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-10 md:gap-16">
+            <div className="mt-14 mb-16">
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8">
                 {businessHeadaches.slice(0, 3).map((headache, index) => (
-                  <Card key={index} className={cn(
-                    "border shadow-sm h-full",
-                    theme === 'dark' ? 'bg-[#222222] border-[#333333]' : 'bg-white border-gray-200'
-                  )}>
+                  <AnimatedCard 
+                    key={index} 
+                    hoverEffect="tilt"
+                    className={cn(
+                      "h-full",
+                      theme === 'dark' ? 'bg-[#222222] border-[#333333]' : 'bg-white border-gray-200'
+                    )}
+                  >
                     <CardContent className="p-6">
                       <p className={cn(
                         "text-sm italic",
-                        theme === 'dark' ? 'text-neutral-300' : 'text-neutral-700'
+                        theme === 'dark' ? 'text-white' : 'text-gray-800'
                       )}>
                         {headache.quote} <span className="block mt-2 font-bold not-italic">{headache.title}</span>
                       </p>
                     </CardContent>
-                  </Card>
+                  </AnimatedCard>
                 ))}
               </div>
               
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-10 md:gap-16 mt-10 md:mt-16 md:px-24">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8 mt-8 md:px-16">
                 {businessHeadaches.slice(3, 5).map((headache, index) => (
-                  <Card key={index + 3} className={cn(
-                    "border shadow-sm h-full",
-                    theme === 'dark' ? 'bg-[#222222] border-[#333333]' : 'bg-white border-gray-200'
-                  )}>
+                  <AnimatedCard 
+                    key={index + 3} 
+                    hoverEffect="glow"
+                    glowColor={theme === 'dark' ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.03)'}
+                    className={cn(
+                      "h-full",
+                      theme === 'dark' ? 'bg-[#222222] border-[#333333]' : 'bg-white border-gray-200'
+                    )}
+                  >
                     <CardContent className="p-6">
                       <p className={cn(
                         "text-sm italic",
-                        theme === 'dark' ? 'text-neutral-300' : 'text-neutral-700'
+                        theme === 'dark' ? 'text-white' : 'text-gray-800'
                       )}>
                         {headache.quote} <span className="block mt-2 font-bold not-italic">{headache.title}</span>
                       </p>
                     </CardContent>
-                  </Card>
+                  </AnimatedCard>
                 ))}
               </div>
             </div>
@@ -211,91 +222,7 @@ const StartFromZeroPage = () => {
         </div>
       </div>
       
-      <footer className={cn(
-        "py-12 border-t",
-        theme === 'dark' ? 'bg-black border-[#222222] text-white' : 'bg-black border-gray-800 text-white'
-      )}>
-        <div className="container-tight mx-auto px-4">
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-10">
-            <div className="space-y-4">
-              <h4 className="text-base font-semibold">pons database</h4>
-              <p className="text-sm text-gray-400">pons is an open-source database of ai solutions to help companies find the right tools for their business problems.</p>
-            </div>
-            
-            <div className="space-y-4">
-              <h4 className="text-base font-semibold">navigation</h4>
-              <ul className="space-y-3">
-                <li>
-                  <Link to="/database" className="text-sm text-gray-400 hover:text-white transition-colors link-underline">
-                    database
-                  </Link>
-                </li>
-                <li>
-                  <Link to="/add-tool" className="text-sm text-gray-400 hover:text-white transition-colors link-underline">
-                    add a tool
-                  </Link>
-                </li>
-                <li>
-                  <Link to="/manifesto" className="text-sm text-gray-400 hover:text-white transition-colors link-underline">
-                    manifesto
-                  </Link>
-                </li>
-              </ul>
-            </div>
-            
-            <div className="space-y-4">
-              <h4 className="text-base font-semibold">about</h4>
-              <ul className="space-y-3">
-                <li>
-                  <Link to="/manifesto" className="text-sm text-gray-400 hover:text-white transition-colors link-underline">
-                    manifesto
-                  </Link>
-                </li>
-                <li>
-                  <Link to="#" className="text-sm text-gray-400 hover:text-white transition-colors link-underline">
-                    changelog
-                  </Link>
-                </li>
-                <li>
-                  <Link to="#" className="text-sm text-gray-400 hover:text-white transition-colors link-underline">
-                    roadmap
-                  </Link>
-                </li>
-              </ul>
-            </div>
-            
-            <div className="space-y-4">
-              <h4 className="text-base font-semibold">contact</h4>
-              <ul className="space-y-3">
-                <li>
-                  <a href="https://github.com" target="_blank" rel="noreferrer" className="text-sm text-gray-400 hover:text-white transition-colors link-underline">
-                    github
-                  </a>
-                </li>
-                <li>
-                  <a href="mailto:info@aisolutionsdatabase.com" className="text-sm text-gray-400 hover:text-white transition-colors link-underline">
-                    contact us
-                  </a>
-                </li>
-                <li>
-                  <a href="#" className="text-sm text-gray-400 hover:text-white transition-colors link-underline">
-                    newsletter
-                  </a>
-                </li>
-              </ul>
-            </div>
-          </div>
-          
-          <div className="border-t border-gray-800 mt-10 pt-6 flex flex-col md:flex-row justify-between items-center text-sm text-gray-400">
-            <p>© {new Date().getFullYear()} ai solutions database. open-source project.</p>
-            <div className="flex gap-6 mt-4 md:mt-0">
-              <Link to="#" className="hover:text-white transition-colors">privacy</Link>
-              <Link to="#" className="hover:text-white transition-colors">terms</Link>
-              <Link to="#" className="hover:text-white transition-colors">cookie policy</Link>
-            </div>
-          </div>
-        </div>
-      </footer>
+      <Footer />
 
       <Dialog open={showEmailDialog} onOpenChange={setShowEmailDialog}>
         <DialogContent className={cn(

@@ -12,6 +12,7 @@ import DatabasePage from "./pages/DatabasePage";
 import ToolDetailPage from "./pages/ToolDetailPage";
 import AddToolPage from "./pages/AddToolPage";
 import ManifestoPage from "./pages/ManifestoPage";
+import StartFromZeroPage from "./pages/StartFromZeroPage";
 
 const queryClient = new QueryClient();
 
@@ -29,6 +30,7 @@ const App = () => (
             <Route path="/add-tool" element={<AddToolPage />} />
             <Route path="/tool/:id" element={<ToolDetailPage />} />
             <Route path="/manifesto" element={<ManifestoPage />} />
+            <Route path="/start-from-zero" element={<StartFromZeroPage />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
           </Routes>

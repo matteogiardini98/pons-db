@@ -28,6 +28,7 @@ const Navbar = () => {
 
   const navLinks = [
     { name: 'database', path: '/' },
+    { name: 'start from 0', path: '/start-from-zero' },
     { name: 'dashboard', path: '/dashboard' },
     { name: 'add tool', path: '/add-tool' },
     { name: 'manifesto', path: '/manifesto' },

@@ -1,15 +1,22 @@
 # pons, connecting the dots to bridge the ai adoption gap in europe
 
 ## the ai adoption gap (why)
+
 the fast pace and directionless innovation coming from silicon valley creates an adoption gap between the state of the art ai solutions that are being developed and what smbs are actually adopting in europe. many general purpose ai tools are being developed without concrete consideration on the business problems they could solve. they are too far from reality, at least in europe, with its regional nuances and specific priorities.
 
+
 ## a lot of noise (what)
+
 there is clearly an opportunity out there for smbs to leverage ai. they will be able to do more with the same resources, multiply their capabilities and empower their employees to reach heights they never have. but, where should they start? there are hundreds of tools out there, many overhyped that create a lot of noise, overwhelming entrepreneurs and their organizations.
 
+
 ## an open-source database (how)
+
 the first step to solve this adoption gap is to cut through the noise and bring to surface what is valuable and who it has been valuable to while doing which task. the idea is to put together an online open-source database which contains information about ai solutions relevant for european companies. we want to make this open-source, first of all because we are not very technical and this could benefit from a technical eye which we do not have, secondly we believe that real value is in peer-to-peer reviews and word of mouth, not in seo optimized searches.
 
-## we are Matteo and Gianlorenzo
+
+## we are matteo and gianlorenzo
+
 we are italian, we understand the importance of SMBs in European economics and we want these businesses to continue growing with technology, not become obsolte. for this, we wish to help all european smbs adopt the right ai solution for their business challenges. we are very business driven as we notice a lot of the ai hype is tech driven and we want to help companies achieve concrete results to have a positive impact on their employees, customers and communities around them. 
 
 
@@ -25,15 +32,19 @@ we are italian, we understand the importance of SMBs in European economics and w
 
 
 ## Project info
+
 **URL**: https://lovable.dev/projects/4e70e3bd-861b-4e09-b630-17e5bfff2a48
 
 ## How can I edit this code?
+
 There are several ways of editing your application.
 
 **Use Lovable**
+
 Simply visit the [Lovable Project](https://lovable.dev/projects/4e70e3bd-861b-4e09-b630-17e5bfff2a48) and start prompting. Changes made via Lovable will be committed automatically to this repo.
 
 **Use your preferred IDE**
+
 If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
 The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
 

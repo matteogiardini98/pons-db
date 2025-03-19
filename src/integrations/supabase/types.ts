@@ -125,16 +125,19 @@ export type Database = {
       }
       ent_input: {
         Row: {
+          challenge: string | null
           created_at: string
           email: string
           id: string
         }
         Insert: {
+          challenge?: string | null
           created_at?: string
           email: string
           id?: string
         }
         Update: {
+          challenge?: string | null
           created_at?: string
           email?: string
           id?: string

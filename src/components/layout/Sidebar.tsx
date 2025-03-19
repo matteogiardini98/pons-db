@@ -96,19 +96,6 @@ const Sidebar = ({ collapsed = false }: SidebarProps) => {
           <ul className="space-y-1 px-2">
             <li>
               <Link
-                to="/"
-                className={cn(
-                  "flex items-center rounded-md px-3 py-2",
-                  theme === 'dark' ? 'hover:bg-[#222222]' : 'hover:bg-neutral-100',
-                  isActive('/') ? (theme === 'dark' ? 'bg-[#222222]' : 'bg-neutral-100') : ''
-                )}
-              >
-                <Database className="h-5 w-5 mr-2 flex-shrink-0" />
-                <span className={cn(isCollapsed ? "hidden" : "hidden md:block")}>database</span>
-              </Link>
-            </li>
-            <li>
-              <Link
                 to="/start-from-zero"
                 className={cn(
                   "flex items-center rounded-md px-3 py-2",
@@ -122,37 +109,56 @@ const Sidebar = ({ collapsed = false }: SidebarProps) => {
             </li>
             <li>
               <Link
-                to="/add-tool"
+                to="/"
                 className={cn(
                   "flex items-center rounded-md px-3 py-2",
                   theme === 'dark' ? 'hover:bg-[#222222]' : 'hover:bg-neutral-100',
-                  isActive('/add-tool') ? (theme === 'dark' ? 'bg-[#222222]' : 'bg-neutral-100') : ''
+                  isActive('/') ? (theme === 'dark' ? 'bg-[#222222]' : 'bg-neutral-100') : ''
                 )}
               >
-                <PlusCircle className="h-5 w-5 mr-2 flex-shrink-0" />
-                <span className={cn(isCollapsed ? "hidden" : "hidden md:block")}>add tool</span>
-              </Link>
-            </li>
-            <li>
-              <Link
-                to="/manifesto"
-                className={cn(
-                  "flex items-center rounded-md px-3 py-2",
-                  theme === 'dark' ? 'hover:bg-[#222222]' : 'hover:bg-neutral-100',
-                  isActive('/manifesto') ? (theme === 'dark' ? 'bg-[#222222]' : 'bg-neutral-100') : ''
-                )}
-              >
-                <FileText className="h-5 w-5 mr-2 flex-shrink-0" />
-                <span className={cn(isCollapsed ? "hidden" : "hidden md:block")}>manifesto</span>
+                <Database className="h-5 w-5 mr-2 flex-shrink-0" />
+                <span className={cn(isCollapsed ? "hidden" : "hidden md:block")}>database</span>
               </Link>
             </li>
           </ul>
         </nav>
         
-        <div className={cn("border-t mt-auto")} 
+        <div className={cn("border-t")} 
           style={{ borderColor: theme === 'dark' ? '#222222' : '#e5e5e5' }}>
           <div className={cn(isCollapsed ? "hidden" : "hidden md:block")}>
             <EmailSubscription />
+          </div>
+          
+          {/* Add tool and manifesto links moved below email subscription */}
+          <div className="py-2">
+            <ul className="space-y-1 px-2">
+              <li>
+                <Link
+                  to="/add-tool"
+                  className={cn(
+                    "flex items-center rounded-md px-3 py-2",
+                    theme === 'dark' ? 'hover:bg-[#222222]' : 'hover:bg-neutral-100',
+                    isActive('/add-tool') ? (theme === 'dark' ? 'bg-[#222222]' : 'bg-neutral-100') : ''
+                  )}
+                >
+                  <PlusCircle className="h-5 w-5 mr-2 flex-shrink-0" />
+                  <span className={cn(isCollapsed ? "hidden" : "hidden md:block")}>add tool</span>
+                </Link>
+              </li>
+              <li>
+                <Link
+                  to="/manifesto"
+                  className={cn(
+                    "flex items-center rounded-md px-3 py-2",
+                    theme === 'dark' ? 'hover:bg-[#222222]' : 'hover:bg-neutral-100',
+                    isActive('/manifesto') ? (theme === 'dark' ? 'bg-[#222222]' : 'bg-neutral-100') : ''
+                  )}
+                >
+                  <FileText className="h-5 w-5 mr-2 flex-shrink-0" />
+                  <span className={cn(isCollapsed ? "hidden" : "hidden md:block")}>manifesto</span>
+                </Link>
+              </li>
+            </ul>
           </div>
           
           <div className="p-4 flex flex-col gap-2">

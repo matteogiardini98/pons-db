@@ -1,5 +1,6 @@
 
 import { Link } from 'react-router-dom';
+import EmailSubscription from './EmailSubscription';
 
 const Footer = () => {
   const currentYear = new Date().getFullYear();
@@ -7,10 +8,11 @@ const Footer = () => {
   return (
     <footer className="border-t border-border py-12 w-full">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl">
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-10">
-          <div className="space-y-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-10">
+          <div className="space-y-4 lg:col-span-2">
             <h4 className="text-base font-semibold">pons database</h4>
             <p className="text-sm text-muted-foreground">pons is an open-source database of ai solutions to help companies find the right tools for their business problems.</p>
+            <EmailSubscription />
           </div>
           
           <div className="space-y-4">

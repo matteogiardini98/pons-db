@@ -19,7 +19,7 @@ const BusinessHeadacheCard = ({ quote, title, hoverEffect = 'tilt', index }: Bus
       hoverEffect="tilt"
       glowColor={theme === 'dark' ? 'rgba(74, 210, 149, 0.15)' : 'rgba(74, 210, 149, 0.2)'}
       className={cn(
-        "h-full min-h-[180px]",
+        "h-full min-h-[200px]",
         theme === 'dark' ? 'bg-[#222222] border-[#333333]' : 'bg-white border-gray-200'
       )}
     >

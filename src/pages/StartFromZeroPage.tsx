@@ -8,6 +8,7 @@ import ChallengeInput from '@/components/business/ChallengeInput';
 import BusinessHeadacheGrid from '@/components/business/BusinessHeadacheGrid';
 import EmailDialog from '@/components/business/EmailDialog';
 import LimitedAvailabilityBanner from '@/components/ui/limited-availability-banner';
+import EmailSubscription from '@/components/layout/EmailSubscription';
 
 const StartFromZeroPage = () => {
   const { theme } = useTheme();
@@ -45,8 +46,6 @@ const StartFromZeroPage = () => {
 
   return (
     <div className="flex min-h-screen flex-col">
-      <LimitedAvailabilityBanner />
-      
       <div className="flex-1 flex">
         <Sidebar />
         <div className={cn(
@@ -59,7 +58,9 @@ const StartFromZeroPage = () => {
                 "text-2xl md:text-3xl lg:text-4xl font-medium leading-normal text-center",
                 theme === 'dark' ? 'text-white' : 'text-black'
               )}>
-                For all <span className="text-emerald-500">entrepreneurs</span> and <span className="text-emerald-500">operators</span> out there, tell us your business <span className="text-emerald-500">challenges</span> and we'll help you find the right AI tools.
+                For all <span className="text-emerald-500">entrepreneurs</span> 
+                <LimitedAvailabilityBanner />
+                and <span className="text-emerald-500">operators</span> out there, tell us your business <span className="text-emerald-500">challenges</span> and we'll help you find the right AI tools.
               </h1>
               
               <div className="max-w-2xl mx-auto pt-6">
@@ -73,6 +74,8 @@ const StartFromZeroPage = () => {
             <div className="mt-24 mb-auto">
               <BusinessHeadacheGrid headaches={businessHeadaches} />
             </div>
+            
+            <EmailSubscription className="mt-20 mb-12" />
           </div>
           
           <Footer />

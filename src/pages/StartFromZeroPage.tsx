@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { useTheme } from '@/hooks/use-theme';
 import { cn } from '@/lib/utils';
@@ -73,7 +74,8 @@ const StartFromZeroPage = () => {
               <BusinessHeadacheGrid headaches={businessHeadaches} />
             </div>
             
-            <EmailSubscription className="mt-20 mb-12" />
+            {/* Remove the className prop since EmailSubscription component doesn't accept it */}
+            <EmailSubscription />
           </div>
           
           <Footer />

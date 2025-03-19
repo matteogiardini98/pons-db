@@ -1,16 +1,16 @@
 # pons, connecting the dots to bridge the ai adoption gap in europe
 
-## the ai adoption gap (why)
+## the ai adoption gap (why)
 
 the fast pace and directionless innovation coming from silicon valley creates an adoption gap between the state of the art ai solutions that are being developed and what smbs are actually adopting in europe. many general purpose ai tools are being developed without concrete consideration on the business problems they could solve. they are too far from reality, at least in europe, with its regional nuances and specific priorities.
 
 
-## a lot of noise (what)
+## a lot of noise (what)
 
 there is clearly an opportunity out there for smbs to leverage ai. they will be able to do more with the same resources, multiply their capabilities and empower their employees to reach heights they never have. but, where should they start? there are hundreds of tools out there, many overhyped that create a lot of noise, overwhelming entrepreneurs and their organizations.
 
 
-## an open-source database (how)
+## an open-source database (how)
 
 the first step to solve this adoption gap is to cut through the noise and bring to surface what is valuable and who it has been valuable to while doing which task. the idea is to put together an online open-source database which contains information about ai solutions relevant for european companies. we want to make this open-source, first of all because we are not very technical and this could benefit from a technical eye which we do not have, secondly we believe that real value is in peer-to-peer reviews and word of mouth, not in seo optimized searches.
 

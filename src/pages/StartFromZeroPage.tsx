@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { useTheme } from '@/hooks/use-theme';
 import { Input } from '@/components/ui/input';
@@ -76,7 +75,6 @@ const StartFromZeroPage = () => {
       return;
     }
 
-    // Basic email validation
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(email)) {
       toast({
@@ -129,6 +127,19 @@ const StartFromZeroPage = () => {
     }
   };
 
+  const formatCardTitle = (title) => {
+    const parts = title.split('–');
+    if (parts.length === 2) {
+      return (
+        <>
+          <span className="text-emerald-500">{parts[0].trim()}</span>
+          <span> – {parts[1].trim()}</span>
+        </>
+      );
+    }
+    return title;
+  };
+
   return (
     <div className="flex h-screen">
       <Sidebar />
@@ -136,8 +147,7 @@ const StartFromZeroPage = () => {
         "flex-1 overflow-auto pt-16 md:ml-16 md:ml-64 transition-all duration-300",
         theme === 'dark' ? 'bg-[#111111]' : 'bg-gray-50'
       )}>
-        <div className="container-tight max-w-3xl mx-auto px-4 py-8 flex flex-col h-full">
-          {/* Moved upper slightly by reducing padding */}
+        <div className="container-tight max-w-4xl mx-auto px-4 py-8 flex flex-col h-full">
           <div className="space-y-6 mb-12">
             <h1 className={cn(
               "text-2xl md:text-3xl lg:text-4xl font-medium leading-normal text-center",
@@ -171,7 +181,6 @@ const StartFromZeroPage = () => {
             </form>
           </div>
           
-          {/* Business Headache Examples Section */}
           <div className="mt-8 mb-8">
             <h2 className={cn(
               "text-xl md:text-2xl font-medium mb-6 text-center",
@@ -180,15 +189,19 @@ const StartFromZeroPage = () => {
               Common Business Headaches
             </h2>
             
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-              {/* First row with 3 cards */}
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8">
               {businessHeadaches.slice(0, 3).map((headache, index) => (
                 <Card key={index} className={cn(
                   "border shadow-sm h-full",
                   theme === 'dark' ? 'bg-[#222222] border-[#333333]' : 'bg-white border-gray-200'
                 )}>
                   <CardHeader className="pb-2">
-                    <CardTitle className="text-lg font-medium">{headache.title}</CardTitle>
+                    <CardTitle className={cn(
+                      "text-lg font-bold",
+                      theme === 'dark' ? 'text-white' : 'text-white'
+                    )}>
+                      {formatCardTitle(headache.title)}
+                    </CardTitle>
                   </CardHeader>
                   <CardContent>
                     <p className={cn(
@@ -202,15 +215,19 @@ const StartFromZeroPage = () => {
               ))}
             </div>
             
-            {/* Second row with 2 cards, centered */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4 md:mx-auto md:max-w-2xl">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8 mt-6 md:mt-8 md:px-16">
               {businessHeadaches.slice(3, 5).map((headache, index) => (
                 <Card key={index + 3} className={cn(
                   "border shadow-sm h-full",
                   theme === 'dark' ? 'bg-[#222222] border-[#333333]' : 'bg-white border-gray-200'
                 )}>
                   <CardHeader className="pb-2">
-                    <CardTitle className="text-lg font-medium">{headache.title}</CardTitle>
+                    <CardTitle className={cn(
+                      "text-lg font-bold",
+                      theme === 'dark' ? 'text-white' : 'text-white'
+                    )}>
+                      {formatCardTitle(headache.title)}
+                    </CardTitle>
                   </CardHeader>
                   <CardContent>
                     <p className={cn(
@@ -290,3 +307,4 @@ const StartFromZeroPage = () => {
 };
 
 export default StartFromZeroPage;
+

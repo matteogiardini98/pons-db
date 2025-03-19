@@ -8,7 +8,6 @@ import { cn } from '@/lib/utils';
 import { useTheme } from '@/hooks/use-theme';
 import { Button } from '@/components/ui/button';
 import { Plus } from 'lucide-react';
-import ProblemQueryInput from '@/components/database/ProblemQueryInput';
 
 const DatabasePage = () => {
   const { theme } = useTheme();
@@ -29,9 +28,6 @@ const DatabasePage = () => {
       <main className="flex-grow pl-16 md:pl-64">
         <div className="container-tight p-4 md:p-6 pt-10 max-w-6xl mx-auto">
           <h1 className="text-3xl md:text-4xl font-medium mb-6">pons database</h1>
-          
-          {/* Problem Query Input component */}
-          <ProblemQueryInput />
           
           <DatabaseTableView />
           <div className="flex justify-center mt-8 mb-16">

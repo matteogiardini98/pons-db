@@ -6,15 +6,13 @@ import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
 import { toast } from '@/hooks/use-toast';
 import { supabase } from '@/integrations/supabase/client';
-import { ArrowRight, Zap } from 'lucide-react';
+import { ArrowRight } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import Sidebar from '@/components/layout/Sidebar';
 import { 
   Dialog, 
   DialogContent, 
   DialogHeader, 
-  DialogTitle,
-  DialogDescription,
   DialogFooter
 } from '@/components/ui/dialog';
 import { Checkbox } from "@/components/ui/checkbox";
@@ -114,35 +112,36 @@ const StartFromZeroPage = () => {
         "flex-1 overflow-auto pt-16 md:ml-16 md:ml-64 transition-all duration-300",
         theme === 'dark' ? 'bg-[#111111]' : 'bg-gray-50'
       )}>
-        <div className="container-tight max-w-3xl mx-auto px-4 py-12">
-          <div className="space-y-8 mt-12">
-            <h1 className="text-2xl md:text-3xl lg:text-4xl font-medium leading-normal text-white text-center">
+        <div className="container-tight max-w-3xl mx-auto px-4 py-12 flex flex-col justify-center h-full">
+          <div className="space-y-8">
+            <h1 className={cn(
+              "text-2xl md:text-3xl lg:text-4xl font-medium leading-normal text-center",
+              theme === 'dark' ? 'text-white' : 'text-black'
+            )}>
               For all <span className="text-emerald-500">entrepreneurs</span> and <span className="text-emerald-500">operators</span> out there, tell us your business <span className="text-emerald-500">challenges</span> and we'll help you find the right AI tools.
             </h1>
             
-            <form onSubmit={handleChallengeSubmit} className="space-y-4 max-w-xl mx-auto">
-              <div className="space-y-2">
+            <form onSubmit={handleChallengeSubmit} className="space-y-4 max-w-2xl mx-auto">
+              <div className="flex items-center gap-2">
                 <Input
                   id="challenge"
                   placeholder="Describe your business challenge"
                   value={challenge}
                   onChange={(e) => setChallenge(e.target.value)}
                   className={cn(
-                    "bg-opacity-10 border-opacity-20",
+                    "bg-opacity-10 border-opacity-20 py-6",
                     theme === 'dark' ? 'bg-[#222222] border-[#333333]' : 'bg-white/10 border-white/20'
                   )}
                 />
-                <div className="flex justify-center mt-4">
-                  <Button 
-                    type="submit" 
-                    variant="cta"
-                    disabled={isSubmitting}
-                    size="sm"
-                    className="rounded-full p-2 h-auto w-auto"
-                  >
-                    <ArrowRight size={16} />
-                  </Button>
-                </div>
+                <Button 
+                  type="submit" 
+                  variant="cta"
+                  disabled={isSubmitting}
+                  size="sm"
+                  className="rounded-full p-2 h-10 w-10"
+                >
+                  <ArrowRight size={16} />
+                </Button>
               </div>
             </form>
           </div>
@@ -155,15 +154,11 @@ const StartFromZeroPage = () => {
           theme === 'dark' ? 'bg-[#191919] text-white' : 'bg-white'
         )}>
           <DialogHeader>
-            <DialogTitle>One last step</DialogTitle>
-            <DialogDescription>
-              Please provide your email so we can send you personalized AI tool recommendations.
-            </DialogDescription>
+            <Label htmlFor="email">Your email</Label>
           </DialogHeader>
           <form onSubmit={handleEmailSubmit}>
             <div className="space-y-4 py-4">
               <div className="space-y-2">
-                <Label htmlFor="email">Your email</Label>
                 <Input 
                   id="email"
                   type="email"

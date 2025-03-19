@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { useTheme } from '@/hooks/use-theme';
 import { Input } from '@/components/ui/input';
@@ -16,7 +15,7 @@ import {
   DialogFooter
 } from '@/components/ui/dialog';
 import { Checkbox } from "@/components/ui/checkbox";
-import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
+import { Card, CardContent } from '@/components/ui/card';
 import { Link } from 'react-router-dom';
 
 const StartFromZeroPage = () => {
@@ -27,27 +26,26 @@ const StartFromZeroPage = () => {
   const [showEmailDialog, setShowEmailDialog] = useState(false);
   const [consentChecked, setConsentChecked] = useState(false);
 
-  // Updated business headaches with shorter descriptions
   const businessHeadaches = [
     {
-      title: "Sales – Head of Sales in Tech Startup",
-      description: "Too much time spent on non-converting leads. Need smarter lead prioritization to focus on revenue-driving opportunities."
+      quote: "\"Our CRM is overloaded with leads, yet we spend too much time on prospects that don't convert. Can we find a better way to prioritize leads?\"",
+      title: "Head of Sales in Tech SaaS"
     },
     {
-      title: "Finance – CFO in Manufacturing Firm",
-      description: "Manual reconciliation delays reports. Need streamlined processes for timely, accurate financial reporting."
+      quote: "\"We are really bogged down with manual reconciliation and data entry that delay our reporting cycles.\"",
+      title: "CFO in Manufacturing"
     },
     {
-      title: "Supply Chain – Supply Chain Manager in Retail",
-      description: "Constant inventory imbalance creates lost sales and higher costs. Need better demand forecasting system."
+      quote: "\"Our forecasting skills are just bad. Inventory overstock in some areas and shortages in others, we keep losing sales and having higher costs\"",
+      title: "Supply Chain Manager in Retail"
     },
     {
-      title: "Operations – Head of Operations in Retail Chain",
-      description: "Inefficient scheduling creates staff overwork and coverage gaps. Need optimal resource planning for shifts."
+      quote: "\"Scheduling system!!! So poor...we have overworked staff during peak periods and coverage gaps during off-hours. We need to optimize shift allocation.\"",
+      title: "VP of Operations in Retail Chain"
     },
     {
-      title: "Marketing – CMO in E-commerce Company",
-      description: "Campaigns underperform due to poor customer insights. Need better analysis tools to adjust strategy quickly."
+      quote: "\"We have some many insights and data to create marketing assets, but we do not have the team, time and skills. Helpppp!\"",
+      title: "CMO in E-commerce"
     }
   ];
 
@@ -130,19 +128,6 @@ const StartFromZeroPage = () => {
     }
   };
 
-  const formatCardTitle = (title) => {
-    const parts = title.split('–');
-    if (parts.length === 2) {
-      return (
-        <>
-          <span className="text-emerald-500">{parts[0].trim()}</span>
-          <span> – {parts[1].trim()}</span>
-        </>
-      );
-    }
-    return title;
-  };
-
   return (
     <div className="flex min-h-screen flex-col">
       <div className="flex flex-grow">
@@ -186,52 +171,36 @@ const StartFromZeroPage = () => {
             </div>
             
             <div className="mt-8 mb-16">
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-12">
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-10 md:gap-16">
                 {businessHeadaches.slice(0, 3).map((headache, index) => (
                   <Card key={index} className={cn(
                     "border shadow-sm h-full",
                     theme === 'dark' ? 'bg-[#222222] border-[#333333]' : 'bg-white border-gray-200'
                   )}>
-                    <CardHeader className="pb-2">
-                      <CardTitle className={cn(
-                        "text-lg font-bold",
-                        theme === 'dark' ? 'text-white' : 'text-white'
-                      )}>
-                        {formatCardTitle(headache.title)}
-                      </CardTitle>
-                    </CardHeader>
-                    <CardContent>
+                    <CardContent className="p-6">
                       <p className={cn(
-                        "text-sm",
+                        "text-sm italic",
                         theme === 'dark' ? 'text-neutral-300' : 'text-neutral-700'
                       )}>
-                        {headache.description}
+                        {headache.quote} <span className="block mt-2 font-bold not-italic">{headache.title}</span>
                       </p>
                     </CardContent>
                   </Card>
                 ))}
               </div>
               
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12 mt-8 md:mt-12 md:px-24">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-10 md:gap-16 mt-10 md:mt-16 md:px-24">
                 {businessHeadaches.slice(3, 5).map((headache, index) => (
                   <Card key={index + 3} className={cn(
                     "border shadow-sm h-full",
                     theme === 'dark' ? 'bg-[#222222] border-[#333333]' : 'bg-white border-gray-200'
                   )}>
-                    <CardHeader className="pb-2">
-                      <CardTitle className={cn(
-                        "text-lg font-bold",
-                        theme === 'dark' ? 'text-white' : 'text-white'
-                      )}>
-                        {formatCardTitle(headache.title)}
-                      </CardTitle>
-                    </CardHeader>
-                    <CardContent>
+                    <CardContent className="p-6">
                       <p className={cn(
-                        "text-sm",
+                        "text-sm italic",
                         theme === 'dark' ? 'text-neutral-300' : 'text-neutral-700'
                       )}>
-                        {headache.description}
+                        {headache.quote} <span className="block mt-2 font-bold not-italic">{headache.title}</span>
                       </p>
                     </CardContent>
                   </Card>
@@ -242,7 +211,6 @@ const StartFromZeroPage = () => {
         </div>
       </div>
       
-      {/* Footer Section */}
       <footer className={cn(
         "py-12 border-t",
         theme === 'dark' ? 'bg-black border-[#222222] text-white' : 'bg-black border-gray-800 text-white'

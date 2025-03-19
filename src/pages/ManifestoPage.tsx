@@ -1,3 +1,4 @@
+
 import { motion } from 'framer-motion';
 import { pageTransition } from '@/utils/animations';
 import { useTheme } from '@/hooks/use-theme';
@@ -19,6 +20,10 @@ const ManifestoPage = () => {
 
           <div className={cn("rounded-lg border p-8 mb-8 prose max-w-none", isDarkMode ? 'bg-[#222222] border-neutral-700 prose-invert' : 'bg-white border-neutral-200 shadow-sm')}>
             <h2 className="font-medium text-xl md:text-2xl mb-6">pons, connecting the dots to bridge the ai adoption gap in europe</h2>
+            
+            <p className={cn("mb-8 leading-relaxed", isDarkMode ? 'text-neutral-300' : 'text-neutral-700')}>
+              pons - latin for bridge - is an open source project aiming at bridging the gap between the overcrowded ai market (supply) and european smbs (demand), the ones that can truly benefit from the ai revolution
+            </p>
             
             <section className="mb-10">
               <h3 className="font-medium text-lg md:text-xl mb-4">the ai adoption gap (why)</h3>

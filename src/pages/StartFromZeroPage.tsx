@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { useTheme } from '@/hooks/use-theme';
 import { cn } from '@/lib/utils';
@@ -54,13 +53,12 @@ const StartFromZeroPage = () => {
         )}>
           <div className="container-tight max-w-5xl mx-auto px-4 py-16 flex flex-col min-h-screen">
             <div className="space-y-10 mb-20 mt-8 max-w-3xl mx-auto">
+              <LimitedAvailabilityBanner />
               <h1 className={cn(
                 "text-2xl md:text-3xl lg:text-4xl font-medium leading-normal text-center",
                 theme === 'dark' ? 'text-white' : 'text-black'
               )}>
-                For all <span className="text-emerald-500">entrepreneurs</span> 
-                <LimitedAvailabilityBanner />
-                and <span className="text-emerald-500">operators</span> out there, tell us your business <span className="text-emerald-500">challenges</span> and we'll help you find the right AI tools.
+                For all <span className="text-emerald-500">entrepreneurs</span> and <span className="text-emerald-500">operators</span> out there, tell us your business <span className="text-emerald-500">challenges</span> and we'll help you find the right AI tools.
               </h1>
               
               <div className="max-w-2xl mx-auto pt-6">

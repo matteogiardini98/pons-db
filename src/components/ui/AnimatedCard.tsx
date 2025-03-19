@@ -16,7 +16,7 @@ const AnimatedCard = ({
   children,
   className,
   hoverEffect = 'tilt',
-  glowColor = 'rgba(255, 255, 255, 0.1)',
+  glowColor = 'rgba(74, 210, 149, 0.2)', // Using pons green with transparency
   isInteractive = true,
   onMouseEnter,
   onMouseLeave
@@ -42,9 +42,9 @@ const AnimatedCard = ({
     const y = e.clientY - rect.top - rect.height / 2;
     
     if (hoverEffect === 'tilt') {
-      // Tilt effect (max 5 degrees)
-      const tiltX = -(y / rect.height) * 5;
-      const tiltY = (x / rect.width) * 5;
+      // Tilt effect (max 10 degrees)
+      const tiltX = -(y / rect.height) * 10;
+      const tiltY = (x / rect.width) * 10;
       
       card.style.transform = `perspective(1000px) rotateX(${tiltX}deg) rotateY(${tiltY}deg)`;
     }
@@ -79,9 +79,9 @@ const AnimatedCard = ({
     if (!isInteractive) return '';
     
     switch(hoverEffect) {
-      case 'lift': return 'transition-transform duration-200 hover:-translate-y-1 hover:shadow-lg';
-      case 'tilt': return 'transition-transform duration-200';
-      case 'glow': return 'transition-shadow duration-200';
+      case 'lift': return 'transition-transform duration-300 hover:-translate-y-2 hover:shadow-lg';
+      case 'tilt': return 'transition-transform duration-300';
+      case 'glow': return 'transition-shadow duration-300';
       default: return '';
     }
   };
@@ -90,7 +90,7 @@ const AnimatedCard = ({
     <div
       ref={cardRef}
       className={cn(
-        'relative overflow-hidden',
+        'relative overflow-hidden rounded-lg border shadow-sm',
         getHoverClass(),
         className
       )}
@@ -98,15 +98,15 @@ const AnimatedCard = ({
       onMouseLeave={handleMouseLeave}
       onMouseEnter={onMouseEnter}
       style={{
-        transition: 'transform 0.2s ease-out',
-        willChange: 'transform',
+        transition: 'transform 0.3s ease-out, box-shadow 0.3s ease-out',
+        willChange: 'transform, box-shadow',
       }}
     >
       {hoverEffect === 'glow' && isInteractive && (
         <div 
           className="absolute pointer-events-none transition-opacity duration-300"
           style={{
-            background: `radial-gradient(circle 100px at ${position.x}px ${position.y}px, ${glowColor}, transparent)`,
+            background: `radial-gradient(circle 150px at ${position.x}px ${position.y}px, ${glowColor}, transparent)`,
             width: '100%',
             height: '100%',
             opacity,

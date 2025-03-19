@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { useTheme } from '@/hooks/use-theme';
 import { Input } from '@/components/ui/input';
@@ -15,7 +16,6 @@ import {
   DialogFooter
 } from '@/components/ui/dialog';
 import { Checkbox } from "@/components/ui/checkbox";
-import { Card, CardContent } from '@/components/ui/card';
 import { Link } from 'react-router-dom';
 import Footer from '@/components/layout/Footer';
 import AnimatedCard from '@/components/ui/AnimatedCard';
@@ -135,11 +135,11 @@ const StartFromZeroPage = () => {
       <div className="flex-1 flex">
         <Sidebar />
         <div className={cn(
-          "flex-1 overflow-auto pt-16 md:ml-16 md:ml-64 transition-all duration-300",
+          "flex-1 overflow-auto md:ml-16 md:ml-64 transition-all duration-300",
           theme === 'dark' ? 'bg-[#111111]' : 'bg-gray-50'
         )}>
           <div className="container-tight max-w-6xl mx-auto px-4 py-8 flex flex-col h-full">
-            <div className="space-y-6 mb-8">
+            <div className="space-y-6 mb-8 pt-10">
               <h1 className={cn(
                 "text-2xl md:text-3xl lg:text-4xl font-medium leading-normal text-center",
                 theme === 'dark' ? 'text-white' : 'text-black'
@@ -172,48 +172,48 @@ const StartFromZeroPage = () => {
               </form>
             </div>
             
-            <div className="mt-14 mb-16">
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8">
+            <div className="mt-10 mb-12">
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-5">
                 {businessHeadaches.slice(0, 3).map((headache, index) => (
                   <AnimatedCard 
                     key={index} 
-                    hoverEffect="tilt"
+                    hoverEffect={index % 2 === 0 ? "tilt" : "glow"}
                     className={cn(
                       "h-full",
                       theme === 'dark' ? 'bg-[#222222] border-[#333333]' : 'bg-white border-gray-200'
                     )}
                   >
-                    <CardContent className="p-6">
+                    <div className="p-5">
                       <p className={cn(
-                        "text-sm italic",
+                        "text-sm",
                         theme === 'dark' ? 'text-white' : 'text-gray-800'
                       )}>
-                        {headache.quote} <span className="block mt-2 font-bold not-italic">{headache.title}</span>
+                        <span className="italic">{headache.quote}</span> <span className="block mt-2 font-bold not-italic">{headache.title}</span>
                       </p>
-                    </CardContent>
+                    </div>
                   </AnimatedCard>
                 ))}
               </div>
               
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8 mt-8 md:px-16">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-5 mt-5 md:px-12">
                 {businessHeadaches.slice(3, 5).map((headache, index) => (
                   <AnimatedCard 
                     key={index + 3} 
-                    hoverEffect="glow"
-                    glowColor={theme === 'dark' ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.03)'}
+                    hoverEffect={index % 2 === 0 ? "glow" : "tilt"}
+                    glowColor={theme === 'dark' ? 'rgba(74, 210, 149, 0.15)' : 'rgba(74, 210, 149, 0.2)'}
                     className={cn(
                       "h-full",
                       theme === 'dark' ? 'bg-[#222222] border-[#333333]' : 'bg-white border-gray-200'
                     )}
                   >
-                    <CardContent className="p-6">
+                    <div className="p-5">
                       <p className={cn(
-                        "text-sm italic",
+                        "text-sm",
                         theme === 'dark' ? 'text-white' : 'text-gray-800'
                       )}>
-                        {headache.quote} <span className="block mt-2 font-bold not-italic">{headache.title}</span>
+                        <span className="italic">{headache.quote}</span> <span className="block mt-2 font-bold not-italic">{headache.title}</span>
                       </p>
-                    </CardContent>
+                    </div>
                   </AnimatedCard>
                 ))}
               </div>

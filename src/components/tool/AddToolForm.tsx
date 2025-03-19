@@ -89,6 +89,19 @@ const AddToolForm = () => {
     }
   }
 
+  // Dynamic input text and background colors based on theme
+  const inputStyles = cn(
+    theme === 'dark' 
+      ? 'bg-[#333333] text-white border-neutral-600 placeholder-gray-400 focus:border-neutral-500' 
+      : 'bg-white text-neutral-800 border-neutral-300 placeholder-gray-500 focus:border-neutral-400'
+  );
+  
+  const textareaStyles = cn(
+    theme === 'dark' 
+      ? 'bg-[#333333] text-white border-neutral-600 placeholder-gray-400 focus:border-neutral-500' 
+      : 'bg-white text-neutral-800 border-neutral-300 placeholder-gray-500 focus:border-neutral-400'
+  );
+
   return (
     <div className={cn("p-6 rounded-lg border", theme === 'dark' ? 'bg-[#222222] border-neutral-700' : 'bg-white border-neutral-200 shadow-sm')}>
       <Form {...form}>
@@ -101,7 +114,7 @@ const AddToolForm = () => {
                 <FormItem>
                   <FormLabel>tool name</FormLabel>
                   <FormControl>
-                    <Input placeholder="e.g. chatgpt" {...field} />
+                    <Input placeholder="e.g. chatgpt" {...field} className={inputStyles} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -115,7 +128,7 @@ const AddToolForm = () => {
                 <FormItem>
                   <FormLabel>website url</FormLabel>
                   <FormControl>
-                    <Input placeholder="https://example.com" {...field} />
+                    <Input placeholder="https://example.com" {...field} className={inputStyles} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -132,7 +145,7 @@ const AddToolForm = () => {
                 <FormControl>
                   <Textarea 
                     placeholder="please describe how you use this tool and what problem it solves for you"
-                    className="min-h-32"
+                    className={cn("min-h-32", textareaStyles)}
                     {...field} 
                   />
                 </FormControl>

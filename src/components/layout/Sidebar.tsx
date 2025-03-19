@@ -96,11 +96,11 @@ const Sidebar = ({ collapsed = false }: SidebarProps) => {
           <ul className="space-y-1 px-2">
             <li>
               <Link
-                to="/start-from-zero"
+                to="/"
                 className={cn(
                   "flex items-center rounded-md px-3 py-2",
                   theme === 'dark' ? 'hover:bg-[#222222]' : 'hover:bg-neutral-100',
-                  isActive('/start-from-zero') ? (theme === 'dark' ? 'bg-[#222222]' : 'bg-neutral-100') : ''
+                  isActive('/') ? (theme === 'dark' ? 'bg-[#222222]' : 'bg-neutral-100') : ''
                 )}
               >
                 <Zap className="h-5 w-5 mr-2 flex-shrink-0" />
@@ -109,11 +109,11 @@ const Sidebar = ({ collapsed = false }: SidebarProps) => {
             </li>
             <li>
               <Link
-                to="/"
+                to="/database"
                 className={cn(
                   "flex items-center rounded-md px-3 py-2",
                   theme === 'dark' ? 'hover:bg-[#222222]' : 'hover:bg-neutral-100',
-                  isActive('/') ? (theme === 'dark' ? 'bg-[#222222]' : 'bg-neutral-100') : ''
+                  isActive('/database') ? (theme === 'dark' ? 'bg-[#222222]' : 'bg-neutral-100') : ''
                 )}
               >
                 <Database className="h-5 w-5 mr-2 flex-shrink-0" />

@@ -8,7 +8,6 @@ import ChallengeInput from '@/components/business/ChallengeInput';
 import BusinessHeadacheGrid from '@/components/business/BusinessHeadacheGrid';
 import EmailDialog from '@/components/business/EmailDialog';
 import LimitedAvailabilityBanner from '@/components/ui/limited-availability-banner';
-import EmailSubscription from '@/components/layout/EmailSubscription';
 
 const StartFromZeroPage = () => {
   const { theme } = useTheme();
@@ -73,9 +72,6 @@ const StartFromZeroPage = () => {
             <div className="mt-24 mb-auto">
               <BusinessHeadacheGrid headaches={businessHeadaches} />
             </div>
-            
-            {/* Remove the className prop since EmailSubscription component doesn't accept it */}
-            <EmailSubscription />
           </div>
           
           <Footer />

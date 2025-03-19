@@ -1,16 +1,18 @@
+
 import { motion } from 'framer-motion';
 import { pageTransition } from '@/utils/animations';
 import { useTheme } from '@/hooks/use-theme';
 import { cn } from '@/lib/utils';
 import Sidebar from '@/components/layout/Sidebar';
 import Footer from '@/components/layout/Footer';
-import { useState } from 'react';
 import { Separator } from '@/components/ui/separator';
+
 const ManifestoPage = () => {
   const {
     theme
   } = useTheme();
   const isDarkMode = theme === 'dark';
+  
   return <div className={cn("min-h-screen flex", isDarkMode ? 'bg-[#111111] text-white' : 'bg-white text-black')}>
       <Sidebar />
       <main className="flex-grow pl-16 md:pl-64 pt-0">
@@ -21,7 +23,10 @@ const ManifestoPage = () => {
             <h2 className="font-medium text-xl md:text-2xl mb-6">pons, connecting the dots to bridge the ai adoption gap in europe</h2>
             
             <section className="mb-10">
-              <h3 className="font-medium text-lg md:text-xl mb-4">pons - latin for bridge - is an open-source project to bridge the gap between the overcrowded ai market and european small businesses, the ones that can truly benefit from the ai revolution.</h3>
+              <h3 className="font-medium text-lg md:text-xl mb-4">the ai adoption gap (why)</h3>
+              <p className={cn("mb-4 leading-relaxed", isDarkMode ? 'text-neutral-300' : 'text-neutral-700')}>
+                pons - latin for bridge - is an open-source project to bridge the gap between the overcrowded ai market and european small businesses, the ones that can truly benefit from the ai revolution.
+              </p>
               <p className={cn("mb-4 leading-relaxed", isDarkMode ? 'text-neutral-300' : 'text-neutral-700')}>
                 the fast pace and directionless innovation coming from silicon valley creates an adoption gap between 
                 the state of the art ai solutions that are being developed and what smbs are actually adopting in europe. 
@@ -55,4 +60,5 @@ const ManifestoPage = () => {
       </main>
     </div>;
 };
+
 export default ManifestoPage;

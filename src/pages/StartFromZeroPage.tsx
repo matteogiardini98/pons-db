@@ -53,8 +53,8 @@ const StartFromZeroPage = () => {
           "flex-1 overflow-auto md:ml-16 md:ml-64 transition-all duration-300",
           theme === 'dark' ? 'bg-[#111111]' : 'bg-gray-50'
         )}>
-          <div className="container-tight max-w-6xl mx-auto px-4 py-8 flex flex-col h-full">
-            <div className="space-y-6 mb-6 pt-10">
+          <div className="container-tight max-w-5xl mx-auto px-4 py-16 flex flex-col min-h-screen">
+            <div className="space-y-10 mb-16 pt-8 max-w-3xl mx-auto">
               <h1 className={cn(
                 "text-2xl md:text-3xl lg:text-4xl font-medium leading-normal text-center",
                 theme === 'dark' ? 'text-white' : 'text-black'
@@ -62,13 +62,17 @@ const StartFromZeroPage = () => {
                 For all <span className="text-emerald-500">entrepreneurs</span> and <span className="text-emerald-500">operators</span> out there, tell us your business <span className="text-emerald-500">challenges</span> and we'll help you find the right AI tools.
               </h1>
               
-              <ChallengeInput 
-                onSubmit={handleChallengeSubmit} 
-                isSubmitting={isSubmitting}
-              />
+              <div className="max-w-2xl mx-auto pt-6">
+                <ChallengeInput 
+                  onSubmit={handleChallengeSubmit} 
+                  isSubmitting={isSubmitting}
+                />
+              </div>
             </div>
             
-            <BusinessHeadacheGrid headaches={businessHeadaches} />
+            <div className="mt-12 mb-auto">
+              <BusinessHeadacheGrid headaches={businessHeadaches} />
+            </div>
           </div>
         </div>
       </div>

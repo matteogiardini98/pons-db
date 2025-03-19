@@ -15,7 +15,7 @@ export const LimitedAvailabilityBanner = ({
   return (
     <div 
       className={cn(
-        "fixed top-4 left-1/2 transform -translate-x-1/2 z-50 px-4 py-1.5 text-xs rounded-full font-medium shadow-sm",
+        "fixed top-6 left-1/2 transform -translate-x-1/2 z-50 px-4 py-1.5 text-xs rounded-full font-medium shadow-sm",
         theme === 'dark' 
           ? 'bg-emerald-900/60 text-emerald-100 border border-emerald-800/70 backdrop-blur-sm' 
           : 'bg-emerald-100/90 text-emerald-800 border border-emerald-200/80 backdrop-blur-sm'

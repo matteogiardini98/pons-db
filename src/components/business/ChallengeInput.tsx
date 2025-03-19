@@ -32,8 +32,8 @@ const ChallengeInput = ({ onSubmit, isSubmitting = false }: ChallengeInputProps)
   };
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-4 max-w-2xl mx-auto">
-      <div className="flex items-center gap-2">
+    <form onSubmit={handleSubmit} className="space-y-4 w-full">
+      <div className="flex items-center gap-3">
         <Input
           id="challenge"
           placeholder="Describe your business challenge"
@@ -49,7 +49,7 @@ const ChallengeInput = ({ onSubmit, isSubmitting = false }: ChallengeInputProps)
           variant="cta"
           disabled={isSubmitting}
           size="sm"
-          className="rounded-full p-2 h-10 w-10"
+          className="rounded-full p-2 h-10 w-10 flex-shrink-0"
         >
           <ArrowRight size={16} />
         </Button>

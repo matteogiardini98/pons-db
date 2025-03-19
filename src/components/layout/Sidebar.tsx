@@ -3,7 +3,7 @@ import { Link, useLocation } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import { cn } from '@/lib/utils';
 import { useTheme } from '@/hooks/use-theme';
-import { Database, PlusCircle, FileText, PanelLeftClose, PanelLeft, Sun, Moon } from 'lucide-react';
+import { Database, PlusCircle, FileText, PanelLeftClose, PanelLeft, Sun, Moon, Zap } from 'lucide-react';
 import EmailSubscription from './EmailSubscription';
 import BetaBanner from '@/components/ui/beta-banner';
 
@@ -105,6 +105,19 @@ const Sidebar = ({ collapsed = false }: SidebarProps) => {
               >
                 <Database className="h-5 w-5 mr-2 flex-shrink-0" />
                 <span className={cn(isCollapsed ? "hidden" : "hidden md:block")}>database</span>
+              </Link>
+            </li>
+            <li>
+              <Link
+                to="/start-from-zero"
+                className={cn(
+                  "flex items-center rounded-md px-3 py-2",
+                  theme === 'dark' ? 'hover:bg-[#222222]' : 'hover:bg-neutral-100',
+                  isActive('/start-from-zero') ? (theme === 'dark' ? 'bg-[#222222]' : 'bg-neutral-100') : ''
+                )}
+              >
+                <Zap className="h-5 w-5 mr-2 flex-shrink-0" />
+                <span className={cn(isCollapsed ? "hidden" : "hidden md:block")}>start from 0</span>
               </Link>
             </li>
             <li>

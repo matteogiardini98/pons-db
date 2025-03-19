@@ -3,15 +3,18 @@ import React, { useState } from 'react';
 import { useTheme } from '@/hooks/use-theme';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Label } from '@/components/ui/label';
 import { toast } from '@/hooks/use-toast';
 import { supabase } from '@/integrations/supabase/client';
-import { Send } from 'lucide-react';
+import { Send, Zap } from 'lucide-react';
 import { cn } from '@/lib/utils';
-import Navbar from '@/components/layout/Navbar';
+import Sidebar from '@/components/layout/Sidebar';
 
 const StartFromZeroPage = () => {
   const { theme } = useTheme();
   const [email, setEmail] = useState('');
+  const [challenge, setChallenge] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -19,8 +22,8 @@ const StartFromZeroPage = () => {
     
     if (!email.trim()) {
       toast({
-        title: "email required",
-        description: "please enter your email address",
+        title: "Email required",
+        description: "Please enter your email address",
         variant: "destructive"
       });
       return;
@@ -30,8 +33,8 @@ const StartFromZeroPage = () => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(email)) {
       toast({
-        title: "invalid email",
-        description: "please enter a valid email address",
+        title: "Invalid email",
+        description: "Please enter a valid email address",
         variant: "destructive"
       });
       return;
@@ -42,21 +45,25 @@ const StartFromZeroPage = () => {
     try {
       const { error } = await supabase
         .from('ent_input')
-        .insert([{ email }]);
+        .insert([{ 
+          email,
+          challenge: challenge.trim() ? challenge : undefined
+        }]);
 
       if (error) throw error;
 
       toast({
-        title: "thanks for your submission!",
-        description: "we'll find the right AI tools for your business challenges and get back to you soon.",
+        title: "Thanks for your submission!",
+        description: "We'll find the right AI tools for your business challenges and get back to you soon.",
       });
       
       setEmail('');
+      setChallenge('');
     } catch (error: any) {
       console.error('Error submitting email:', error);
       toast({
-        title: "submission failed",
-        description: error.message || "there was an error submitting your email. please try again.",
+        title: "Submission failed",
+        description: error.message || "There was an error submitting your information. Please try again.",
         variant: "destructive"
       });
     } finally {
@@ -65,38 +72,73 @@ const StartFromZeroPage = () => {
   };
 
   return (
-    <>
-      <Navbar />
-      <div className="flex min-h-screen items-center justify-center">
-        <div className="container-tight max-w-2xl mx-auto px-4 text-center">
-          <h1 className="text-3xl md:text-4xl font-medium mb-6">
-            For all entrepreneurs and operators out there, tell us your business challenges and we get back to you with the best AI tool that solves your problem
-          </h1>
-          
-          <form onSubmit={handleSubmit} className="mt-8 flex gap-2 max-w-md mx-auto">
-            <Input 
-              type="email"
-              placeholder="your@email.com"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              className={cn(
-                "flex-grow",
-                theme === 'dark' ? 'bg-neutral-800' : 'bg-gray-50'
-              )}
-              disabled={isSubmitting}
-            />
-            <Button 
-              type="submit" 
-              className="bg-emerald-600 hover:bg-emerald-500 aspect-square p-0 h-10 w-10"
-              disabled={isSubmitting}
-              aria-label="Submit email"
-            >
-              <Send size={18} />
-            </Button>
-          </form>
+    <div className="flex h-screen">
+      <Sidebar />
+      <div className={cn(
+        "flex-1 overflow-auto pt-16 md:ml-16 md:ml-64 transition-all duration-300",
+        theme === 'dark' ? 'bg-[#111111]' : 'bg-gray-50'
+      )}>
+        <div className="container-tight max-w-3xl mx-auto px-4 py-12">
+          <Card className={cn(
+            "border-0 shadow-lg",
+            theme === 'dark' ? 'bg-[#191919] text-white' : 'bg-white'
+          )}>
+            <CardHeader className="space-y-1 pb-2">
+              <div className="flex items-center gap-2 mb-2">
+                <Zap className="h-5 w-5 text-emerald-500" />
+                <CardTitle className="text-xl font-medium">Start From Zero</CardTitle>
+              </div>
+              <CardDescription className="text-xl md:text-2xl font-medium leading-normal">
+                For all entrepreneurs and operators out there, tell us your business challenges and we'll help you find the right AI tools.
+              </CardDescription>
+            </CardHeader>
+            <CardContent className="pt-4">
+              <form onSubmit={handleSubmit} className="space-y-4">
+                <div className="space-y-2">
+                  <Label htmlFor="challenge">What business challenge are you facing?</Label>
+                  <Input
+                    id="challenge"
+                    placeholder="Describe your business challenge (optional)"
+                    value={challenge}
+                    onChange={(e) => setChallenge(e.target.value)}
+                    className={cn(
+                      theme === 'dark' ? 'bg-[#222222] border-[#333333]' : 'bg-white'
+                    )}
+                  />
+                </div>
+                
+                <div className="space-y-2">
+                  <Label htmlFor="email">Your email</Label>
+                  <div className="flex gap-2">
+                    <Input 
+                      id="email"
+                      type="email"
+                      placeholder="your@email.com"
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
+                      className={cn(
+                        "flex-grow",
+                        theme === 'dark' ? 'bg-[#222222] border-[#333333]' : 'bg-white'
+                      )}
+                      disabled={isSubmitting}
+                    />
+                    <Button 
+                      type="submit" 
+                      variant="cta"
+                      disabled={isSubmitting}
+                      className="gap-1"
+                    >
+                      <Send size={16} />
+                      <span className="hidden sm:inline">Submit</span>
+                    </Button>
+                  </div>
+                </div>
+              </form>
+            </CardContent>
+          </Card>
         </div>
       </div>
-    </>
+    </div>
   );
 };
 

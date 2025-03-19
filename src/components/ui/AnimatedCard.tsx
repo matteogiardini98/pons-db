@@ -1,6 +1,7 @@
 
 import { useRef, useEffect, useState } from 'react';
 import { cn } from '@/lib/utils';
+import { motion } from 'framer-motion';
 
 interface AnimatedCardProps {
   children: React.ReactNode;
@@ -86,8 +87,16 @@ const AnimatedCard = ({
     }
   };
 
+  // Initial animation for when card enters viewport
+  const initialAnimation = {
+    initial: { opacity: 0, y: 10 },
+    animate: { opacity: 1, y: 0 },
+    transition: { duration: 0.3, ease: "easeOut" }
+  };
+
   return (
-    <div
+    <motion.div
+      {...initialAnimation}
       ref={cardRef}
       className={cn(
         'relative overflow-hidden rounded-lg border shadow-sm',
@@ -120,7 +129,7 @@ const AnimatedCard = ({
       <div className="relative z-10">
         {children}
       </div>
-    </div>
+    </motion.div>
   );
 };
 

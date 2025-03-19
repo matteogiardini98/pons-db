@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { useTheme } from '@/hooks/use-theme';
 import { Input } from '@/components/ui/input';
@@ -16,6 +17,7 @@ import {
 } from '@/components/ui/dialog';
 import { Checkbox } from "@/components/ui/checkbox";
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
+import { Link } from 'react-router-dom';
 
 const StartFromZeroPage = () => {
   const { theme } = useTheme();
@@ -25,26 +27,27 @@ const StartFromZeroPage = () => {
   const [showEmailDialog, setShowEmailDialog] = useState(false);
   const [consentChecked, setConsentChecked] = useState(false);
 
+  // Updated business headaches with shorter descriptions
   const businessHeadaches = [
     {
       title: "Sales – Head of Sales in Tech Startup",
-      description: "Our CRM is overloaded with leads, yet our team spends too much time on prospects that don't convert. We need a smarter lead prioritization process to focus on opportunities that drive revenue growth."
+      description: "Too much time spent on non-converting leads. Need smarter lead prioritization to focus on revenue-driving opportunities."
     },
     {
       title: "Finance – CFO in Manufacturing Firm",
-      description: "Our finance team is bogged down with manual reconciliation and data entry, delaying critical financial reports. We need a streamlined process to ensure timely, accurate reporting."
+      description: "Manual reconciliation delays reports. Need streamlined processes for timely, accurate financial reporting."
     },
     {
       title: "Supply Chain – Supply Chain Manager in Retail",
-      description: "Inventory is a constant challenge—overstock in some areas and shortages in others cause lost sales and higher costs. We need a reliable system to forecast demand and optimize stock levels."
+      description: "Constant inventory imbalance creates lost sales and higher costs. Need better demand forecasting system."
     },
     {
       title: "Operations – Head of Operations in Retail Chain",
-      description: "Our scheduling system is inefficient, resulting in overworked staff during peak periods and coverage gaps during off-hours. We need a more effective resource planning approach to optimize shift allocation."
+      description: "Inefficient scheduling creates staff overwork and coverage gaps. Need optimal resource planning for shifts."
     },
     {
       title: "Marketing – CMO in E-commerce Company",
-      description: "Our digital marketing campaigns often fall short due to unclear customer insights, leading to wasted spend and low engagement. We need better tools to analyze performance and quickly adjust our strategy."
+      description: "Campaigns underperform due to poor customer insights. Need better analysis tools to adjust strategy quickly."
     }
   ];
 
@@ -141,108 +144,190 @@ const StartFromZeroPage = () => {
   };
 
   return (
-    <div className="flex h-screen">
-      <Sidebar />
-      <div className={cn(
-        "flex-1 overflow-auto pt-16 md:ml-16 md:ml-64 transition-all duration-300",
-        theme === 'dark' ? 'bg-[#111111]' : 'bg-gray-50'
-      )}>
-        <div className="container-tight max-w-4xl mx-auto px-4 py-8 flex flex-col h-full">
-          <div className="space-y-6 mb-12">
-            <h1 className={cn(
-              "text-2xl md:text-3xl lg:text-4xl font-medium leading-normal text-center",
-              theme === 'dark' ? 'text-white' : 'text-black'
-            )}>
-              For all <span className="text-emerald-500">entrepreneurs</span> and <span className="text-emerald-500">operators</span> out there, tell us your business <span className="text-emerald-500">challenges</span> and we'll help you find the right AI tools.
-            </h1>
-            
-            <form onSubmit={handleChallengeSubmit} className="space-y-4 max-w-2xl mx-auto">
-              <div className="flex items-center gap-2">
-                <Input
-                  id="challenge"
-                  placeholder="Describe your business challenge"
-                  value={challenge}
-                  onChange={(e) => setChallenge(e.target.value)}
-                  className={cn(
-                    "bg-opacity-10 border-opacity-20 py-6",
-                    theme === 'dark' ? 'bg-[#222222] border-[#333333]' : 'bg-white/10 border-white/20'
-                  )}
-                />
-                <Button 
-                  type="submit" 
-                  variant="cta"
-                  disabled={isSubmitting}
-                  size="sm"
-                  className="rounded-full p-2 h-10 w-10"
-                >
-                  <ArrowRight size={16} />
-                </Button>
-              </div>
-            </form>
-          </div>
-          
-          <div className="mt-8 mb-8">
-            <h2 className={cn(
-              "text-xl md:text-2xl font-medium mb-6 text-center",
-              theme === 'dark' ? 'text-white' : 'text-black'
-            )}>
-              Common Business Headaches
-            </h2>
-            
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8">
-              {businessHeadaches.slice(0, 3).map((headache, index) => (
-                <Card key={index} className={cn(
-                  "border shadow-sm h-full",
-                  theme === 'dark' ? 'bg-[#222222] border-[#333333]' : 'bg-white border-gray-200'
-                )}>
-                  <CardHeader className="pb-2">
-                    <CardTitle className={cn(
-                      "text-lg font-bold",
-                      theme === 'dark' ? 'text-white' : 'text-white'
-                    )}>
-                      {formatCardTitle(headache.title)}
-                    </CardTitle>
-                  </CardHeader>
-                  <CardContent>
-                    <p className={cn(
-                      "text-sm",
-                      theme === 'dark' ? 'text-neutral-300' : 'text-neutral-700'
-                    )}>
-                      {headache.description}
-                    </p>
-                  </CardContent>
-                </Card>
-              ))}
+    <div className="flex min-h-screen flex-col">
+      <div className="flex flex-grow">
+        <Sidebar />
+        <div className={cn(
+          "flex-1 overflow-auto pt-16 md:ml-16 md:ml-64 transition-all duration-300",
+          theme === 'dark' ? 'bg-[#111111]' : 'bg-gray-50'
+        )}>
+          <div className="container-tight max-w-5xl mx-auto px-4 py-8 flex flex-col h-full">
+            <div className="space-y-6 mb-12">
+              <h1 className={cn(
+                "text-2xl md:text-3xl lg:text-4xl font-medium leading-normal text-center",
+                theme === 'dark' ? 'text-white' : 'text-black'
+              )}>
+                For all <span className="text-emerald-500">entrepreneurs</span> and <span className="text-emerald-500">operators</span> out there, tell us your business <span className="text-emerald-500">challenges</span> and we'll help you find the right AI tools.
+              </h1>
+              
+              <form onSubmit={handleChallengeSubmit} className="space-y-4 max-w-2xl mx-auto">
+                <div className="flex items-center gap-2">
+                  <Input
+                    id="challenge"
+                    placeholder="Describe your business challenge"
+                    value={challenge}
+                    onChange={(e) => setChallenge(e.target.value)}
+                    className={cn(
+                      "bg-opacity-10 border-opacity-20 py-6",
+                      theme === 'dark' ? 'bg-[#222222] border-[#333333]' : 'bg-white/10 border-white/20'
+                    )}
+                  />
+                  <Button 
+                    type="submit" 
+                    variant="cta"
+                    disabled={isSubmitting}
+                    size="sm"
+                    className="rounded-full p-2 h-10 w-10"
+                  >
+                    <ArrowRight size={16} />
+                  </Button>
+                </div>
+              </form>
             </div>
             
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8 mt-6 md:mt-8 md:px-16">
-              {businessHeadaches.slice(3, 5).map((headache, index) => (
-                <Card key={index + 3} className={cn(
-                  "border shadow-sm h-full",
-                  theme === 'dark' ? 'bg-[#222222] border-[#333333]' : 'bg-white border-gray-200'
-                )}>
-                  <CardHeader className="pb-2">
-                    <CardTitle className={cn(
-                      "text-lg font-bold",
-                      theme === 'dark' ? 'text-white' : 'text-white'
-                    )}>
-                      {formatCardTitle(headache.title)}
-                    </CardTitle>
-                  </CardHeader>
-                  <CardContent>
-                    <p className={cn(
-                      "text-sm",
-                      theme === 'dark' ? 'text-neutral-300' : 'text-neutral-700'
-                    )}>
-                      {headache.description}
-                    </p>
-                  </CardContent>
-                </Card>
-              ))}
+            <div className="mt-8 mb-16">
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-12">
+                {businessHeadaches.slice(0, 3).map((headache, index) => (
+                  <Card key={index} className={cn(
+                    "border shadow-sm h-full",
+                    theme === 'dark' ? 'bg-[#222222] border-[#333333]' : 'bg-white border-gray-200'
+                  )}>
+                    <CardHeader className="pb-2">
+                      <CardTitle className={cn(
+                        "text-lg font-bold",
+                        theme === 'dark' ? 'text-white' : 'text-white'
+                      )}>
+                        {formatCardTitle(headache.title)}
+                      </CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                      <p className={cn(
+                        "text-sm",
+                        theme === 'dark' ? 'text-neutral-300' : 'text-neutral-700'
+                      )}>
+                        {headache.description}
+                      </p>
+                    </CardContent>
+                  </Card>
+                ))}
+              </div>
+              
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12 mt-8 md:mt-12 md:px-24">
+                {businessHeadaches.slice(3, 5).map((headache, index) => (
+                  <Card key={index + 3} className={cn(
+                    "border shadow-sm h-full",
+                    theme === 'dark' ? 'bg-[#222222] border-[#333333]' : 'bg-white border-gray-200'
+                  )}>
+                    <CardHeader className="pb-2">
+                      <CardTitle className={cn(
+                        "text-lg font-bold",
+                        theme === 'dark' ? 'text-white' : 'text-white'
+                      )}>
+                        {formatCardTitle(headache.title)}
+                      </CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                      <p className={cn(
+                        "text-sm",
+                        theme === 'dark' ? 'text-neutral-300' : 'text-neutral-700'
+                      )}>
+                        {headache.description}
+                      </p>
+                    </CardContent>
+                  </Card>
+                ))}
+              </div>
             </div>
           </div>
         </div>
       </div>
+      
+      {/* Footer Section */}
+      <footer className={cn(
+        "py-12 border-t",
+        theme === 'dark' ? 'bg-black border-[#222222] text-white' : 'bg-black border-gray-800 text-white'
+      )}>
+        <div className="container-tight mx-auto px-4">
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-10">
+            <div className="space-y-4">
+              <h4 className="text-base font-semibold">pons database</h4>
+              <p className="text-sm text-gray-400">pons is an open-source database of ai solutions to help companies find the right tools for their business problems.</p>
+            </div>
+            
+            <div className="space-y-4">
+              <h4 className="text-base font-semibold">navigation</h4>
+              <ul className="space-y-3">
+                <li>
+                  <Link to="/database" className="text-sm text-gray-400 hover:text-white transition-colors link-underline">
+                    database
+                  </Link>
+                </li>
+                <li>
+                  <Link to="/add-tool" className="text-sm text-gray-400 hover:text-white transition-colors link-underline">
+                    add a tool
+                  </Link>
+                </li>
+                <li>
+                  <Link to="/manifesto" className="text-sm text-gray-400 hover:text-white transition-colors link-underline">
+                    manifesto
+                  </Link>
+                </li>
+              </ul>
+            </div>
+            
+            <div className="space-y-4">
+              <h4 className="text-base font-semibold">about</h4>
+              <ul className="space-y-3">
+                <li>
+                  <Link to="/manifesto" className="text-sm text-gray-400 hover:text-white transition-colors link-underline">
+                    manifesto
+                  </Link>
+                </li>
+                <li>
+                  <Link to="#" className="text-sm text-gray-400 hover:text-white transition-colors link-underline">
+                    changelog
+                  </Link>
+                </li>
+                <li>
+                  <Link to="#" className="text-sm text-gray-400 hover:text-white transition-colors link-underline">
+                    roadmap
+                  </Link>
+                </li>
+              </ul>
+            </div>
+            
+            <div className="space-y-4">
+              <h4 className="text-base font-semibold">contact</h4>
+              <ul className="space-y-3">
+                <li>
+                  <a href="https://github.com" target="_blank" rel="noreferrer" className="text-sm text-gray-400 hover:text-white transition-colors link-underline">
+                    github
+                  </a>
+                </li>
+                <li>
+                  <a href="mailto:info@aisolutionsdatabase.com" className="text-sm text-gray-400 hover:text-white transition-colors link-underline">
+                    contact us
+                  </a>
+                </li>
+                <li>
+                  <a href="#" className="text-sm text-gray-400 hover:text-white transition-colors link-underline">
+                    newsletter
+                  </a>
+                </li>
+              </ul>
+            </div>
+          </div>
+          
+          <div className="border-t border-gray-800 mt-10 pt-6 flex flex-col md:flex-row justify-between items-center text-sm text-gray-400">
+            <p>© {new Date().getFullYear()} ai solutions database. open-source project.</p>
+            <div className="flex gap-6 mt-4 md:mt-0">
+              <Link to="#" className="hover:text-white transition-colors">privacy</Link>
+              <Link to="#" className="hover:text-white transition-colors">terms</Link>
+              <Link to="#" className="hover:text-white transition-colors">cookie policy</Link>
+            </div>
+          </div>
+        </div>
+      </footer>
 
       <Dialog open={showEmailDialog} onOpenChange={setShowEmailDialog}>
         <DialogContent className={cn(
@@ -307,4 +392,3 @@ const StartFromZeroPage = () => {
 };
 
 export default StartFromZeroPage;
-

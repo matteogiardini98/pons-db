@@ -19,17 +19,17 @@ const BusinessHeadacheCard = ({ quote, title, hoverEffect = 'tilt', index }: Bus
       hoverEffect="tilt"
       glowColor={theme === 'dark' ? 'rgba(74, 210, 149, 0.15)' : 'rgba(74, 210, 149, 0.2)'}
       className={cn(
-        "h-full min-h-[200px]",
+        "h-full",
         theme === 'dark' ? 'bg-[#222222] border-[#333333]' : 'bg-white border-gray-200'
       )}
     >
-      <div className="p-6 h-full flex flex-col">
+      <div className="p-4 h-full flex flex-col">
         <p className={cn(
-          "text-sm h-full flex flex-col",
+          "text-sm flex flex-col",
           theme === 'dark' ? 'text-white' : 'text-gray-800'
         )}>
-          <span className="italic flex-grow">"{quote}"</span> 
-          <span className="block mt-4 font-bold not-italic">{title}</span>
+          <span className="italic">"{quote}"</span> 
+          <span className="block mt-3 font-bold not-italic">{title}</span>
         </p>
       </div>
     </AnimatedCard>

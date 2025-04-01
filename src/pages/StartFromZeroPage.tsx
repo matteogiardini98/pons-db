@@ -9,6 +9,7 @@ import ChallengeInput from '@/components/business/ChallengeInput';
 import BusinessHeadacheGrid from '@/components/business/BusinessHeadacheGrid';
 import EmailDialog from '@/components/business/EmailDialog';
 import LimitedAvailabilityBanner from '@/components/ui/limited-availability-banner';
+import LanguageSwitcher from '@/components/layout/LanguageSwitcher';
 
 const StartFromZeroPage = () => {
   const { theme } = useTheme();
@@ -66,6 +67,11 @@ const StartFromZeroPage = () => {
 
   return (
     <div className="flex min-h-screen flex-col">
+      {/* Add language switcher in a fixed position */}
+      <div className="fixed top-4 right-4 z-50">
+        <LanguageSwitcher />
+      </div>
+      
       <div className="flex-1 flex">
         <Sidebar />
         <div className={cn(

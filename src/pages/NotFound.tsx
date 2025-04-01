@@ -2,7 +2,6 @@
 import { useLocation } from "react-router-dom";
 import { useEffect } from "react";
 import { useLanguage } from '@/hooks/use-language';
-import LanguageSwitcher from '@/components/layout/LanguageSwitcher';
 
 const NotFound = () => {
   const location = useLocation();
@@ -17,10 +16,6 @@ const NotFound = () => {
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-100">
-      {/* Add language switcher in a fixed position */}
-      <div className="fixed top-4 right-4 z-50">
-        <LanguageSwitcher />
-      </div>
       <div className="text-center">
         <h1 className="text-4xl font-bold mb-4">404</h1>
         <p className="text-xl text-gray-600 mb-4">{t('notFound.message')}</p>

@@ -8,7 +8,6 @@ import { cn } from '@/lib/utils';
 import Sidebar from '@/components/layout/Sidebar';
 import Footer from '@/components/layout/Footer';
 import AddToolForm from '@/components/tool/AddToolForm';
-import LanguageSwitcher from '@/components/layout/LanguageSwitcher';
 
 const AddToolPage = () => {
   const { theme } = useTheme();
@@ -25,10 +24,6 @@ const AddToolPage = () => {
       theme === 'dark' ? 'bg-[#111111] text-white' : 'bg-white text-black'
     )}>
       <Sidebar />
-      {/* Add language switcher in a fixed position */}
-      <div className="fixed top-4 right-4 z-50">
-        <LanguageSwitcher />
-      </div>
       <main className="flex-grow pl-16 md:pl-64 pt-0">
         <motion.div className="container-tight p-4 md:p-6 pt-10 max-w-6xl mx-auto" {...pageTransition}>
           <h1 className="text-3xl md:text-4xl font-medium mb-6">{t('addTool.title')}</h1>

@@ -4,7 +4,6 @@ import { Link, useLocation } from 'react-router-dom';
 import { Menu, X } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useLanguage } from '@/hooks/use-language';
-import LanguageSwitcher from './LanguageSwitcher';
 
 const Navbar = () => {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -51,7 +50,7 @@ const Navbar = () => {
 
         {/* Desktop Navigation */}
         <div className="hidden md:flex items-center">
-          <nav className="flex items-center gap-8 mr-4">
+          <nav className="flex items-center gap-8">
             {navLinks.map((link) => (
               <Link
                 key={link.path}
@@ -67,14 +66,10 @@ const Navbar = () => {
               </Link>
             ))}
           </nav>
-          
-          {/* Language Switcher */}
-          <LanguageSwitcher />
         </div>
 
         {/* Mobile Menu Button */}
         <div className="md:hidden flex items-center">
-          <LanguageSwitcher />
           <button 
             onClick={toggleMenu} 
             className="flex items-center justify-center w-10 h-10 rounded-full focus:outline-none hover:bg-secondary transition-colors"

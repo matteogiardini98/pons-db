@@ -2,10 +2,12 @@
 import { ArrowDown } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useEffect, useRef, useState } from 'react';
+import { useLanguage } from '@/hooks/use-language';
 
 const Hero = () => {
   const [isVisible, setIsVisible] = useState(false);
   const heroRef = useRef<HTMLDivElement>(null);
+  const { t } = useLanguage();
 
   useEffect(() => {
     setIsVisible(true);
@@ -38,16 +40,16 @@ const Hero = () => {
       >
         <div className="space-y-2 mb-6">
           <div className="inline-block px-3 py-1 rounded-full bg-secondary text-xs font-medium tracking-wide text-muted-foreground">
-            Open Source Project
+            {t('hero.badge')}
           </div>
         </div>
         
         <h1 className="text-4xl md:text-5xl lg:text-6xl font-display font-medium mb-6 tracking-tight">
-          Find the right AI solution for your business problem
+          {t('hero.title')}
         </h1>
         
         <p className="text-lg md:text-xl mb-10 text-muted-foreground max-w-2xl mx-auto text-pretty">
-          Cutting through the noise to connect European businesses with the AI tools that solve real business challenges.
+          {t('hero.description')}
         </p>
         
         <div className="flex flex-col sm:flex-row gap-4 justify-center">
@@ -56,7 +58,7 @@ const Hero = () => {
             className="rounded-md px-8 py-6 text-base font-medium transition-all duration-200 hover:shadow-lg"
             onClick={() => scrollToContent()}
           >
-            Explore the Database
+            {t('hero.exploreButton')}
           </Button>
           
           <Button 
@@ -64,7 +66,7 @@ const Hero = () => {
             size="lg" 
             className="rounded-md px-8 py-6 text-base font-medium border-2"
           >
-            View Insights
+            {t('hero.insightsButton')}
           </Button>
         </div>
       </div>
@@ -80,7 +82,7 @@ const Hero = () => {
           className="flex flex-col items-center text-muted-foreground hover:text-primary transition-colors"
           aria-label="Scroll down"
         >
-          <span className="text-sm mb-2">Scroll</span>
+          <span className="text-sm mb-2">{t('hero.scrollText')}</span>
           <ArrowDown size={20} className="animate-bounce" />
         </button>
       </div>

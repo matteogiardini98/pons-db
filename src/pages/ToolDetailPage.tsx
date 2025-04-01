@@ -4,6 +4,7 @@ import { motion } from 'framer-motion';
 import { ArrowLeft } from 'lucide-react';
 import { pageTransition } from '@/utils/animations';
 import { useTheme } from '@/hooks/use-theme';
+import { useLanguage } from '@/hooks/use-language';
 import { cn } from '@/lib/utils';
 import Sidebar from '@/components/layout/Sidebar';
 import Footer from '@/components/layout/Footer';
@@ -12,11 +13,13 @@ import useToolDetail from '@/hooks/use-tool-detail';
 import ToolDetailContent from '@/components/tool/ToolDetailContent';
 import ToolDetailSkeleton from '@/components/tool/ToolDetailSkeleton';
 import ToolDetailError from '@/components/tool/ToolDetailError';
+import LanguageSwitcher from '@/components/layout/LanguageSwitcher';
 
 const ToolDetailPage = () => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const { theme } = useTheme();
+  const { t } = useLanguage();
   const isDarkMode = theme === 'dark';
   const { tool, isLoading, error } = useToolDetail(id);
 
@@ -34,6 +37,10 @@ const ToolDetailPage = () => {
       isDarkMode ? 'bg-[#111111] text-white' : 'bg-white text-black'
     )}>
       <Sidebar />
+      {/* Add language switcher in a fixed position */}
+      <div className="fixed top-4 right-4 z-50">
+        <LanguageSwitcher />
+      </div>
       <main className="flex-grow pl-16 md:pl-64 pt-0">
         <motion.div className="container-tight p-4 md:p-6 pt-10" {...pageTransition}>
           <Button 
@@ -46,7 +53,7 @@ const ToolDetailPage = () => {
             onClick={() => navigate('/')}
           >
             <ArrowLeft className="mr-2 h-4 w-4" />
-            back to database
+            {t('toolDetail.backToDatabase')}
           </Button>
           
           <ToolDetailContent tool={tool} />

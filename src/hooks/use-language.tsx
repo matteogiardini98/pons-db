@@ -31,7 +31,7 @@ export const translations = {
     'startZero.challenges': 'challenges',
 
     // Footer
-    'footer.about': 'pons is an open-source database of ai solutions to help companies find the right tools for their business problems.',
+    'footer.description': 'pons is an open-source database of ai solutions to help companies find the right tools for their business problems.',
     'footer.navigation': 'navigation',
     'footer.about': 'about',
     'footer.contact': 'contact',
@@ -63,7 +63,7 @@ export const translations = {
     'startZero.challenges': 'sfide',
 
     // Footer
-    'footer.about': 'pons è un database open-source di soluzioni AI per aiutare le aziende a trovare gli strumenti giusti per i loro problemi aziendali.',
+    'footer.description': 'pons è un database open-source di soluzioni AI per aiutare le aziende a trovare gli strumenti giusti per i loro problemi aziendali.',
     'footer.navigation': 'navigazione',
     'footer.about': 'chi siamo',
     'footer.contact': 'contatti',

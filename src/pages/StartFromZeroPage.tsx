@@ -45,6 +45,25 @@ const StartFromZeroPage = () => {
     setShowEmailDialog(true);
   };
 
+  // Helper function to render title with highlighted words
+  const renderTitle = () => {
+    const title = t('startZero.title');
+    const entrepreneurs = t('startZero.entrepreneurs');
+    const operators = t('startZero.operators');
+    const challenges = t('startZero.challenges');
+    
+    // Replace entrepreneurs with highlighted version
+    let result = title.split(entrepreneurs).join(`<span class="text-emerald-500">${entrepreneurs}</span>`);
+    
+    // Replace operators with highlighted version
+    result = result.split(operators).join(`<span class="text-emerald-500">${operators}</span>`);
+    
+    // Replace challenges with highlighted version
+    result = result.split(challenges).join(`<span class="text-emerald-500">${challenges}</span>`);
+    
+    return { __html: result };
+  };
+
   return (
     <div className="flex min-h-screen flex-col">
       <div className="flex-1 flex">
@@ -56,31 +75,13 @@ const StartFromZeroPage = () => {
           <div className="container-tight max-w-5xl mx-auto px-4 py-16 flex flex-col min-h-screen">
             <div className="space-y-10 mb-20 mt-8 max-w-3xl mx-auto">
               <LimitedAvailabilityBanner />
-              <h1 className={cn(
-                "text-2xl md:text-3xl lg:text-4xl font-medium leading-normal text-center",
-                theme === 'dark' ? 'text-white' : 'text-black'
-              )}>
-                {t('startZero.title').split(t('startZero.entrepreneurs')).map((part, i, arr) => (
-                  <React.Fragment key={i}>
-                    {part}
-                    {i < arr.length - 1 && <span className="text-emerald-500">{t('startZero.entrepreneurs')}</span>}
-                  </React.Fragment>
-                )).map((part, i) => typeof part === 'string' ? 
-                  part.split(t('startZero.operators')).map((subPart, j, subArr) => (
-                    <React.Fragment key={`${i}-${j}`}>
-                      {subPart}
-                      {j < subArr.length - 1 && <span className="text-emerald-500">{t('startZero.operators')}</span>}
-                    </React.Fragment>
-                  )) : part
-                ).map((part, i) => typeof part === 'string' ? 
-                  part.split(t('startZero.challenges')).map((subPart, j, subArr) => (
-                    <React.Fragment key={`${i}-${j}`}>
-                      {subPart}
-                      {j < subArr.length - 1 && <span className="text-emerald-500">{t('startZero.challenges')}</span>}
-                    </React.Fragment>
-                  )) : part
+              <h1 
+                className={cn(
+                  "text-2xl md:text-3xl lg:text-4xl font-medium leading-normal text-center",
+                  theme === 'dark' ? 'text-white' : 'text-black'
                 )}
-              </h1>
+                dangerouslySetInnerHTML={renderTitle()}
+              />
               
               <div className="max-w-2xl mx-auto pt-6">
                 <ChallengeInput 

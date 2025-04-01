@@ -1,6 +1,7 @@
 
 import React, { useState } from 'react';
 import { useTheme } from '@/hooks/use-theme';
+import { useLanguage } from '@/hooks/use-language';
 import { cn } from '@/lib/utils';
 import Sidebar from '@/components/layout/Sidebar';
 import Footer from '@/components/layout/Footer';
@@ -11,6 +12,7 @@ import LimitedAvailabilityBanner from '@/components/ui/limited-availability-bann
 
 const StartFromZeroPage = () => {
   const { theme } = useTheme();
+  const { t } = useLanguage();
   const [challenge, setChallenge] = useState('');
   const [showEmailDialog, setShowEmailDialog] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -58,7 +60,26 @@ const StartFromZeroPage = () => {
                 "text-2xl md:text-3xl lg:text-4xl font-medium leading-normal text-center",
                 theme === 'dark' ? 'text-white' : 'text-black'
               )}>
-                For all <span className="text-emerald-500">entrepreneurs</span> and <span className="text-emerald-500">operators</span> out there, tell us your business <span className="text-emerald-500">challenges</span> and we'll help you find the right AI tools.
+                {t('startZero.title').split(t('startZero.entrepreneurs')).map((part, i, arr) => (
+                  <React.Fragment key={i}>
+                    {part}
+                    {i < arr.length - 1 && <span className="text-emerald-500">{t('startZero.entrepreneurs')}</span>}
+                  </React.Fragment>
+                )).map((part, i) => typeof part === 'string' ? 
+                  part.split(t('startZero.operators')).map((subPart, j, subArr) => (
+                    <React.Fragment key={`${i}-${j}`}>
+                      {subPart}
+                      {j < subArr.length - 1 && <span className="text-emerald-500">{t('startZero.operators')}</span>}
+                    </React.Fragment>
+                  )) : part
+                ).map((part, i) => typeof part === 'string' ? 
+                  part.split(t('startZero.challenges')).map((subPart, j, subArr) => (
+                    <React.Fragment key={`${i}-${j}`}>
+                      {subPart}
+                      {j < subArr.length - 1 && <span className="text-emerald-500">{t('startZero.challenges')}</span>}
+                    </React.Fragment>
+                  )) : part
+                )}
               </h1>
               
               <div className="max-w-2xl mx-auto pt-6">

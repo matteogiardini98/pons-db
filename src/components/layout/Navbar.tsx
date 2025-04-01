@@ -3,11 +3,14 @@ import { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { Menu, X } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { useLanguage } from '@/hooks/use-language';
+import LanguageSwitcher from './LanguageSwitcher';
 
 const Navbar = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const location = useLocation();
+  const { t } = useLanguage();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -27,11 +30,11 @@ const Navbar = () => {
   const isActive = (path: string) => location.pathname === path;
 
   const navLinks = [
-    { name: 'start from 0', path: '/' },
-    { name: 'database', path: '/database' },
-    { name: 'dashboard', path: '/dashboard' },
-    { name: 'add tool', path: '/add-tool' },
-    { name: 'manifesto', path: '/manifesto' },
+    { name: t('nav.start'), path: '/' },
+    { name: t('nav.database'), path: '/database' },
+    { name: t('nav.dashboard'), path: '/dashboard' },
+    { name: t('nav.addTool'), path: '/add-tool' },
+    { name: t('nav.manifesto'), path: '/manifesto' },
   ];
 
   return (
@@ -47,31 +50,39 @@ const Navbar = () => {
         </Link>
 
         {/* Desktop Navigation */}
-        <nav className="hidden md:flex items-center gap-8">
-          {navLinks.map((link) => (
-            <Link
-              key={link.path}
-              to={link.path}
-              className={cn(
-                'text-sm font-medium transition-colors duration-200',
-                isActive(link.path)
-                  ? 'text-primary font-medium'
-                  : 'text-muted-foreground hover:text-primary link-underline'
-              )}
-            >
-              {link.name}
-            </Link>
-          ))}
-        </nav>
+        <div className="hidden md:flex items-center">
+          <nav className="flex items-center gap-8 mr-4">
+            {navLinks.map((link) => (
+              <Link
+                key={link.path}
+                to={link.path}
+                className={cn(
+                  'text-sm font-medium transition-colors duration-200',
+                  isActive(link.path)
+                    ? 'text-primary font-medium'
+                    : 'text-muted-foreground hover:text-primary link-underline'
+                )}
+              >
+                {link.name}
+              </Link>
+            ))}
+          </nav>
+          
+          {/* Language Switcher */}
+          <LanguageSwitcher />
+        </div>
 
         {/* Mobile Menu Button */}
-        <button 
-          onClick={toggleMenu} 
-          className="md:hidden flex items-center justify-center w-10 h-10 rounded-full focus:outline-none hover:bg-secondary transition-colors"
-          aria-label={isMenuOpen ? "close menu" : "open menu"}
-        >
-          {isMenuOpen ? <X size={20} /> : <Menu size={20} />}
-        </button>
+        <div className="md:hidden flex items-center">
+          <LanguageSwitcher />
+          <button 
+            onClick={toggleMenu} 
+            className="flex items-center justify-center w-10 h-10 rounded-full focus:outline-none hover:bg-secondary transition-colors"
+            aria-label={isMenuOpen ? "close menu" : "open menu"}
+          >
+            {isMenuOpen ? <X size={20} /> : <Menu size={20} />}
+          </button>
+        </div>
       </div>
 
       {/* Mobile Navigation */}

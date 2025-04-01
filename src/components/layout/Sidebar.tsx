@@ -3,6 +3,7 @@ import { Link, useLocation } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import { cn } from '@/lib/utils';
 import { useTheme } from '@/hooks/use-theme';
+import { useLanguage } from '@/hooks/use-language';
 import { Database, PlusCircle, FileText, PanelLeftClose, PanelLeft, Sun, Moon, Zap } from 'lucide-react';
 import EmailSubscription from './EmailSubscription';
 import BetaBanner from '@/components/ui/beta-banner';
@@ -14,6 +15,7 @@ interface SidebarProps {
 const Sidebar = ({ collapsed = false }: SidebarProps) => {
   const location = useLocation();
   const { theme, setTheme } = useTheme();
+  const { t } = useLanguage();
   const [isCollapsed, setIsCollapsed] = useState(collapsed);
   const [logoError, setLogoError] = useState(false);
   
@@ -104,7 +106,7 @@ const Sidebar = ({ collapsed = false }: SidebarProps) => {
                 )}
               >
                 <Zap className="h-5 w-5 mr-2 flex-shrink-0" />
-                <span className={cn(isCollapsed ? "hidden" : "hidden md:block")}>start from 0</span>
+                <span className={cn(isCollapsed ? "hidden" : "hidden md:block")}>{t('nav.start')}</span>
               </Link>
             </li>
             <li>
@@ -117,7 +119,7 @@ const Sidebar = ({ collapsed = false }: SidebarProps) => {
                 )}
               >
                 <Database className="h-5 w-5 mr-2 flex-shrink-0" />
-                <span className={cn(isCollapsed ? "hidden" : "hidden md:block")}>database</span>
+                <span className={cn(isCollapsed ? "hidden" : "hidden md:block")}>{t('nav.database')}</span>
               </Link>
             </li>
           </ul>
@@ -142,7 +144,7 @@ const Sidebar = ({ collapsed = false }: SidebarProps) => {
                   )}
                 >
                   <PlusCircle className="h-5 w-5 mr-2 flex-shrink-0" />
-                  <span className={cn(isCollapsed ? "hidden" : "hidden md:block")}>add tool</span>
+                  <span className={cn(isCollapsed ? "hidden" : "hidden md:block")}>{t('nav.addTool')}</span>
                 </Link>
               </li>
               <li>
@@ -155,7 +157,7 @@ const Sidebar = ({ collapsed = false }: SidebarProps) => {
                   )}
                 >
                   <FileText className="h-5 w-5 mr-2 flex-shrink-0" />
-                  <span className={cn(isCollapsed ? "hidden" : "hidden md:block")}>manifesto</span>
+                  <span className={cn(isCollapsed ? "hidden" : "hidden md:block")}>{t('nav.manifesto')}</span>
                 </Link>
               </li>
             </ul>
@@ -175,7 +177,7 @@ const Sidebar = ({ collapsed = false }: SidebarProps) => {
                 : <Moon className="h-4 w-4" />
               }
               <span className={cn(isCollapsed ? "hidden" : "hidden md:block")}>
-                {theme === 'dark' ? 'light mode' : 'dark mode'}
+                {theme === 'dark' ? t('sidebar.lightMode') : t('sidebar.darkMode')}
               </span>
             </button>
           </div>
